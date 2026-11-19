@@ -1,0 +1,52 @@
+name: VSA & Orderflow Monitor (Telegram)
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      test_notify:
+        description: 'Enviar mensaje de prueba a Telegram (1 = sí, 0 = no)'
+        required: false
+        default: '1'
+
+concurrency:
+  group: vsa-telegram-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Restaurar estado previo
+        uses: actions/cache/restore@v4
+        with:
+          path: state.json
+          key: vsa-state-${{ github.run_id }}
+          restore-keys: |
+            vsa-state-
+
+      - name: Vigilar precios (cada 15s) y señales confirmadas
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          LOOP_SECONDS: '260'
+          POLL_MS: '15000'
+          TEST_NOTIFY: ${{ github.event.inputs.test_notify || '0' }}
+        run: node monitor.js
+
+      - name: Guardar estado
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: state.json
+          key: vsa-state-${{ github.run_id }}
