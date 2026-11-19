@@ -1,0 +1,35 @@
+{
+  "market": "spot",
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "BNBUSDT",
+    "XRPUSDT",
+    "ADAUSDT",
+    "DOGEUSDT",
+    "AVAXUSDT",
+    "LINKUSDT",
+    "SUIUSDT",
+    "NEARUSDT",
+    "ARBUSDT",
+    "DOTUSDT",
+    "INJUSDT",
+    "TONUSDT",
+    "OPUSDT"
+  ],
+  "timeframes": ["1h", "4h"],
+  "hist": 3000,
+  "Kfine": 4000,
+  "sigAlertOn": true,
+  "sigAlert": "BOTH",
+  "priceAlerts": [
+    {
+      "sym": "BTCUSDT",
+      "market": "spot",
+      "dir": "up",
+      "target": 120000,
+      "repeat": false
+    }
+  ]
+}
