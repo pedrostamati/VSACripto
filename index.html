@@ -1775,7 +1775,7 @@ var SYM_NAMES = {}; SYMBOLS.forEach(function (x) { SYM_NAMES[x[0]] = x[1]; });
 var SCAN_TF_MAP = { intra: ['15m', '1h'], swing: ['1h', '4h'], macro: ['4h', '1d'], all3: ['15m', '1h', '4h'] };
 var DEF = {
   v: 3.1, market: 'spot', sym: 'BTCUSDT', tf: '1h', thr: 'esc', rvol: 'seas', hist: 3000, h: 0, // h=0 -> Auto multi-horizonte
-  feeSpot: 0.10, feeFut: 0.04, slip: 0.02, Kfine: 4000, fontScale: 1.15, refresh: 15, sound: true, sigAlert: 'BOTH', sigAlertOn: true, tgOn: false, tgToken: '', tgChat: '', theme: 'dark',
+  feeSpot: 0.10, feeFut: 0.04, slip: 0.02, Kfine: 4000, fontScale: 1.15, refresh: 15, sound: true, sigAlert: 'BOTH', sigAlertOn: true, tgOn: false, tgToken: '', tgChat: '', ghOn: false, ghRepo: '', ghToken: '', ghBranch: 'main', theme: 'dark',
   slAtr: 1.3, rr: 2, maxBars: 12,
   scanList: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'ADAUSDT', 'DOGEUSDT', 'AVAXUSDT', 'LINKUSDT', 'SUIUSDT', 'NEARUSDT', 'ARBUSDT', 'DOTUSDT', 'INJUSDT', 'TONUSDT', 'OPUSDT'],
   scanTf: 'swing', scanFilter: 'ALL',
@@ -1801,6 +1801,10 @@ function validate(o) {
   o.tgOn = !!o.tgOn;
   o.tgToken = typeof o.tgToken === 'string' ? o.tgToken.trim().slice(0, 120) : '';
   o.tgChat = typeof o.tgChat === 'string' ? o.tgChat.trim().slice(0, 40) : '';
+  o.ghOn = !!o.ghOn;
+  o.ghRepo = typeof o.ghRepo === 'string' ? o.ghRepo.trim().replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '').replace(/^\/+|\/+$/g, '').slice(0, 120) : '';
+  o.ghToken = typeof o.ghToken === 'string' ? o.ghToken.trim().slice(0, 200) : '';
+  o.ghBranch = typeof o.ghBranch === 'string' && o.ghBranch.trim() ? o.ghBranch.trim().slice(0, 60) : 'main';
   if (['dark', 'light', 'auto'].indexOf(o.theme) < 0) o.theme = 'dark';
   if (typeof o.sym !== 'string' || !SYM_RE.test(o.sym)) o.sym = 'BTCUSDT';
   if (!Array.isArray(o.scanList)) o.scanList = DEF.scanList.slice();
@@ -1830,6 +1834,11 @@ function loadSettings() {
         if (old[k] !== undefined) o[k] = old[k];
       });
     }
+  }
+  if (!o.ghRepo && typeof location !== 'undefined' && /\.github\.io$/i.test(location.hostname || '')) {
+    var ghUser = location.hostname.replace(/\.github\.io$/i, '');
+    var ghSeg = (location.pathname || '').split('/').filter(Boolean)[0];
+    if (ghUser && ghSeg) o.ghRepo = ghUser + '/' + ghSeg;
   }
   return validate(o);
 }
@@ -1938,12 +1947,10 @@ function sendTelegram(text, silent) {
     return Promise.resolve(false);
   }
 }
-function exportServerConfig() {
-  var cfg = {
-    telegramToken: S.set.tgToken || 'TU_BOT_TOKEN_AQUI',
-    telegramChatId: S.set.tgChat || 'TU_CHAT_ID_AQUI',
+function buildServerConfig() {
+  return {
     market: mk(),
-    symbols: S.set.scanList.slice(0, 20),
+    symbols: S.set.scanList.slice(0, 25),
     timeframes: SCAN_TF_MAP[S.set.scanTf] || ['1h', '4h'],
     hist: S.set.hist,
     Kfine: S.set.Kfine,
@@ -1953,13 +1960,84 @@ function exportServerConfig() {
       return { sym: a.sym, market: a.market, dir: a.dir, target: a.target, repeat: !!a.repeat };
     })
   };
-  var json = JSON.stringify(cfg, null, 2);
+}
+function exportServerConfig() {
+  var json = JSON.stringify(buildServerConfig(), null, 2);
   try {
     var blob = new Blob([json], { type: 'application/json;charset=utf-8' }), a = document.createElement('a');
     a.href = URL.createObjectURL(blob); a.download = 'config.json';
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
-    toast('config.json descargado para subir a tu servidor', 3200);
+    toast('config.json descargado (sin claves secretas)', 3200);
   } catch (e) { copyText(json, 'config.json copiado al portapapeles'); }
+}
+var ghSyncTimer = 0;
+function scheduleGitHubSync() {
+  if (!S.set.ghOn || !S.set.ghRepo || !S.set.ghToken) return;
+  clearTimeout(ghSyncTimer);
+  ghSyncTimer = setTimeout(function () { syncToGitHub(true); }, 900);
+}
+function utf8ToB64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64ToUtf8(b64) {
+  return decodeURIComponent(escape(atob(String(b64 || '').replace(/\s/g, ''))));
+}
+function syncToGitHub(silent) {
+  var repo = (S.set.ghRepo || '').trim(), tok = (S.set.ghToken || '').trim(), br = S.set.ghBranch || 'main';
+  if (!repo || repo.indexOf('/') < 1 || !tok) {
+    if (!silent) toast('Completá usuario/repositorio y tu GitHub Token');
+    return Promise.resolve(false);
+  }
+  var apiUrl = 'https://api.github.com/repos/' + repo + '/contents/config.json';
+  var headers = { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' };
+  var json = JSON.stringify(buildServerConfig(), null, 2) + '\n';
+  if (!silent) toast('Guardando config.json en GitHub…', 2000);
+  try {
+    return fetch(apiUrl + '?ref=' + encodeURIComponent(br), { headers: headers, cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; }, function () { return null; })
+      .then(function (cur) {
+        var body = { message: 'Actualizar config.json desde terminal web', content: utf8ToB64(json), branch: br };
+        if (cur && cur.sha) body.sha = cur.sha;
+        return fetch(apiUrl, { method: 'PUT', headers: headers, body: JSON.stringify(body) });
+      })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (res.ok) { toast('✓ Guardado en GitHub: el bot 24/7 ya usa esta configuración', 3200); return true; }
+        toast('Error de GitHub: ' + ((res.j && res.j.message) || 'revisá el repo y el token (permiso Contents: Read and write)'), 5000);
+        return false;
+      }, function () {
+        toast('No se pudo conectar con api.github.com', 4000);
+        return false;
+      });
+  } catch (e) {
+    toast('Error al sincronizar con GitHub', 4000);
+    return Promise.resolve(false);
+  }
+}
+function pullFromGitHub() {
+  var repo = (S.set.ghRepo || '').trim(), tok = (S.set.ghToken || '').trim(), br = S.set.ghBranch || 'main';
+  if (!repo || repo.indexOf('/') < 1) { toast('Completá usuario/repositorio'); return; }
+  var apiUrl = 'https://api.github.com/repos/' + repo + '/contents/config.json?ref=' + encodeURIComponent(br);
+  var headers = { 'Accept': 'application/vnd.github+json' };
+  if (tok) headers.Authorization = 'Bearer ' + tok;
+  try {
+    fetch(apiUrl, { headers: headers, cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) {
+        var cfg = JSON.parse(b64ToUtf8(j.content));
+        if (cfg.market === 'spot' || cfg.market === 'futures') S.set.market = cfg.market;
+        if (Array.isArray(cfg.symbols) && cfg.symbols.length) S.set.scanList = cfg.symbols.slice(0, 25);
+        if (typeof cfg.sigAlertOn === 'boolean') S.set.sigAlertOn = cfg.sigAlertOn;
+        if (['BOTH', 'BUY', 'SELL'].indexOf(cfg.sigAlert) >= 0) S.set.sigAlert = cfg.sigAlert;
+        if (Array.isArray(cfg.priceAlerts)) {
+          S.alerts = cfg.priceAlerts.filter(function (a) { return a && a.sym && a.target > 0; }).map(function (a, idx) {
+            return { id: Date.now() + idx, sym: a.sym, market: a.market || S.set.market, dir: a.dir === 'down' ? 'down' : 'up', mode: 'px', target: +a.target, basePx: NaN, pct: NaN, repeat: !!a.repeat, active: true, firedAt: 0 };
+          });
+          saveAlerts();
+        }
+        saveSettings(); render('all'); toast('Configuración cargada desde GitHub ✓', 3000);
+      }, function () { toast('No se pudo leer config.json desde GitHub', 4000); });
+  } catch (e) { toast('Error al leer desde GitHub', 4000); }
 }
 function fireLoudAlarm(opts) {
   var up = opts.up !== false;
@@ -2738,7 +2816,7 @@ function addPriceAlert() {
     if (!(target > 0)) { toast('El porcentaje supera el 100 %'); return; }
   }
   var al = { id: Date.now(), sym: sym, market: m, dir: dir, mode: mode, target: target, basePx: cur, pct: pct, repeat: repFlag, active: true, firedAt: 0 };
-  S.alerts.unshift(al); saveAlerts(); $('#alVal').value = ''; renderStatus(); renderAlerts();
+  S.alerts.unshift(al); saveAlerts(); $('#alVal').value = ''; renderStatus(); renderAlerts(); scheduleGitHubSync();
   toast('Alerta creada: ' + sym + (dir === 'up' ? ' ≥ ' : ' ≤ ') + fpx(target), 3200);
 }
 function checkPriceAlertsWith(sym, m, px) {
@@ -2803,12 +2881,24 @@ function renderAlerts() {
       '<div><label class="lbl" for="tgToken">Bot Token (@BotFather)</label><input id="tgToken" type="text" autocomplete="off" spellcheck="false" placeholder="123456789:AAH..."></div>' +
       '<div><label class="lbl" for="tgChat">Chat ID (@userinfobot)</label><input id="tgChat" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="Ej.: 987654321"></div>' +
       '<div class="wide row-btns"><button type="button" id="tgSave" class="abtn sm">Guardar</button><button type="button" id="tgTest" class="pbtn sm">Probar Telegram</button><button type="button" id="tgExport" class="pbtn sm">Descargar config.json</button></div>' +
+      '</div></div>' +
+      '<div class="pad" style="border-top:1px solid var(--line);background:var(--card)">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-bottom:8px">' +
+      '<div><b>☁️ Guardar cambios directo en GitHub (24/7)</b><div class="card-sub">Cada alerta o cambio de Spot/Futuros se guarda solo en tu repo</div></div>' +
+      '<label style="display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.84rem;cursor:pointer"><input type="checkbox" id="ghOn" style="width:auto;min-height:0"> Auto</label></div>' +
+      '<div class="al-form" style="padding:0">' +
+      '<div><label class="lbl" for="ghRepo">Repositorio (usuario/repo)</label><input id="ghRepo" type="text" autocomplete="off" spellcheck="false" placeholder="Ej.: pedrostamati/VSACripto"></div>' +
+      '<div><label class="lbl" for="ghToken">GitHub Token (solo tu celular)</label><input id="ghToken" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_..."></div>' +
+      '<div class="wide row-btns"><button type="button" id="ghSync" class="abtn sm">Guardar y sincronizar ahora</button><button type="button" id="ghPull" class="pbtn sm">Cargar desde GitHub</button></div>' +
       '</div></div>';
     S.alertsBuilt = true;
   }
   $('#tgOn').checked = !!S.set.tgOn;
   if (document.activeElement !== $('#tgToken')) $('#tgToken').value = S.set.tgToken || '';
   if (document.activeElement !== $('#tgChat')) $('#tgChat').value = S.set.tgChat || '';
+  $('#ghOn').checked = !!S.set.ghOn;
+  if (document.activeElement !== $('#ghRepo')) $('#ghRepo').value = S.set.ghRepo || '';
+  if (document.activeElement !== $('#ghToken')) $('#ghToken').value = S.set.ghToken || '';
   $('#alCurLbl').textContent = 'Nueva alerta para ' + S.set.sym + ' (' + mkLabel() + ')' + (isNum(cur) ? ' · precio actual: ' + fpx(cur) : '');
   $('#alValLbl').textContent = $('#alMode').value === 'pct' ? 'Variación (%)' : 'Precio objetivo';
   $('#alVal').placeholder = $('#alMode').value === 'pct' ? 'Ej.: 2,5' : (isNum(cur) ? plain(cur * 1.02, decimalsFor(cur)) : 'Ej.: 95000');
@@ -3142,7 +3232,7 @@ function setSetting(key, val) {
   var num = ['hist', 'h', 'Kfine', 'refresh', 'fontScale'].indexOf(key) >= 0;
   S.set[key] = num ? +val : val; validate(S.set); saveSettings();
   switch (key) {
-    case 'market': loadCatalog(mk()); S.scan.rows = []; S.riskBuilt = false; loadAll(); break;
+    case 'market': loadCatalog(mk()); S.scan.rows = []; S.riskBuilt = false; scheduleGitHubSync(); loadAll(); break;
     case 'hist': S.scan.rows = []; S.riskBuilt = false; loadAll(); break;
     case 'thr': case 'rvol': if (S.demo) loadDemo(S.demo.code); else reanalyzeAll(); break;
     case 'Kfine': case 'feeSpot': case 'feeFut': case 'slip': S.bt = {}; queueEvidence(); break;
@@ -3341,11 +3431,19 @@ function bind() {
       S.set.tgOn = $('#tgOn').checked; S.set.tgToken = $('#tgToken').value.trim(); S.set.tgChat = $('#tgChat').value.trim();
       saveSettings(); exportServerConfig(); return;
     }
+    if (e.target.closest('#ghSync')) {
+      S.set.ghOn = true; S.set.ghRepo = $('#ghRepo').value.trim(); S.set.ghToken = $('#ghToken').value.trim();
+      validate(S.set); saveSettings(); renderAlerts(); syncToGitHub(false); return;
+    }
+    if (e.target.closest('#ghPull')) {
+      S.set.ghRepo = $('#ghRepo').value.trim(); S.set.ghToken = $('#ghToken').value.trim();
+      validate(S.set); saveSettings(); pullFromGitHub(); return;
+    }
     var sal = e.target.closest('[data-sal]');
     if (sal) {
       var v = sal.getAttribute('data-sal');
       if (v === 'OFF') S.set.sigAlertOn = false; else { S.set.sigAlertOn = true; S.set.sigAlert = v; }
-      saveSettings(); renderAlerts(); toast(v === 'OFF' ? 'Alertas de señales apagadas' : 'Alertas de señales confirmadas activadas');
+      saveSettings(); renderAlerts(); scheduleGitHubSync(); toast(v === 'OFF' ? 'Alertas de señales apagadas' : 'Alertas de señales confirmadas activadas');
       return;
     }
     var al = e.target.closest('[data-al]');
@@ -3353,12 +3451,13 @@ function bind() {
       var id = al.getAttribute('data-id'), act = al.getAttribute('data-al');
       if (act === 'del') S.alerts = S.alerts.filter(function (x) { return String(x.id) !== id; });
       else if (act === 'rearm') S.alerts.forEach(function (x) { if (String(x.id) === id) { x.active = true; x.firedAt = 0; } });
-      saveAlerts(); renderStatus(); renderAlerts();
+      saveAlerts(); renderStatus(); renderAlerts(); scheduleGitHubSync();
     }
   });
   $('#cAlerts').addEventListener('change', function (e) {
     if (e.target && e.target.id === 'alMode') renderAlerts();
     if (e.target && e.target.id === 'tgOn') { S.set.tgOn = e.target.checked; saveSettings(); toast(S.set.tgOn ? 'Envío a Telegram activado' : 'Envío a Telegram pausado'); }
+    if (e.target && e.target.id === 'ghOn') { S.set.ghOn = e.target.checked; saveSettings(); toast(S.set.ghOn ? 'Auto-sincronización con GitHub activada' : 'Auto-sincronización con GitHub pausada'); }
   });
   $('#cAlerts').addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target && e.target.id === 'alVal') addPriceAlert(); });
   $('#btnSettings').addEventListener('click', openSheet);
@@ -3401,7 +3500,7 @@ function bind() {
   $('#scanGo').addEventListener('click', runScan);
   $('#scanTop25').addEventListener('click', loadTop25);
   $('#scanList').addEventListener('keydown', function (e) { if (e.key === 'Enter') runScan(); });
-  $('#scanTfSeg').addEventListener('click', function (e) { var b = e.target.closest('[data-stf]'); if (!b) return; S.set.scanTf = b.getAttribute('data-stf'); saveSettings(); render('scan'); });
+  $('#scanTfSeg').addEventListener('click', function (e) { var b = e.target.closest('[data-stf]'); if (!b) return; S.set.scanTf = b.getAttribute('data-stf'); saveSettings(); scheduleGitHubSync(); render('scan'); });
   $('#scanFilters').addEventListener('click', function (e) { var b = e.target.closest('[data-sf]'); if (!b) return; S.set.scanFilter = b.getAttribute('data-sf'); saveSettings(); render('scan'); });
   $('#scanOut').addEventListener('click', function (e) {
     var r = e.target.closest('[data-sym]'); if (!r) return; var sym = r.getAttribute('data-sym'), tf = r.getAttribute('data-tf');
