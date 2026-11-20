@@ -3,22 +3,34 @@
   "symbols": [
     "BTCUSDT",
     "ETHUSDT",
+    "ZECUSDT",
     "SOLUSDT",
-    "BNBUSDT",
     "XRPUSDT",
-    "ADAUSDT",
-    "DOGEUSDT",
-    "AVAXUSDT",
-    "LINKUSDT",
-    "SUIUSDT",
     "NEARUSDT",
-    "ARBUSDT",
-    "DOTUSDT",
-    "INJUSDT",
-    "TONUSDT",
-    "OPUSDT"
+    "NVDABUSDT",
+    "SOXLBUSDT",
+    "BNBUSDT",
+    "MMTUSDT",
+    "HYPEUSDT",
+    "XAUTUSDT",
+    "PEPEUSDT",
+    "PAXGUSDT",
+    "UNIUSDT",
+    "SPCXBUSDT",
+    "TRXUSDT",
+    "ENAUSDT",
+    "CRCLBUSDT",
+    "DOGEUSDT",
+    "SKYUSDT",
+    "UUSDT",
+    "SUIUSDT",
+    "MUBUSDT",
+    "TAOUSDT"
   ],
-  "timeframes": ["1h", "4h"],
+  "timeframes": [
+    "1h",
+    "4h"
+  ],
   "hist": 3000,
   "Kfine": 4000,
   "sigAlertOn": true,
@@ -28,8 +40,29 @@
       "sym": "BTCUSDT",
       "market": "spot",
       "dir": "up",
-      "target": 120000,
+      "target": 65000,
       "repeat": false
+    },
+    {
+      "sym": "BTCUSDT",
+      "market": "spot",
+      "dir": "up",
+      "target": 65000,
+      "repeat": false
+    },
+    {
+      "sym": "BTCUSDT",
+      "market": "spot",
+      "dir": "up",
+      "target": 65000,
+      "repeat": false
+    },
+    {
+      "sym": "BTCUSDT",
+      "market": "spot",
+      "dir": "up",
+      "target": 63000,
+      "repeat": true
     }
   ]
 }
