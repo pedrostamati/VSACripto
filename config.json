@@ -37,11 +37,11 @@
   "sigAlert": "BOTH",
   "priceAlerts": [
     {
-      "sym": "ETHUSDT",
+      "sym": "ADAUSDT",
       "market": "spot",
       "dir": "up",
-      "target": 1740,
-      "repeat": false
+      "target": 1600,
+      "repeat": true
     },
     {
       "sym": "ETHUSDT",
