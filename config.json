@@ -34,7 +34,7 @@
   "hist": 3000,
   "Kfine": 4000,
   "sigAlertOn": true,
-  "sigAlert": "SELL",
+  "sigAlert": "BOTH",
   "priceAlerts": [
     {
       "sym": "ADAUSDT",
