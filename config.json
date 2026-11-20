@@ -37,6 +37,13 @@
   "sigAlert": "BOTH",
   "priceAlerts": [
     {
+      "sym": "ETHUSDT",
+      "market": "spot",
+      "dir": "up",
+      "target": 1790,
+      "repeat": false
+    },
+    {
       "sym": "BTCUSDT",
       "market": "spot",
       "dir": "up",
