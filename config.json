@@ -54,13 +54,6 @@
       "sym": "BTCUSDT",
       "market": "spot",
       "dir": "up",
-      "target": 65000,
-      "repeat": false
-    },
-    {
-      "sym": "BTCUSDT",
-      "market": "spot",
-      "dir": "up",
       "target": 63000,
       "repeat": true
     }
