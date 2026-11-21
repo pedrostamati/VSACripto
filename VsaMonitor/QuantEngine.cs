@@ -241,7 +241,7 @@ public static class QuantEngine
         public bool Green, Red, Green1, Red1, Green2, Red2;
         public double O1, C1, C3, V1, V2, E9, E21, E50, Rsi;
         public double AtrRatioPrev, VolComp, RsiLow, RsiHigh, ZTrig;
-        public double Move8a, Lo15, Hi15, Lo10, Hi10;
+        public double Move8a, Lo15, Hi15, Lo10, Hi10, Lo5, Hi5;
         public double Vwap, VwapU1, VwapD1, VwapU2, VwapD2;
         public int VwapN;
         public double Share, Share1, Share2, ShareZ, Delta, Dr10Z, Ob10Z, PMove10;
@@ -294,6 +294,11 @@ public static class QuantEngine
         new(54, "V54", "Reversión RSI adaptativo sobrecomprado + flujo", "ADAPTIVE", -1, x => double.IsFinite(x.Rsi) && x.Rsi >= x.RsiHigh && x.Clv < -0.20 && x.ShareZ < -x.ZTrig && x.Rvol > 1.15),
         new(55, "V55", "Expansión adaptativa alcista en compresión", "ADAPTIVE", 1, x => x.VolComp < 0.95 && double.IsFinite(x.Rsi) && x.Rsi > 54.0 && x.C > x.E21 && x.C > x.Vwap && x.ShareZ > x.ZTrig && x.Rvol > 1.30),
         new(56, "V56", "Expansión adaptativa bajista en compresión", "ADAPTIVE", -1, x => x.VolComp < 0.95 && double.IsFinite(x.Rsi) && x.Rsi < 46.0 && x.C < x.E21 && x.C < x.Vwap && x.ShareZ < -x.ZTrig && x.Rvol > 1.30),
+        // Short Squeeze, Short Selling y Long Squeeze (v5.1)
+        new(57, "V57", "Short Squeeze activo (ruptura violenta de cortos)", "SQUEEZE", 1, x => x.C > x.Hi5 && x.DPa > 0.85 && x.Clv > 0.55 && x.Rvol > 1.85 && x.ShareZ > 1.8),
+        new(58, "V58", "Short Squeeze inminente (trampa bajista)", "SQUEEZE", 1, x => x.L < x.Lo10 && x.C > x.Lo10 && x.LoW > 0.35 && x.Share > 0.56 && x.Share > x.Share1 && x.Rvol > 1.35),
+        new(59, "V59", "Short Selling institucional agresivo", "SQUEEZE", -1, x => x.C < x.Lo5 && x.C < x.Vwap && x.C < x.E21 && x.DPa < -0.75 && x.Clv < -0.55 && x.Rvol > 1.75 && x.ShareZ < -1.6),
+        new(60, "V60", "Long Squeeze / cascada de largos atrapados", "SQUEEZE", -1, x => x.H > x.Hi10 && x.C < x.Hi10 && x.UpW > 0.35 && x.Share < 0.44 && x.Share < x.Share1 && x.Rvol > 1.35),
     };
 
     private static double ZPrev(double[] arr, int i, int window, int minN)
@@ -439,6 +444,7 @@ public static class QuantEngine
             double rng = k.High - k.Low;
             double lo15 = double.PositiveInfinity, hi15 = double.NegativeInfinity;
             double lo10 = double.PositiveInfinity, hi10 = double.NegativeInfinity;
+            double lo5 = double.PositiveInfinity, hi5 = double.NegativeInfinity;
             for (int j = i - 15; j < i; j++)
             {
                 if (closed[j].Low < lo15) lo15 = closed[j].Low;
@@ -447,6 +453,11 @@ public static class QuantEngine
                 {
                     if (closed[j].Low < lo10) lo10 = closed[j].Low;
                     if (closed[j].High > hi10) hi10 = closed[j].High;
+                }
+                if (j >= i - 5)
+                {
+                    if (closed[j].Low < lo5) lo5 = closed[j].Low;
+                    if (closed[j].High > hi5) hi5 = closed[j].High;
                 }
             }
             double vc = (double.IsFinite(atr[i]) && double.IsFinite(atrSma50[i]) && atrSma50[i] > 0) ? atr[i] / atrSma50[i] : 1.0;
@@ -469,7 +480,7 @@ public static class QuantEngine
                 AtrRatioPrev = (double.IsFinite(atr[i - 1]) && double.IsFinite(atrSma50[i - 1]) && atrSma50[i - 1] > 0) ? atr[i - 1] / atrSma50[i - 1] : double.NaN,
                 VolComp = ab.VolCompression, RsiLow = ab.RsiLow, RsiHigh = ab.RsiHigh, ZTrig = ab.ZTrigger,
                 Move8a = atr[i - 1] > 0 ? (k1.Close - closed[i - 8].Open) / atr[i - 1] : double.NaN,
-                Lo15 = lo15, Hi15 = hi15, Lo10 = lo10, Hi10 = hi10,
+                Lo15 = lo15, Hi15 = hi15, Lo10 = lo10, Hi10 = hi10, Lo5 = lo5, Hi5 = hi5,
                 Vwap = vwap[i], VwapU1 = vwapU1[i], VwapD1 = vwapD1[i], VwapU2 = vwapU2[i], VwapD2 = vwapD2[i], VwapN = vwapN[i],
                 Share = share[i], Share1 = share[i - 1], Share2 = share[i - 2],
                 ShareZ = ZPrev(share, i, 100, 30), Delta = delta[i],
