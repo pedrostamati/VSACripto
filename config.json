@@ -1,55 +1,81 @@
 {
-  "version": "5.0",
+  "version": "4.0",
   "market": "spot",
   "favorites": [
     "BTCUSDT",
     "ETHUSDT",
+    "ADAUSDT",
     "SOLUSDT",
-    "BNBUSDT",
     "XRPUSDT"
   ],
   "symbols": [
     "BTCUSDT",
     "ETHUSDT",
     "SOLUSDT",
-    "BNBUSDT",
+    "ZECUSDT",
     "XRPUSDT",
-    "ADAUSDT",
-    "DOGEUSDT",
-    "AVAXUSDT",
-    "LINKUSDT",
-    "SUIUSDT",
+    "SOXLBUSDT",
+    "BNBUSDT",
+    "NVDABUSDT",
     "NEARUSDT",
-    "ARBUSDT",
-    "DOTUSDT",
-    "INJUSDT",
-    "TONUSDT",
-    "OPUSDT"
+    "XAUTUSDT",
+    "HYPEUSDT",
+    "DOGEUSDT",
+    "UUSDT",
+    "PEPEUSDT",
+    "SUIUSDT",
+    "PAXGUSDT",
+    "UNIUSDT",
+    "MUBUSDT",
+    "ENAUSDT",
+    "TRXUSDT",
+    "ADAUSDT",
+    "LINKUSDT",
+    "SPCXBUSDT",
+    "GOOGLBUSDT",
+    "QQQBUSDT"
   ],
-  "timeframes": ["15m", "1h", "4h", "1d"],
+  "timeframes": [
+    "15m",
+    "1h",
+    "4h",
+    "1d"
+  ],
   "hist": 3000,
   "Kfine": 4000,
   "hardRegimeFilter": true,
   "regimeHtf": "auto",
   "strictLateral": false,
   "adaptiveTriggers": true,
-  "orderBookAlerts": true,
-  "obiAlertThreshold": 0.60,
   "paperTrading": {
     "enabled": true,
     "initialCapital": 10000,
-    "riskPct": 1.0,
-    "leverage": 2.0,
+    "riskPct": 1,
+    "leverage": 2,
     "maxOpenPositions": 5
   },
   "sigAlertOn": true,
   "sigAlert": "BOTH",
   "priceAlerts": [
     {
+      "sym": "ADAUSDT",
+      "market": "spot",
+      "dir": "up",
+      "target": 1600,
+      "repeat": true
+    },
+    {
+      "sym": "ETHUSDT",
+      "market": "spot",
+      "dir": "up",
+      "target": 1790,
+      "repeat": false
+    },
+    {
       "sym": "BTCUSDT",
       "market": "spot",
       "dir": "up",
-      "target": 120000,
+      "target": 65000,
       "repeat": false
     }
   ]
