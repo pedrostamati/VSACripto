@@ -3,8 +3,8 @@
   "market": "spot",
   "favorites": [
     "BTCUSDT",
-    "ADAUSDT",
     "ETHUSDT",
+    "ADAUSDT",
     "SOLUSDT",
     "XRPUSDT"
   ],
