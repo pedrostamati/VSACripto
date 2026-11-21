@@ -171,6 +171,7 @@ jobs:
           import android.annotation.SuppressLint
           import android.graphics.Color
           import android.os.Bundle
+          import android.view.ViewGroup
           import android.view.WindowManager
           import android.webkit.WebChromeClient
           import android.webkit.WebSettings
@@ -220,7 +221,8 @@ jobs:
                       }
                   }
 
-                  swipeRefresh.addView(webView)
+                  swipeRefresh.addView(webView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                  swipeRefresh.setOnChildScrollUpCallback { _, _ -> webView.scrollY > 0 }
                   swipeRefresh.setOnRefreshListener { webView.reload() }
                   setContentView(swipeRefresh)
 
