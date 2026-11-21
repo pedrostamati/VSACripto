@@ -2,8 +2,8 @@
   "version": "4.0",
   "market": "spot",
   "favorites": [
-    "ADAUSDT",
     "BTCUSDT",
+    "ADAUSDT",
     "ETHUSDT",
     "SOLUSDT",
     "XRPUSDT"
