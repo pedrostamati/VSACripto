@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#070b14">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VSA Cripto">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="description" content="Terminal VSA & Orderflow v4.0 QuantPulse Edition: 56 reglas con triggers adaptativos, filtro duro de régimen HTF (EMA50/200), simulador aislado de Paper Trading en vivo y gestor de favoritas.">
 <title>VSA & Orderflow v5.0 · Institutional Microstructure</title>
 <style>
@@ -292,9 +299,9 @@ select:focus, input:focus { border-color: var(--acc); box-shadow: 0 0 0 3px var(
 .jrow .acts button { min-height: 30px; font-size: 11.5px; border-radius: 8px; border: 1px solid var(--line2); background: var(--card2); padding: 0 9px; font-weight: 700; }
 
 /* ajustes */
-.sheet { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; }
-.sheet-bg { position: absolute; inset: 0; background: rgba(2,6,23,.62); }
-.sheet-card { position: relative; width: 100%; max-width: 820px; max-height: 88vh; background: var(--card); border: 1px solid var(--line2); border-radius: 16px 16px 0 0; display: flex; flex-direction: column; }
+.sheet { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100vh; height: 100dvh; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 12px; }
+.sheet-bg { position: fixed; inset: 0; background: rgba(2,6,23,.72); z-index: 1; }
+.sheet-card { position: relative; z-index: 2; width: 100%; max-width: 760px; max-height: 86vh; max-height: 86dvh; background: var(--card); border: 1px solid var(--line2); border-radius: 16px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-bottom: 1px solid var(--line); }
 .sheet-body { overflow-y: auto; padding: 4px 12px 20px; -webkit-overflow-scrolling: touch; }
 .set-g { padding: 10px 0; border-bottom: 1px solid var(--line); }
@@ -445,6 +452,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
       </div>
     </div>
     <div class="top-act">
+      <button id="btnInstallApp" class="pbtn sm" type="button" hidden style="min-height:36px;background:var(--bull);border-color:var(--bull);color:#fff">📲 Instalar</button>
       <button id="btnFontDown" class="ibtn fsbtn" type="button" aria-label="Reducir tamaño de fuente" title="Reducir texto">A−</button>
       <button id="btnFontUp" class="ibtn fsbtn" type="button" aria-label="Agrandar tamaño de fuente" title="Agrandar texto">A+</button>
       <button id="btnRefresh" class="ibtn" type="button" aria-label="Recargar todo" title="Recargar todo">
@@ -2592,7 +2600,7 @@ function openPaperConfig() {
     '<div><label class="lbl" for="pcLev">Apalancamiento Fut. (x)</label><input id="pcLev" type="text" inputmode="decimal" value="' + P.lev + '"></div>' +
     '</div><div style="margin-top:8px;max-width:180px"><label class="lbl" for="pcMax">Máx. posiciones abiertas</label><input id="pcMax" type="text" inputmode="numeric" value="' + P.maxOpen + '"></div>' +
     '<div class="row-btns" style="margin-top:12px"><button type="button" class="abtn sm" id="pcSave">Guardar configuración</button></div></div>';
-  $('#sheet').hidden = false; document.body.style.overflow = 'hidden';
+  $('#sheet').hidden = false; $('#sheetBody').scrollTop = 0; document.body.style.overflow = 'hidden';
 }
 
 // ─── GESTOR DE FAVORITAS (v4.0) ───
@@ -2615,7 +2623,7 @@ function renderFavBar() {
 function openFavManager() {
   $('#sheetTitle').textContent = '★ Gestionar Favoritas';
   renderFavManagerBody();
-  $('#sheet').hidden = false; document.body.style.overflow = 'hidden';
+  $('#sheet').hidden = false; $('#sheetBody').scrollTop = 0; document.body.style.overflow = 'hidden';
 }
 function renderFavManagerBody() {
   var rows = S.set.favs.length ? S.set.favs.map(function (sym, idx) {
@@ -3862,7 +3870,7 @@ function renderSheet() {
     g('Demostración con datos inventados', 'Velas sintéticas para inspeccionar visualmente cada regla. Nunca se activa sola.', '<div class="set-in" style="grid-template-columns:1fr auto"><div class="sel-wrap"><select id="demoSel">' + V.SCEN.map(function (x) { return '<option value="' + x.id + '"' + (S.demo && S.demo.code === x.id ? ' selected' : '') + '>' + x.id + ' · ' + esc(x.name) + '</option>'; }).join('') + '</select></div><button type="button" class="pbtn" id="demoGo">Ver</button></div>') +
     g('Conexión', 'Servidor: ' + esc(D.Net.lastHost ? D.Net.lastHost.replace('https://', '') : '—') + ' · reloj: ' + fnum(D.Net.offset / 1000, 1) + ' s · pedidos: ' + D.Net.reqs, '<div class="opts"><button type="button" id="resetSet">Restablecer ajustes</button></div>');
 }
-function openSheet() { $('#sheetTitle').textContent = 'Ajustes'; renderSheet(); $('#sheet').hidden = false; document.body.style.overflow = 'hidden'; }
+function openSheet() { $('#sheetTitle').textContent = 'Ajustes'; renderSheet(); $('#sheet').hidden = false; $('#sheetBody').scrollTop = 0; document.body.style.overflow = 'hidden'; }
 function closeSheet() { $('#sheet').hidden = true; document.body.style.overflow = ''; }
 function setSetting(key, val) {
   var num = ['hist', 'h', 'Kfine', 'refresh', 'fontScale'].indexOf(key) >= 0;
@@ -4031,6 +4039,12 @@ function bind() {
   $('#btnOther').addEventListener('click', function () { var b = $('#otherBox'); b.hidden = !b.hidden; $('#btnOther').setAttribute('aria-expanded', b.hidden ? 'false' : 'true'); if (!b.hidden) $('#otherIn').focus(); });
   $('#otherGo').addEventListener('click', applyOther);
   $('#otherIn').addEventListener('keydown', function (e) { if (e.key === 'Enter') applyOther(); });
+  var ibtn = $('#btnInstallApp');
+  if (ibtn) ibtn.addEventListener('click', function () {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(function () { deferredInstallPrompt = null; ibtn.hidden = true; });
+  });
   $('#btnFontDown').addEventListener('click', function () { stepFont(-0.10); });
   $('#btnFontUp').addEventListener('click', function () { stepFont(0.10); });
   $('#btnRefresh').addEventListener('click', function () { if (S.demo) loadDemo(S.demo.code); else loadAll(); });
@@ -4306,6 +4320,27 @@ function bindCanvas() {
   cv.addEventListener('pointercancel', function (e) { delete pts[e.pointerId]; pinch = null; drag = null; });
   cv.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse' && S.ch.hoverT != null) { S.ch.hoverT = null; scheduleDraw(); } });
   cv.addEventListener('wheel', function (e) { e.preventDefault(); S.ch.span = S.ch.span * (e.deltaY > 0 ? 1.12 : 1 / 1.12); scheduleDraw(); }, { passive: false });
+}
+
+
+// ─── PWA: Service Worker + botón de instalación directa en Android ───
+var deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function (e) {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  var ib = $('#btnInstallApp');
+  if (ib) ib.hidden = false;
+});
+window.addEventListener('appinstalled', function () {
+  deferredInstallPrompt = null;
+  var ib = $('#btnInstallApp');
+  if (ib) ib.hidden = true;
+  toast('✓ App VSA Cripto instalada en tu pantalla de inicio', 3200);
+});
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function () {});
+  });
 }
 
 function boot() {
