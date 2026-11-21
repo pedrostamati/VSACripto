@@ -36,8 +36,8 @@
     "QQQBUSDT"
   ],
   "timeframes": [
-    "1h",
-    "4h"
+    "15m",
+    "1h"
   ],
   "hist": 3000,
   "Kfine": 4000,
