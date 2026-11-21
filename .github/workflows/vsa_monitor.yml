@@ -1,52 +1,104 @@
-name: VSA & Orderflow Monitor (Telegram)
+name: VSA & Orderflow v4.0 Monitor (.NET 8 WebSocket)
 
 on:
   schedule:
     - cron: '*/5 * * * *'
+  push:
+    paths:
+      - 'VsaMonitor/**'
+      - '.github/workflows/vsa_monitor.yml'
   workflow_dispatch:
     inputs:
       test_notify:
-        description: 'Enviar mensaje de prueba a Telegram (1 = sí, 0 = no)'
+        description: 'Enviar mensaje de prueba a Telegram'
+        required: false
+        default: '1'
+      build_windows_exe:
+        description: 'Compilar también ejecutable autónomo para Windows (.exe)'
         required: false
         default: '1'
 
 concurrency:
-  group: vsa-telegram-monitor
+  group: vsa-monitor-v4
   cancel-in-progress: false
 
 jobs:
   monitor:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 7
+
     steps:
-      - name: Descargar repositorio
+      - name: Checkout repositorio
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js 20
-        uses: actions/setup-node@v4
+      - name: Configurar .NET 8 SDK
+        uses: actions/setup-dotnet@v4
         with:
-          node-version: '20'
+          dotnet-version: '8.0.x'
 
-      - name: Restaurar estado previo
+      - name: Cachear binario compilado (Linux x64)
+        id: bin-cache
+        uses: actions/cache@v4
+        with:
+          path: dist/linux-x64
+          key: vsa-bin-linux-${{ hashFiles('VsaMonitor/**') }}
+
+      - name: Compilar ejecutable autónomo Linux (Self-Contained SingleFile)
+        if: steps.bin-cache.outputs.cache-hit != 'true'
+        run: |
+          dotnet publish VsaMonitor/VsaMonitor.csproj \
+            -c Release \
+            -r linux-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -o dist/linux-x64
+          chmod +x dist/linux-x64/VsaMonitor
+
+      - name: Compilar ejecutable autónomo Windows (.exe) bajo demanda o push
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.build_windows_exe == '1')
+        run: |
+          dotnet publish VsaMonitor/VsaMonitor.csproj \
+            -c Release \
+            -r win-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -o dist/win-x64
+
+      - name: Publicar ejecutables compilados como Artifacts
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: VsaMonitor-v4-binaries
+          path: |
+            dist/linux-x64/VsaMonitor
+            dist/win-x64/VsaMonitor.exe
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Restaurar estado y Paper Trading (state.json + paper_state.json)
         uses: actions/cache/restore@v4
         with:
-          path: state.json
-          key: vsa-state-${{ github.run_id }}
+          path: |
+            state.json
+            paper_state.json
+          key: vsa-state-v4-${{ github.run_id }}
           restore-keys: |
-            vsa-state-
+            vsa-state-v4-
 
-      - name: Vigilar precios (cada 15s) y señales confirmadas
+      - name: Ejecutar monitor C# WebSocket en tiempo real
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          LOOP_SECONDS: '260'
-          POLL_MS: '15000'
-          TEST_NOTIFY: ${{ github.event.inputs.test_notify || '0' }}
-        run: node monitor.js
+          LOOP_SECONDS: ${{ github.event_name == 'workflow_dispatch' && '30' || '260' }}
+          TEST_NOTIFY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.test_notify || '0' }}
+          VSA_WORKDIR: ${{ github.workspace }}
+        run: ./dist/linux-x64/VsaMonitor
 
-      - name: Guardar estado
+      - name: Guardar estado y Paper Trading
         if: always()
         uses: actions/cache/save@v4
         with:
-          path: state.json
-          key: vsa-state-${{ github.run_id }}
+          path: |
+            state.json
+            paper_state.json
+          key: vsa-state-v4-${{ github.run_id }}
