@@ -5,7 +5,7 @@ namespace VsaMonitor;
 public sealed class AppConfig
 {
     [JsonPropertyName("version")]
-    public string Version { get; set; } = "4.0";
+    public string Version { get; set; } = "5.0";
 
     [JsonPropertyName("market")]
     public string Market { get; set; } = "spot";
@@ -17,7 +17,7 @@ public sealed class AppConfig
     public List<string> Symbols { get; set; } = new() { "BTCUSDT", "ETHUSDT", "SOLUSDT" };
 
     [JsonPropertyName("timeframes")]
-    public List<string> Timeframes { get; set; } = new() { "1h", "4h" };
+    public List<string> Timeframes { get; set; } = new() { "15m", "1h", "4h", "1d" };
 
     [JsonPropertyName("hist")]
     public int Hist { get; set; } = 3000;
@@ -36,6 +36,12 @@ public sealed class AppConfig
 
     [JsonPropertyName("adaptiveTriggers")]
     public bool AdaptiveTriggers { get; set; } = true;
+
+    [JsonPropertyName("orderBookAlerts")]
+    public bool OrderBookAlerts { get; set; } = true;
+
+    [JsonPropertyName("obiAlertThreshold")]
+    public double ObiAlertThreshold { get; set; } = 0.60;
 
     [JsonPropertyName("paperTrading")]
     public PaperConfig PaperTrading { get; set; } = new();
@@ -103,12 +109,26 @@ public readonly record struct Candle(
     double TakerBuyQuote
 );
 
-public readonly record struct TickerUpdate(
+public readonly record struct OrderBookSnapshot(
     string Symbol,
-    double LastPrice,
-    double PriceChangePercent,
-    double QuoteVolume,
-    long EventTime
+    double Obi,
+    double SpreadBps,
+    double BidUsd,
+    double AskUsd,
+    double BidWallPrice,
+    double BidWallUsd,
+    double AskWallPrice,
+    double AskWallUsd,
+    long UpdatedAtMs
+);
+
+public readonly record struct DerivativesSnapshot(
+    double FundingRate,
+    double BasisPct,
+    double OpenInterestUsd,
+    double OiChange24hPct,
+    double LongShortRatio,
+    string SqueezeStatus
 );
 
 public sealed class MonitorState
@@ -118,6 +138,9 @@ public sealed class MonitorState
 
     [JsonPropertyName("firedAlerts")]
     public Dictionary<string, long> FiredAlerts { get; set; } = new();
+
+    [JsonPropertyName("obiAlerts")]
+    public Dictionary<string, long> ObiAlerts { get; set; } = new();
 }
 
 public sealed class PaperPosition

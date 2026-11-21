@@ -8,12 +8,11 @@ using System.Text.Json;
 namespace VsaMonitor;
 
 /// <summary>
-/// VSA &amp; Orderflow v4.0 · QuantPulse Backend (.NET 8 Self-Contained)
-/// - Suscripción en tiempo real a Binance WebSockets (wss://stream.binance.com:9443/ws/!ticker@arr)
-///   y Futuros USDT-M (wss://fstream.binance.com/ws/!ticker@arr): cero polling REST para precios, cero HTTP 429.
-/// - Evalúa alertas de precio y SL/TP del Simulador Aislado de Paper Trading con latencia sub-segundo.
-/// - Evalúa señales confirmadas (con respaldo BH + Filtro Duro de Régimen HTF EMA50/200 + Triggers Adaptativos)
-///   sobre velas cerradas y notifica vía Telegram.
+/// VSA &amp; Orderflow v5.0 · Institutional Microstructure Backend (.NET 8 Self-Contained)
+/// - WebSocket 1: Binance !ticker@arr (precios en tiempo real, cero HTTP 429).
+/// - WebSocket 2: Binance @depth20@1000ms combinado sobre Favoritas (Order Book Imbalance + Paredes de liquidez).
+/// - Microestructura de Derivados: Funding Rate, Basis %, Open Interest (Δ 24h) y Long/Short Ratio.
+/// - Auditoría en vivo del Simulador Aislado de Paper Trading por regla y temporalidad.
 /// </summary>
 public static class Program
 {
@@ -32,6 +31,7 @@ public static class Program
     private static readonly string[] FuturesHosts = { "https://fapi.binance.com" };
 
     private static readonly ConcurrentDictionary<string, double> LivePrices = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly ConcurrentDictionary<string, OrderBookSnapshot> LiveBooks = new(StringComparer.OrdinalIgnoreCase);
 
     public static async Task<int> Main(string[] args)
     {
@@ -53,12 +53,13 @@ public static class Program
             Cash = cfg.PaperTrading.InitialCapital
         });
 
-        Console.WriteLine($"[VSA QuantPulse v4.0 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | FiltroHTF={cfg.HardRegimeFilter} | Paper={cfg.PaperTrading.Enabled} | Loop={loopSeconds}s");
+        Console.WriteLine($"[VSA Institutional v5.0 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts}");
 
         if (testNotify)
         {
+            string audit = BuildPaperAuditSummary(paper);
             await SendTelegramAsync(tgToken, tgChat,
-                $"✅ VSA & Orderflow v4.0 (.NET 8 WebSocket) operativo.\nMercado: {cfg.Market.ToUpperInvariant()} · Pares: {cfg.Symbols.Count} · Favoritas: {cfg.Favorites.Count}\nFiltro Duro HTF: {(cfg.HardRegimeFilter ? "ON" : "OFF")} · Paper Balance: {paper.TotalEquity:N2} USDT");
+                $"✅ VSA & Orderflow v5.0 Institutional (.NET 8 WebSockets) operativo.\nMercado: {cfg.Market.ToUpperInvariant()} · TFs: {string.Join("+", cfg.Timeframes).ToUpperInvariant()} · Favoritas: {cfg.Favorites.Count}\nWebSockets: !ticker@arr + @depth20@1000ms · Filtro HTF: {(cfg.HardRegimeFilter ? "ON" : "OFF")}\n{audit}");
         }
 
         using var cts = loopSeconds > 0
@@ -67,30 +68,222 @@ public static class Program
 
         Console.CancelKeyPress += (_, e) => { e.Cancel = true; cts.Cancel(); };
 
-        // 1. Lanzar evaluación de velas cerradas y señales confirmadas en paralelo con el stream WebSocket
+        // 1. WebSocket de Profundidad de Libro (@depth20@1000ms) para Favoritas
+        var depthTask = Task.Run(async () =>
+        {
+            try
+            {
+                await RunOrderBookWebSocketLoopAsync(cfg, state, tgToken, tgChat, cts.Token);
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception ex) { Console.Error.WriteLine($"[DepthWS error] {ex.Message}"); }
+        }, cts.Token);
+
+        // 2. Evaluación de señales confirmadas (con HTF + Funding/OI + OBI) en paralelo
         var signalTask = Task.Run(async () =>
         {
             try
             {
+                await Task.Delay(2500, cts.Token); // dar margen a que lleguen los primeros frames de @depth20
                 await CheckConfirmedSignalsAsync(cfg, state, paper, tgToken, tgChat, cts.Token);
             }
             catch (OperationCanceledException) { }
             catch (Exception ex) { Console.Error.WriteLine($"[Señales error] {ex.Message}"); }
         }, cts.Token);
 
-        // 2. Suscribirse a Binance WebSocket (!ticker@arr) para alertas de precio y Paper Trading en tiempo real
+        // 3. WebSocket principal de precios (!ticker@arr) para alertas y Paper Trading sub-segundo
         try
         {
             await RunTickerWebSocketLoopAsync(cfg, state, paper, tgToken, tgChat, cts.Token);
         }
         catch (OperationCanceledException) { }
 
-        await Task.WhenAny(signalTask, Task.Delay(5000));
+        await Task.WhenAny(Task.WhenAll(signalTask, depthTask), Task.Delay(4000));
 
         SaveJson(statePath, state);
         SaveJson(paperPath, paper);
-        Console.WriteLine($"[VSA QuantPulse v4.0 .NET] Ciclo finalizado. Paper Equity={paper.TotalEquity:N2} USDT (Abiertas={paper.Open.Count}, Cerradas={paper.Closed.Count}).");
+        Console.WriteLine($"[VSA Institutional v5.0 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
         return 0;
+    }
+
+    private static string BuildPaperAuditSummary(PaperState paper)
+    {
+        int n = paper.Closed.Count;
+        int wins = paper.Closed.Count(x => x.NetUsd > 0);
+        double wr = n > 0 ? (double)wins / n * 100.0 : 0.0;
+        double avgR = n > 0 ? paper.Closed.Average(x => x.RMultiple) : 0.0;
+        double pnl = paper.TotalEquity - paper.InitialCapital;
+        string readiness = (n >= 20 && avgR >= 0.15 && pnl > 0) ? "APTA REAL" : $"Incubación ({n}/20)";
+        return $"🧪 Paper Audit: {paper.TotalEquity:N2} USDT ({pnl:+0.00;-0.00}) | Abiertas={paper.Open.Count} | Cerradas={n} (WR {wr:0.0}%, Exp {avgR:+0.00;-0.00}R) | Estado: {readiness}";
+    }
+
+    private static async Task RunOrderBookWebSocketLoopAsync(
+        AppConfig cfg, MonitorState state, string tgToken, string tgChat, CancellationToken ct)
+    {
+        var favs = cfg.Favorites.Take(12).Select(s => s.ToLowerInvariant()).Distinct().ToList();
+        if (favs.Count == 0) return;
+
+        bool isFutures = cfg.Market.Equals("futures", StringComparison.OrdinalIgnoreCase);
+        string streams = string.Join("/", favs.Select(s => $"{s}@depth20@1000ms"));
+        var wsUri = new Uri(isFutures
+            ? $"wss://fstream.binance.com/stream?streams={streams}"
+            : $"wss://stream.binance.com:9443/stream?streams={streams}");
+
+        int backoffMs = 1500;
+        var buffer = new byte[65536];
+
+        while (!ct.IsCancellationRequested)
+        {
+            using var ws = new ClientWebSocket();
+            ws.Options.KeepAliveInterval = TimeSpan.FromSeconds(20);
+            try
+            {
+                Console.WriteLine($"[DepthWS] Conectando a @depth20@1000ms ({favs.Count} favoritas)...");
+                await ws.ConnectAsync(wsUri, ct);
+                backoffMs = 1500;
+
+                using var ms = new MemoryStream();
+                while (ws.State == WebSocketState.Open && !ct.IsCancellationRequested)
+                {
+                    ms.SetLength(0);
+                    WebSocketReceiveResult res;
+                    do
+                    {
+                        res = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), ct);
+                        if (res.MessageType == WebSocketMessageType.Close) break;
+                        ms.Write(buffer, 0, res.Count);
+                    } while (!res.EndOfMessage);
+
+                    if (res.MessageType == WebSocketMessageType.Close) break;
+                    if (ms.Length == 0) continue;
+
+                    await ProcessDepthFrameAsync(ms.ToArray(), cfg, state, tgToken, tgChat);
+                }
+            }
+            catch (OperationCanceledException) { break; }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"[DepthWS reconexión en {backoffMs}ms] {ex.Message}");
+                await Task.Delay(backoffMs, ct);
+                backoffMs = Math.Min(30_000, backoffMs * 2);
+            }
+        }
+    }
+
+    private static async Task ProcessDepthFrameAsync(
+        byte[] payload, AppConfig cfg, MonitorState state, string tgToken, string tgChat)
+    {
+        using var doc = JsonDocument.Parse(payload);
+        var root = doc.RootElement;
+        if (!root.TryGetProperty("stream", out var stEl) || !root.TryGetProperty("data", out var data)) return;
+        string streamName = stEl.GetString() ?? "";
+        int atIdx = streamName.IndexOf('@');
+        if (atIdx <= 0) return;
+        string sym = streamName[..atIdx].ToUpperInvariant();
+
+        JsonElement bidsEl = data.TryGetProperty("bids", out var b1) ? b1 : (data.TryGetProperty("b", out var b2) ? b2 : default);
+        JsonElement asksEl = data.TryGetProperty("asks", out var a1) ? a1 : (data.TryGetProperty("a", out var a2) ? a2 : default);
+        if (bidsEl.ValueKind != JsonValueKind.Array || asksEl.ValueKind != JsonValueKind.Array) return;
+
+        double bidUsd = 0, askUsd = 0, bestBid = 0, bestAsk = 0, bwPx = 0, bwUsd = 0, awPx = 0, awUsd = 0;
+        foreach (var row in bidsEl.EnumerateArray())
+        {
+            double p = ParseD(row[0]), q = ParseD(row[1]), u = p * q;
+            if (bestBid == 0) bestBid = p;
+            bidUsd += u;
+            if (u > bwUsd) { bwUsd = u; bwPx = p; }
+        }
+        foreach (var row in asksEl.EnumerateArray())
+        {
+            double p = ParseD(row[0]), q = ParseD(row[1]), u = p * q;
+            if (bestAsk == 0) bestAsk = p;
+            askUsd += u;
+            if (u > awUsd) { awUsd = u; awPx = p; }
+        }
+        double tot = bidUsd + askUsd;
+        if (tot <= 0 || bestBid <= 0 || bestAsk <= 0) return;
+
+        double obi = (bidUsd - askUsd) / tot;
+        double mid = (bestBid + bestAsk) / 2.0;
+        double spreadBps = (bestAsk - bestBid) / mid * 10000.0;
+        long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        var snap = new OrderBookSnapshot(sym, obi, spreadBps, bidUsd, askUsd, bwPx, bwUsd, awPx, awUsd, nowMs);
+        LiveBooks[sym] = snap;
+
+        // Alerta institucional de desequilibrio extremo en libro (cooldown 30 min por símbolo)
+        if (cfg.OrderBookAlerts && Math.Abs(obi) >= cfg.ObiAlertThreshold && tot >= 250_000)
+        {
+            long prev = state.ObiAlerts.GetValueOrDefault(sym, 0);
+            if (nowMs - prev >= 30 * 60 * 1000)
+            {
+                state.ObiAlerts[sym] = nowMs;
+                bool bull = obi > 0;
+                string wallTxt = bull
+                    ? $"Pared Bid: {QuantEngine.FormatPrice(bwPx)} ({bwUsd / 1e6:0.00}M $)"
+                    : $"Pared Ask: {QuantEngine.FormatPrice(awPx)} ({awUsd / 1e6:0.00}M $)";
+                Console.WriteLine($"[OBI EXTREMO] {sym} OBI={obi * 100:+0.0;-0.0}%");
+                await SendTelegramAsync(tgToken, tgChat,
+                    $"🏛️ LIBRO DE ÓRDENES EXTREMO · ★ {sym} ({cfg.Market.ToUpperInvariant()})\nOBI Top 20: {obi * 100:+0.0;-0.0}% ({(bull ? "presión compradora" : "presión vendedora")})\n{wallTxt} · Spread: {spreadBps:0.00} bps");
+            }
+        }
+    }
+
+    private static async Task<DerivativesSnapshot?> FetchDerivativesAsync(string sym, CancellationToken ct)
+    {
+        try
+        {
+            using var premResp = await Http.GetAsync($"https://fapi.binance.com/fapi/v1/premiumIndex?symbol={Uri.EscapeDataString(sym)}", ct);
+            if (!premResp.IsSuccessStatusCode) return null;
+            using var premDoc = await JsonDocument.ParseAsync(await premResp.Content.ReadAsStreamAsync(ct), cancellationToken: ct);
+            var pr = premDoc.RootElement;
+            double funding = pr.TryGetProperty("lastFundingRate", out var frEl) ? ParseD(frEl) : 0;
+            double mark = pr.TryGetProperty("markPrice", out var mkEl) ? ParseD(mkEl) : 0;
+            double idxP = pr.TryGetProperty("indexPrice", out var ixEl) ? ParseD(ixEl) : 0;
+            double basis = (mark > 0 && idxP > 0) ? (mark - idxP) / idxP : 0;
+
+            double oiUsd = 0, oiChg24h = 0, lsRatio = 0;
+            try
+            {
+                using var oiResp = await Http.GetAsync($"https://fapi.binance.com/futures/data/openInterestHist?symbol={Uri.EscapeDataString(sym)}&period=1h&limit=25", ct);
+                if (oiResp.IsSuccessStatusCode)
+                {
+                    using var oiDoc = await JsonDocument.ParseAsync(await oiResp.Content.ReadAsStreamAsync(ct), cancellationToken: ct);
+                    var arr = oiDoc.RootElement;
+                    int len = arr.GetArrayLength();
+                    if (len > 0)
+                    {
+                        oiUsd = ParseD(arr[len - 1].GetProperty("sumOpenInterestValue"));
+                        if (len >= 24)
+                        {
+                            double oi0 = ParseD(arr[0].GetProperty("sumOpenInterestValue"));
+                            if (oi0 > 0) oiChg24h = oiUsd / oi0 - 1.0;
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            try
+            {
+                using var lsResp = await Http.GetAsync($"https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol={Uri.EscapeDataString(sym)}&period=1h&limit=1", ct);
+                if (lsResp.IsSuccessStatusCode)
+                {
+                    using var lsDoc = await JsonDocument.ParseAsync(await lsResp.Content.ReadAsStreamAsync(ct), cancellationToken: ct);
+                    var arr = lsDoc.RootElement;
+                    if (arr.GetArrayLength() > 0)
+                        lsRatio = ParseD(arr[0].GetProperty("longShortRatio"));
+                }
+            }
+            catch { }
+
+            string squeeze = (funding <= -0.0002 && oiChg24h > 0.02) ? "⚡ Short Squeeze"
+                           : (funding >= 0.0004 && oiChg24h > 0.02) ? "⚠ Long Squeeze"
+                           : "Equilibrio";
+
+            return new DerivativesSnapshot(funding, basis, oiUsd, oiChg24h, lsRatio, squeeze);
+        }
+        catch { return null; }
     }
 
     private static async Task RunTickerWebSocketLoopAsync(
@@ -168,7 +361,6 @@ public static class Program
 
             LivePrices[sym] = px;
 
-            // A) Evaluar alertas de precio en tiempo real
             foreach (var alert in cfg.PriceAlerts)
             {
                 if (!sym.Equals(alert.Sym, StringComparison.OrdinalIgnoreCase)) continue;
@@ -181,8 +373,7 @@ public static class Program
                 if (alert.Repeat && prev > 0 && nowMs - prev < 60_000) continue;
 
                 bool up = alert.Dir.Equals("up", StringComparison.OrdinalIgnoreCase);
-                bool hit = up ? px >= alert.Target : px <= alert.Target;
-                if (!hit) continue;
+                if (!(up ? px >= alert.Target : px <= alert.Target)) continue;
 
                 state.FiredAlerts[key] = nowMs;
                 string msg = $"{(up ? "🚨📈 SUBIÓ" : "🚨📉 BAJÓ")} {sym} ({cfg.Market.ToUpperInvariant()})\nPrecio WebSocket: {QuantEngine.FormatPrice(px)}\nObjetivo {(up ? "≥" : "≤")} {QuantEngine.FormatPrice(alert.Target)}";
@@ -190,7 +381,6 @@ public static class Program
                 await SendTelegramAsync(tgToken, tgChat, msg);
             }
 
-            // B) Evaluar posiciones abiertas del Simulador Aislado de Paper Trading
             await UpdatePaperOnTickAsync(paper, sym, px, nowMs, tgToken, tgChat);
         }
     }
@@ -209,10 +399,7 @@ public static class Program
 
                 bool hitSl = pos.Side > 0 ? px <= pos.Sl : px >= pos.Sl;
                 bool hitTp = pos.Side > 0 ? px >= pos.Tp : px <= pos.Tp;
-                if (hitSl || hitTp || nowMs >= pos.ExpiresAt)
-                {
-                    toClose.Add(pos);
-                }
+                if (hitSl || hitTp || nowMs >= pos.ExpiresAt) toClose.Add(pos);
             }
         }
 
@@ -235,27 +422,16 @@ public static class Program
                 paper.Cash += netUsd;
                 paper.Closed.Insert(0, new PaperClosedTrade
                 {
-                    Id = pos.Id,
-                    OpenedAt = pos.OpenedAt,
-                    ClosedAt = nowMs,
-                    Sym = pos.Sym,
-                    Market = pos.Market,
-                    Tf = pos.Tf,
-                    Rule = pos.Rule,
-                    Side = pos.Side,
-                    Entry = pos.Entry,
-                    Exit = exitPx,
-                    Reason = reason,
-                    NetUsd = netUsd,
-                    NetPct = netPct,
-                    RMultiple = rMult
+                    Id = pos.Id, OpenedAt = pos.OpenedAt, ClosedAt = nowMs,
+                    Sym = pos.Sym, Market = pos.Market, Tf = pos.Tf, Rule = pos.Rule, Side = pos.Side,
+                    Entry = pos.Entry, Exit = exitPx, Reason = reason, NetUsd = netUsd, NetPct = netPct, RMultiple = rMult
                 });
                 if (paper.Closed.Count > 500) paper.Closed.RemoveRange(500, paper.Closed.Count - 500);
             }
 
             Console.WriteLine($"[PAPER CERRADO] {pos.Sym} ({reason}) {netUsd:+0.00;-0.00} USDT ({rMult:+0.00;-0.00}R)");
             await SendTelegramAsync(tgToken, tgChat,
-                $"🧪 PAPER CERRADO ({reason}) · {pos.Sym} {pos.Tf.ToUpperInvariant()}\n{(pos.Side > 0 ? "LONG" : "SHORT")} {pos.Rule}: {QuantEngine.FormatPrice(pos.Entry)} → {QuantEngine.FormatPrice(exitPx)}\nResultado: {netUsd:+0.00;-0.00} USDT ({rMult:+0.00;-0.00}R) · Balance Paper: {paper.TotalEquity:N2} USDT");
+                $"🧪 PAPER CERRADO ({reason}) · {pos.Sym} {pos.Tf.ToUpperInvariant()}\n{(pos.Side > 0 ? "LONG" : "SHORT")} {pos.Rule}: {QuantEngine.FormatPrice(pos.Entry)} → {QuantEngine.FormatPrice(exitPx)}\nResultado: {netUsd:+0.00;-0.00} USDT ({rMult:+0.00;-0.00}R)\n{BuildPaperAuditSummary(paper)}");
         }
     }
 
@@ -269,7 +445,6 @@ public static class Program
         double costRt = costSide * 2.0;
         long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-        // Priorizar favoritas al inicio de la lista de escaneo
         var orderedSymbols = cfg.Favorites
             .Concat(cfg.Symbols)
             .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -298,14 +473,12 @@ public static class Program
                     state.Candles[key] = lastCandle.OpenTime;
                     if (firstSeen && (nowMs - (lastCandle.CloseTime + 1)) > 20 * 60 * 1000) continue;
 
-                    // Evaluar Régimen Duro HTF (EMA 50 vs EMA 200)
                     string htf = QuantEngine.HigherTimeframeFor(tf, cfg.RegimeHtf);
                     string htfKey = $"{sym}|{htf}";
                     if (!htfCache.TryGetValue(htfKey, out var htfRegime))
                     {
                         var htfCandles = htf == tf ? candles : await FetchHistoryAsync(market, sym, htf, 300, ct);
-                        var htfClosed = htfCandles.Where(k => k.CloseTime < nowMs).ToList();
-                        htfRegime = QuantEngine.EvaluateRegime(htfClosed);
+                        htfRegime = QuantEngine.EvaluateRegime(htfCandles.Where(k => k.CloseTime < nowMs).ToList());
                         htfCache[htfKey] = htfRegime;
                     }
 
@@ -322,12 +495,20 @@ public static class Program
                     bool up = hit.Bias > 0;
                     bool isFav = cfg.Favorites.Any(f => f.Equals(sym, StringComparison.OrdinalIgnoreCase));
 
-                    // Ejecutar en Simulador Aislado de Paper Trading si corresponde
+                    // Enriquecer señal con Microestructura (Funding/OI + Order Book OBI)
+                    var deriv = await FetchDerivativesAsync(sym, ct);
+                    string microLine = deriv.HasValue
+                        ? $"\n🏛️ Derivados: Funding {deriv.Value.FundingRate * 100:+0.000;-0.000}% · OI 24h {deriv.Value.OiChange24hPct * 100:+0.0;-0.0}% · L/S {deriv.Value.LongShortRatio:0.00} ({deriv.Value.SqueezeStatus})"
+                        : "";
+                    string obLine = LiveBooks.TryGetValue(sym, out var ob)
+                        ? $"\n📚 Libro Top 20: OBI {ob.Obi * 100:+0.0;-0.0}% · BidWall {QuantEngine.FormatPrice(ob.BidWallPrice)} · AskWall {QuantEngine.FormatPrice(ob.AskWallPrice)}"
+                        : "";
+
                     string paperNote = "";
                     if (cfg.PaperTrading.Enabled && (up || market == "futures"))
                     {
                         bool opened = TryOpenPaperPosition(paper, cfg.PaperTrading, sym, market, tf, hit.Code, hit.Bias, px, sl, tp, risk, costSide, Math.Max(12, hit.Horizon));
-                        if (opened) paperNote = $"\n🧪 Paper Trading: Ejecutado (Balance virtual {paper.TotalEquity:N2} USDT)";
+                        if (opened) paperNote = $"\n🧪 Paper Trading: Ejecutado (Balance {paper.TotalEquity:N2} USDT)";
                     }
 
                     string msg =
@@ -335,9 +516,9 @@ public static class Program
                         $"Regla: {hit.Code} {hit.Name}\n" +
                         $"Régimen HTF ({htf.ToUpperInvariant()}): {hit.HtfRegime.Label} ({hit.HtfRegime.SpreadPct * 100:+0.00;-0.00}%) · Hurst: {(double.IsFinite(hit.Hurst) ? hit.Hurst.ToString("0.00", CultureInfo.InvariantCulture) : "—")}\n" +
                         $"Evidencia (h={hit.Horizon}v): n={hit.SampleCount} · acierto {hit.HitRate * 100:0.0}% · neto {hit.NetReturn * 100:+0.00;-0.00}% · p={hit.PValue:0.0000} (BH✓)\n" +
-                        $"Ref: {QuantEngine.FormatPrice(px)} · SL: {QuantEngine.FormatPrice(sl)} · Obj 2R: {QuantEngine.FormatPrice(tp)}{paperNote}";
+                        $"Ref: {QuantEngine.FormatPrice(px)} · SL: {QuantEngine.FormatPrice(sl)} · Obj 2R: {QuantEngine.FormatPrice(tp)}{microLine}{obLine}{paperNote}";
 
-                    Console.WriteLine($"[SEÑAL CONFIRMADA] {sym} {tf} {hit.Code} (HTF={hit.HtfRegime.Label})");
+                    Console.WriteLine($"[SEÑAL CONFIRMADA v5] {sym} {tf} {hit.Code}");
                     await SendTelegramAsync(tgToken, tgChat, msg);
                 }
                 catch (Exception ex)
@@ -364,26 +545,14 @@ public static class Program
 
             double lev = market == "futures" ? pcfg.Leverage : 1.0;
             double qty = riskUsd / perUnit;
-            double notional = qty * entry;
-            if (notional > eq * lev) qty = (eq * lev) / entry;
+            if (qty * entry > eq * lev) qty = (eq * lev) / entry;
 
             long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             paper.Open.Insert(0, new PaperPosition
             {
-                Id = $"{nowMs}-{sym}-{tf}",
-                OpenedAt = nowMs,
-                Sym = sym,
-                Market = market,
-                Tf = tf,
-                Rule = ruleCode,
-                Side = side,
-                Entry = entry,
-                LastPrice = entry,
-                Sl = sl,
-                Tp = tp,
-                Risk = risk,
-                Qty = qty,
-                CostSide = costSide,
+                Id = $"{nowMs}-{sym}-{tf}", OpenedAt = nowMs, Sym = sym, Market = market, Tf = tf,
+                Rule = ruleCode, Side = side, Entry = entry, LastPrice = entry, Sl = sl, Tp = tp,
+                Risk = risk, Qty = qty, CostSide = costSide,
                 ExpiresAt = nowMs + maxBars * QuantEngine.TfToMs(tf),
                 UnrealizedUsd = -qty * costSide * entry
             });
@@ -416,7 +585,7 @@ public static class Program
                     page = ParseKlines(doc.RootElement);
                     break;
                 }
-                catch { /* probar siguiente host */ }
+                catch { }
             }
             if (page == null || page.Count == 0) break;
             if (all.Count > 0)
@@ -439,16 +608,11 @@ public static class Program
         {
             if (row.GetArrayLength() < 11) continue;
             long ot = row[0].GetInt64();
-            double o = ParseD(row[1]);
-            double h = ParseD(row[2]);
-            double l = ParseD(row[3]);
-            double c = ParseD(row[4]);
-            double v = ParseD(row[5]);
+            double o = ParseD(row[1]), h = ParseD(row[2]), l = ParseD(row[3]), c = ParseD(row[4]), v = ParseD(row[5]);
             long ct = row[6].GetInt64();
             double qv = ParseD(row[7]);
             int tr = row[8].GetInt32();
-            double tb = ParseD(row[9]);
-            double tq = ParseD(row[10]);
+            double tb = ParseD(row[9]), tq = ParseD(row[10]);
             if (o > 0 && c > 0 && h >= l)
                 list.Add(new Candle(ot, ct, o, h, l, c, v, qv, tr, tb, tq));
         }
@@ -472,13 +636,9 @@ public static class Program
             string url = $"https://api.telegram.org/bot{Uri.EscapeDataString(token)}/sendMessage";
             var payload = new { chat_id = chatId, text, disable_web_page_preview = true };
             using var resp = await Http.PostAsJsonAsync(url, payload);
-            if (!resp.IsSuccessStatusCode)
-                Console.Error.WriteLine($"[Telegram HTTP {(int)resp.StatusCode}]");
+            if (!resp.IsSuccessStatusCode) Console.Error.WriteLine($"[Telegram HTTP {(int)resp.StatusCode}]");
         }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"[Telegram error] {ex.Message}");
-        }
+        catch (Exception ex) { Console.Error.WriteLine($"[Telegram error] {ex.Message}"); }
     }
 
     private static T LoadJson<T>(string path, T fallback)
