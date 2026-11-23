@@ -1,39 +1,32 @@
 {
-  "version": "4.0",
+  "version": "6.0",
   "market": "spot",
+  "thr": "esc",
+  "rvol": "seas",
   "favorites": [
     "BTCUSDT",
     "ETHUSDT",
-    "ADAUSDT",
     "SOLUSDT",
+    "BNBUSDT",
     "XRPUSDT"
   ],
   "symbols": [
     "BTCUSDT",
     "ETHUSDT",
     "SOLUSDT",
-    "ZECUSDT",
-    "XRPUSDT",
-    "SOXLBUSDT",
     "BNBUSDT",
-    "NVDABUSDT",
-    "NEARUSDT",
-    "XAUTUSDT",
-    "HYPEUSDT",
-    "DOGEUSDT",
-    "UUSDT",
-    "PEPEUSDT",
-    "SUIUSDT",
-    "PAXGUSDT",
-    "UNIUSDT",
-    "MUBUSDT",
-    "ENAUSDT",
-    "TRXUSDT",
+    "XRPUSDT",
     "ADAUSDT",
+    "DOGEUSDT",
+    "AVAXUSDT",
     "LINKUSDT",
-    "SPCXBUSDT",
-    "GOOGLBUSDT",
-    "QQQBUSDT"
+    "SUIUSDT",
+    "NEARUSDT",
+    "ARBUSDT",
+    "DOTUSDT",
+    "INJUSDT",
+    "TONUSDT",
+    "OPUSDT"
   ],
   "timeframes": [
     "15m",
@@ -47,6 +40,8 @@
   "regimeHtf": "auto",
   "strictLateral": false,
   "adaptiveTriggers": true,
+  "orderBookAlerts": true,
+  "obiAlertThreshold": 0.6,
   "paperTrading": {
     "enabled": true,
     "initialCapital": 10000,
@@ -58,25 +53,12 @@
   "sigAlert": "BOTH",
   "priceAlerts": [
     {
-      "sym": "ADAUSDT",
-      "market": "spot",
-      "dir": "up",
-      "target": 1600,
-      "repeat": true
-    },
-    {
-      "sym": "ETHUSDT",
-      "market": "spot",
-      "dir": "up",
-      "target": 1790,
-      "repeat": false
-    },
-    {
       "sym": "BTCUSDT",
       "market": "spot",
       "dir": "up",
-      "target": 65000,
+      "target": 120000,
       "repeat": false
     }
-  ]
+  ],
+  "edgeBook": null
 }
