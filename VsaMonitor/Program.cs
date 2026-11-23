@@ -8,7 +8,10 @@ using System.Text.Json;
 namespace VsaMonitor;
 
 /// <summary>
-/// VSA &amp; Orderflow v5.0 · Institutional Microstructure Backend (.NET 8 Self-Contained)
+/// VSA &amp; Orderflow v6.0 · Edge Lab Backend (.NET 8 Self-Contained)
+/// - v6: si config.json trae el libro de ventajas (edgeBook) del Laboratorio de la web, las alertas y el Paper salen SOLO de
+///   reglas validadas fuera de muestra en el universo (candidatas: solo Paper). Sin libro vigente, modo clásico por par.
+/// - v6: el Paper se concilia al inicio de cada corrida con velas de 1m/5m/15m (stops y objetivos tocados entre corridas).
 /// - WebSocket 1: Binance !ticker@arr (precios en tiempo real, cero HTTP 429).
 /// - WebSocket 2: Binance @depth20@1000ms combinado sobre Favoritas (Order Book Imbalance + Paredes de liquidez).
 /// - Microestructura de Derivados: Funding Rate, Basis %, Open Interest (Δ 24h) y Long/Short Ratio.
@@ -53,13 +56,22 @@ public static class Program
             Cash = cfg.PaperTrading.InitialCapital
         });
 
-        Console.WriteLine($"[VSA Institutional v5.0 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts}");
+        bool useBook = BookUsable(cfg);
+        Console.WriteLine($"[VSA Edge Lab v6.0 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts} | Libro={(useBook ? $"SÍ ({cfg.EdgeBook!.Edges.Count(e => e.Label == "validada")} validadas, {cfg.EdgeBook.Edges.Count(e => e.Label == "candidata")} candidatas)" : "no (modo clásico por par)")}");
+        if (!cfg.Thr.Equals("esc", StringComparison.OrdinalIgnoreCase)) Console.WriteLine("[Aviso] El backend solo replica umbrales 'esc'; la web usa '" + cfg.Thr + "'.");
+
+        // v6: conciliar el Paper con lo que pasó mientras el backend no corría (mechas que tocaron stop/objetivo, vencimientos)
+        try { await ReconcilePaperAsync(paper, tgToken, tgChat, CancellationToken.None); }
+        catch (Exception ex) { Console.Error.WriteLine($"[Paper conciliación] {ex.Message}"); }
 
         if (testNotify)
         {
             string audit = BuildPaperAuditSummary(paper);
+            string bookTxt = useBook
+                ? $"Libro de ventajas: {cfg.EdgeBook!.Edges.Count(e => e.Label == "validada")} validadas · {cfg.EdgeBook.Edges.Count(e => e.Label == "candidata")} candidatas · {cfg.EdgeBook.Symbols.Count} pares · {string.Join("+", cfg.EdgeBook.Timeframes).ToUpperInvariant()}"
+                : "Sin libro vigente: modo clásico por par";
             await SendTelegramAsync(tgToken, tgChat,
-                $"✅ VSA & Orderflow v5.0 Institutional (.NET 8 WebSockets) operativo.\nMercado: {cfg.Market.ToUpperInvariant()} · TFs: {string.Join("+", cfg.Timeframes).ToUpperInvariant()} · Favoritas: {cfg.Favorites.Count}\nWebSockets: !ticker@arr + @depth20@1000ms · Filtro HTF: {(cfg.HardRegimeFilter ? "ON" : "OFF")}\n{audit}");
+                $"✅ VSA & Orderflow v6.0 Edge Lab (.NET 8 WebSockets) operativo.\nMercado: {cfg.Market.ToUpperInvariant()} · {bookTxt}\nWebSockets: !ticker@arr + @depth20@1000ms · Filtro HTF: {(cfg.HardRegimeFilter ? "ON" : "OFF")}\n{audit}");
         }
 
         using var cts = loopSeconds > 0
@@ -85,7 +97,8 @@ public static class Program
             try
             {
                 await Task.Delay(2500, cts.Token); // dar margen a que lleguen los primeros frames de @depth20
-                await CheckConfirmedSignalsAsync(cfg, state, paper, tgToken, tgChat, cts.Token);
+                if (useBook) await CheckEdgeBookSignalsAsync(cfg, state, paper, tgToken, tgChat, cts.Token);
+                else await CheckConfirmedSignalsAsync(cfg, state, paper, tgToken, tgChat, cts.Token);
             }
             catch (OperationCanceledException) { }
             catch (Exception ex) { Console.Error.WriteLine($"[Señales error] {ex.Message}"); }
@@ -100,10 +113,23 @@ public static class Program
 
         await Task.WhenAny(Task.WhenAll(signalTask, depthTask), Task.Delay(4000));
 
+        lock (paper)
+        {
+            paper.Curve.Add(new EquityPoint { T = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), Eq = paper.TotalEquity });
+            if (paper.Curve.Count > 2000) paper.Curve.RemoveRange(0, paper.Curve.Count - 2000);
+        }
         SaveJson(statePath, state);
         SaveJson(paperPath, paper);
-        Console.WriteLine($"[VSA Institutional v5.0 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
+        Console.WriteLine($"[VSA Edge Lab v6.0 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
         return 0;
+    }
+
+    private static bool BookUsable(AppConfig cfg)
+    {
+        var b = cfg.EdgeBook;
+        if (b == null || b.At <= 0) return false;
+        long age = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - b.At;
+        return b.Market.Equals(cfg.Market, StringComparison.OrdinalIgnoreCase) && age < 14L * 86_400_000L && b.Timeframes.Count > 0 && b.Symbols.Count > 0;
     }
 
     private static string BuildPaperAuditSummary(PaperState paper)
@@ -112,9 +138,18 @@ public static class Program
         int wins = paper.Closed.Count(x => x.NetUsd > 0);
         double wr = n > 0 ? (double)wins / n * 100.0 : 0.0;
         double avgR = n > 0 ? paper.Closed.Average(x => x.RMultiple) : 0.0;
+        double sdR = n > 1 ? Math.Sqrt(paper.Closed.Sum(x => (x.RMultiple - avgR) * (x.RMultiple - avgR)) / (n - 1)) : double.NaN;
+        double tR = n > 1 && sdR > 0 ? avgR / (sdR / Math.Sqrt(n)) : double.NaN;
+        double gw = paper.Closed.Where(x => x.NetUsd > 0).Sum(x => x.NetUsd), gl = -paper.Closed.Where(x => x.NetUsd < 0).Sum(x => x.NetUsd);
+        double pf = gl > 0 ? gw / gl : (gw > 0 ? double.PositiveInfinity : double.NaN);
+        double pk = paper.InitialCapital, mdd = 0;
+        foreach (var pt in paper.Curve) { if (pt.Eq > pk) pk = pt.Eq; if (pk > 0) mdd = Math.Min(mdd, pt.Eq / pk - 1); }
         double pnl = paper.TotalEquity - paper.InitialCapital;
-        string readiness = (n >= 20 && avgR >= 0.15 && pnl > 0) ? "APTA REAL" : $"Incubación ({n}/20)";
-        return $"🧪 Paper Audit: {paper.TotalEquity:N2} USDT ({pnl:+0.00;-0.00}) | Abiertas={paper.Open.Count} | Cerradas={n} (WR {wr:0.0}%, Exp {avgR:+0.00;-0.00}R) | Estado: {readiness}";
+        // v6: con N=20 el error estándar de la media en R es ~0,25R; se exige N ≥ 30 y t ≥ 1,645 (95 % unilateral)
+        bool ready = n >= 30 && double.IsFinite(tR) && tR >= 1.645 && avgR > 0 && (double.IsPositiveInfinity(pf) || pf >= 1.2) && mdd > -0.15;
+        string readiness = ready ? "APTA REAL" : $"Incubación ({n}/30)";
+        string tTxt = double.IsFinite(tR) ? tR.ToString("0.00", CultureInfo.InvariantCulture) : "—";
+        return $"🧪 Paper Audit: {paper.TotalEquity:N2} USDT ({pnl:+0.00;-0.00}) | Abiertas={paper.Open.Count} | Cerradas={n} (WR {wr:0.0}%, Exp {avgR:+0.00;-0.00}R, t {tTxt}, MDD {mdd * 100:0.0}%) | Estado: {readiness}";
     }
 
     private static async Task RunOrderBookWebSocketLoopAsync(
@@ -409,30 +444,95 @@ public static class Program
             bool hitTp = pos.Side > 0 ? px >= pos.Tp : px <= pos.Tp;
             string reason = hitSl ? "STOP" : hitTp ? "OBJETIVO" : "TIEMPO";
             double exitPx = hitSl ? pos.Sl : hitTp ? pos.Tp : px;
-
-            double grossUsd = pos.Qty * pos.Side * (exitPx - pos.Entry);
-            double feesUsd = pos.Qty * pos.CostSide * (pos.Entry + exitPx);
-            double netUsd = grossUsd - feesUsd;
-            double netPct = pos.Side * (exitPx - pos.Entry) / pos.Entry - 2.0 * pos.CostSide;
-            double rMult = pos.Risk > 0 ? netPct / (pos.Risk / pos.Entry) : 0;
-
-            lock (paper)
-            {
-                if (!paper.Open.Remove(pos)) continue;
-                paper.Cash += netUsd;
-                paper.Closed.Insert(0, new PaperClosedTrade
-                {
-                    Id = pos.Id, OpenedAt = pos.OpenedAt, ClosedAt = nowMs,
-                    Sym = pos.Sym, Market = pos.Market, Tf = pos.Tf, Rule = pos.Rule, Side = pos.Side,
-                    Entry = pos.Entry, Exit = exitPx, Reason = reason, NetUsd = netUsd, NetPct = netPct, RMultiple = rMult
-                });
-                if (paper.Closed.Count > 500) paper.Closed.RemoveRange(500, paper.Closed.Count - 500);
-            }
-
-            Console.WriteLine($"[PAPER CERRADO] {pos.Sym} ({reason}) {netUsd:+0.00;-0.00} USDT ({rMult:+0.00;-0.00}R)");
-            await SendTelegramAsync(tgToken, tgChat,
-                $"🧪 PAPER CERRADO ({reason}) · {pos.Sym} {pos.Tf.ToUpperInvariant()}\n{(pos.Side > 0 ? "LONG" : "SHORT")} {pos.Rule}: {QuantEngine.FormatPrice(pos.Entry)} → {QuantEngine.FormatPrice(exitPx)}\nResultado: {netUsd:+0.00;-0.00} USDT ({rMult:+0.00;-0.00}R)\n{BuildPaperAuditSummary(paper)}");
+            await ClosePaperAsync(paper, pos, reason, exitPx, nowMs, tgToken, tgChat);
         }
+    }
+
+    private static async Task ClosePaperAsync(PaperState paper, PaperPosition pos, string reason, double exitPx, long closedAt, string tgToken, string tgChat)
+    {
+        double grossUsd = pos.Qty * pos.Side * (exitPx - pos.Entry);
+        double feesUsd = pos.Qty * pos.CostSide * (pos.Entry + exitPx);
+        double netUsd = grossUsd - feesUsd;
+        double netPct = pos.Side * (exitPx - pos.Entry) / pos.Entry - 2.0 * pos.CostSide;
+        double rMult = pos.Risk > 0 ? netPct / (pos.Risk / pos.Entry) : 0;
+        lock (paper)
+        {
+            if (!paper.Open.Remove(pos)) return;
+            paper.Cash += netUsd;
+            paper.Closed.Insert(0, new PaperClosedTrade
+            {
+                Id = pos.Id, OpenedAt = pos.OpenedAt, ClosedAt = closedAt,
+                Sym = pos.Sym, Market = pos.Market, Tf = pos.Tf, Rule = pos.Rule, Side = pos.Side,
+                Entry = pos.Entry, Exit = exitPx, Reason = reason, NetUsd = netUsd, NetPct = netPct, RMultiple = rMult, Src = pos.Src
+            });
+            if (paper.Closed.Count > 500) paper.Closed.RemoveRange(500, paper.Closed.Count - 500);
+            paper.Curve.Add(new EquityPoint { T = closedAt, Eq = paper.TotalEquity });
+        }
+        Console.WriteLine($"[PAPER CERRADO] {pos.Sym} ({reason}) {netUsd:+0.00;-0.00} USDT ({rMult:+0.00;-0.00}R)");
+        await SendTelegramAsync(tgToken, tgChat,
+            $"🧪 PAPER CERRADO ({reason}) · {pos.Sym} {pos.Tf.ToUpperInvariant()} · {pos.Src}\n{(pos.Side > 0 ? "LONG" : "SHORT")} {pos.Rule}: {QuantEngine.FormatPrice(pos.Entry)} → {QuantEngine.FormatPrice(exitPx)}\nResultado: {netUsd:+0.00;-0.00} USDT ({rMult:+0.00;-0.00}R)\n{BuildPaperAuditSummary(paper)}");
+    }
+
+    /// <summary>
+    /// v6: concilia cada posición abierta con velas de 1m (5m/15m si el hueco es largo) desde la última vela revisada.
+    /// Detecta stops/objetivos tocados por mechas entre corridas de GitHub Actions, gaps a través del stop y vencimientos.
+    /// Si una vela toca stop y objetivo a la vez, cuenta el stop (conservador, igual que el backtest).
+    /// </summary>
+    private static async Task ReconcilePaperAsync(PaperState paper, string tgToken, string tgChat, CancellationToken ct)
+    {
+        List<PaperPosition> open;
+        lock (paper) open = paper.Open.ToList();
+        foreach (var pos in open)
+        {
+            long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            long from = Math.Max(pos.Chk > 0 ? pos.Chk : pos.OpenedAt, pos.OpenedAt);
+            bool done = false;
+            for (int page = 0; page < 6 && !done; page++)
+            {
+                long gap = nowMs - from;
+                string iv = gap <= 16 * 3_600_000L ? "1m" : gap <= (long)(3.4 * 86_400_000L) ? "5m" : "15m";
+                long ivMs = QuantEngine.TfToMs(iv);
+                var rows = await FetchKlinesFromAsync(pos.Market, pos.Sym, iv, from / ivMs * ivMs, 1000, ct);
+                if (rows.Count == 0) break;
+                foreach (var k in rows)
+                {
+                    if (k.OpenTime < pos.OpenedAt) continue; // la vela que contiene la entrada tiene precios previos
+                    bool closed = k.CloseTime < nowMs, lng = pos.Side > 0;
+                    if (lng ? k.Open <= pos.Sl : k.Open >= pos.Sl) { await ClosePaperAsync(paper, pos, "STOP", k.Open, k.OpenTime, tgToken, tgChat); done = true; break; }
+                    if (lng ? k.Open >= pos.Tp : k.Open <= pos.Tp) { await ClosePaperAsync(paper, pos, "OBJETIVO", k.Open, k.OpenTime, tgToken, tgChat); done = true; break; }
+                    bool hitSl = lng ? k.Low <= pos.Sl : k.High >= pos.Sl, hitTp = lng ? k.High >= pos.Tp : k.Low <= pos.Tp;
+                    if (hitSl) { await ClosePaperAsync(paper, pos, "STOP", pos.Sl, k.OpenTime, tgToken, tgChat); done = true; break; }
+                    if (hitTp) { await ClosePaperAsync(paper, pos, "OBJETIVO", pos.Tp, k.OpenTime, tgToken, tgChat); done = true; break; }
+                    if (closed && pos.ExpiresAt > 0 && k.CloseTime + 1 >= pos.ExpiresAt) { await ClosePaperAsync(paper, pos, "TIEMPO", k.Close, k.CloseTime + 1, tgToken, tgChat); done = true; break; }
+                    if (closed) pos.Chk = k.CloseTime + 1;
+                    pos.LastPrice = k.Close;
+                    pos.UnrealizedUsd = pos.Qty * (pos.Side * (k.Close - pos.Entry) - pos.CostSide * (pos.Entry + k.Close));
+                }
+                if (rows.Count < 1000) break;
+                from = Math.Max(from + ivMs, pos.Chk);
+            }
+        }
+    }
+
+    private static async Task<List<Candle>> FetchKlinesFromAsync(string market, string sym, string tf, long startTime, int limit, CancellationToken ct)
+    {
+        var hosts = market == "futures" ? FuturesHosts : SpotHosts;
+        string path = market == "futures" ? "/fapi/v1/klines" : "/api/v3/klines";
+        foreach (string host in hosts)
+        {
+            string url = $"{host}{path}?symbol={Uri.EscapeDataString(sym)}&interval={Uri.EscapeDataString(tf)}&limit={limit}&startTime={startTime}";
+            try
+            {
+                using var resp = await Http.GetAsync(url, ct);
+                if (!resp.IsSuccessStatusCode) continue;
+                using var stream = await resp.Content.ReadAsStreamAsync(ct);
+                using var doc = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
+                return ParseKlines(doc.RootElement);
+            }
+            catch (OperationCanceledException) { throw; }
+            catch { }
+        }
+        return new List<Candle>();
     }
 
     private static async Task CheckConfirmedSignalsAsync(
@@ -484,7 +584,7 @@ public static class Program
 
                     var hit = QuantEngine.EvaluateLatestConfirmed(
                         closed, htfRegime, sym, tf, costRt, cfg.Kfine,
-                        cfg.HardRegimeFilter, cfg.StrictLateral, cfg.SigAlert);
+                        cfg.HardRegimeFilter, cfg.StrictLateral, cfg.SigAlert, cfg.Rvol);
 
                     if (hit == null) continue;
 
@@ -507,7 +607,7 @@ public static class Program
                     string paperNote = "";
                     if (cfg.PaperTrading.Enabled && (up || market == "futures"))
                     {
-                        bool opened = TryOpenPaperPosition(paper, cfg.PaperTrading, sym, market, tf, hit.Code, hit.Bias, px, sl, tp, risk, costSide, Math.Max(12, hit.Horizon));
+                        bool opened = TryOpenPaperPosition(paper, cfg.PaperTrading, sym, market, tf, hit.Code, hit.Bias, px, sl, tp, risk, costSide, Math.Max(12, hit.Horizon), "par");
                         if (opened) paperNote = $"\n🧪 Paper Trading: Ejecutado (Balance {paper.TotalEquity:N2} USDT)";
                     }
 
@@ -529,9 +629,104 @@ public static class Program
         }
     }
 
+    /// <summary>
+    /// v6 · modo libro: recorre los pares y TFs del libro y, cuando cierra una vela nueva, evalúa SOLO las reglas validadas
+    /// fuera de muestra en el universo (alerta + Paper) y, si el libro lo permite, las candidatas (solo Paper, sin alerta).
+    /// Usa la salida exacta con la que se validó cada ventaja (stop ATR, objetivo R, tope de velas).
+    /// </summary>
+    private static async Task CheckEdgeBookSignalsAsync(AppConfig cfg, MonitorState state, PaperState paper, string tgToken, string tgChat, CancellationToken ct)
+    {
+        var book = cfg.EdgeBook!;
+        string market = book.Market.Equals("futures", StringComparison.OrdinalIgnoreCase) ? "futures" : "spot";
+        double baseFee = market == "futures" ? 0.0004 : 0.0010, slip = 0.0002;
+        long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        int nVal = book.Edges.Count(e => e.Label == "validada"), nCand = book.Edges.Count(e => e.Label == "candidata");
+        if (nVal == 0 && !(book.PaperCandidates && nCand > 0))
+        {
+            Console.WriteLine("[Libro] Sin ventajas validadas (ni candidatas para Paper): no se emiten señales. No operar también protege el capital.");
+            return;
+        }
+        var syms = book.Symbols.Distinct(StringComparer.OrdinalIgnoreCase).Take(60).ToList();
+        var htfCache = new Dictionary<string, RegimeResult>(StringComparer.OrdinalIgnoreCase);
+        int checkedN = 0, hitsN = 0;
+        foreach (string sym in syms)
+        {
+            if (ct.IsCancellationRequested) break;
+            foreach (string tf in book.Timeframes)
+            {
+                if (ct.IsCancellationRequested) break;
+                if (!book.Edges.Any(e => e.Tf == tf && (e.Label == "validada" || (book.PaperCandidates && e.Label == "candidata")))) continue;
+                try
+                {
+                    var candles = await FetchHistoryAsync(market, sym, tf, tf == "15m" ? 2000 : 1000, ct);
+                    var closed = candles.Where(k => k.CloseTime < nowMs).ToList();
+                    if (closed.Count < 200) continue;
+                    var last = closed[^1];
+                    string key = $"book|{market}|{sym}|{tf}";
+                    if (state.Candles.TryGetValue(key, out long prevT) && prevT == last.OpenTime) continue;
+                    state.Candles[key] = last.OpenTime;
+                    long tfMs = QuantEngine.TfToMs(tf), entryT = last.CloseTime + 1;
+                    if (nowMs - entryT > tfMs / 2) continue; // la vela de entrada ya pasó la mitad: señal tardía (la evidencia supone entrar en su apertura)
+                    checkedN++;
+                    var fa = QuantEngine.Analyze(closed, tf, book.Rvol);
+                    string htf = QuantEngine.HigherTimeframeFor(tf, book.RegimeHtf);
+                    RegimeResult reg = new(0, "SIN FILTRO", double.NaN, false);
+                    if (book.HardRegime)
+                    {
+                        string hk = $"{sym}|{htf}";
+                        if (!htfCache.TryGetValue(hk, out reg))
+                        {
+                            var hc = await FetchHistoryAsync(market, sym, htf, 1000, ct);
+                            reg = QuantEngine.EvaluateRegime(hc.Where(k => k.CloseTime < nowMs).ToList());
+                            htfCache[hk] = reg;
+                        }
+                    }
+                    var hits = QuantEngine.EvaluateEdgeBook(fa, book, tf, reg, book.PaperCandidates);
+                    if (hits.Count == 0) continue;
+                    hitsN++;
+                    var top = hits[0];
+                    bool isVal = top.Edge.Label == "validada", up = top.Bias > 0, tradable = up || market == "futures";
+                    double px = LivePrices.TryGetValue(sym, out double livePx) ? livePx : last.Close;
+                    double half = LiveBooks.TryGetValue(sym, out var obk) && double.IsFinite(obk.SpreadBps) ? obk.SpreadBps / 2.0 / 10000.0 : 0;
+                    double costSide = baseFee + Math.Max(slip, half);
+                    double atr = fa.Atr[^1], risk = Math.Max(book.SlAtr * atr, px * 0.0035);
+                    if (!(risk > 0) || !(px > 0)) continue;
+                    double sl = px - top.Bias * risk, tp = px + top.Bias * book.Rr * risk;
+                    bool isFav = cfg.Favorites.Any(f => f.Equals(sym, StringComparison.OrdinalIgnoreCase));
+
+                    string paperNote = "";
+                    if (cfg.PaperTrading.Enabled && tradable && (isVal || book.PaperCandidates))
+                    {
+                        bool opened = TryOpenPaperPosition(paper, cfg.PaperTrading, sym, market, tf, top.Code, top.Bias, px, sl, tp, risk, costSide, book.MaxBars,
+                            isVal ? "universo" : "candidata", entryT + book.MaxBars * tfMs);
+                        if (opened) paperNote = $"\n🧪 Paper ({(isVal ? "validada" : "candidata")}): ejecutado · Balance {paper.TotalEquity:N2} USDT";
+                    }
+                    Console.WriteLine($"[LIBRO {(isVal ? "VALIDADA" : "candidata")}] {sym} {tf} {top.Code}{paperNote.Replace("\n", " ")}");
+                    if (!isVal || !cfg.SigAlertOn) continue;
+                    if (cfg.SigAlert == "BUY" && !up) continue;
+                    if (cfg.SigAlert == "SELL" && up) continue;
+
+                    var e = top.Edge;
+                    string f2(double? v) => v.HasValue && double.IsFinite(v.Value) ? v.Value.ToString("+0.00;-0.00", CultureInfo.InvariantCulture) : "—";
+                    string headTxt = !tradable ? "🚪 SALIDA VALIDADA (si tenés " + sym.Replace("USDT", "") + ")" : up ? "🎯📈 COMPRA VALIDADA (universo)" : "🎯📉 VENTA VALIDADA (universo)";
+                    string msg =
+                        $"{headTxt} {(isFav ? "★ " : "")}· {sym} ({market.ToUpperInvariant()}) · {tf.ToUpperInvariant()}\n" +
+                        $"Regla: {top.Code} {top.Name}\n" +
+                        $"Universo ({e.NSym} pares): fuera de muestra {f2(e.E)}R/op (t {(e.TTest ?? double.NaN).ToString("0.0", CultureInfo.InvariantCulture)}, n {e.NTest}) · entren. {f2(e.ETrain)}R (n {e.NTrain})" + (e.Hit.HasValue ? $" · acierto {e.Hit.Value * 100:0}%" : "") + "\n" +
+                        $"Régimen HTF ({htf.ToUpperInvariant()}): {reg.Label}" + (double.IsFinite(reg.SpreadPct) ? $" ({reg.SpreadPct * 100:+0.00;-0.00}%)" : "") + "\n" +
+                        (tradable ? $"Ref: {QuantEngine.FormatPrice(px)} · SL: {QuantEngine.FormatPrice(sl)} · Obj {book.Rr:0.0}R: {QuantEngine.FormatPrice(tp)} · tope {book.MaxBars} velas" : "Spot: la evidencia sugiere salir o reducir; si no tenés la moneda, no comprar ahora.") + paperNote;
+                    await SendTelegramAsync(tgToken, tgChat, msg);
+                }
+                catch (OperationCanceledException) { throw; }
+                catch (Exception ex) { Console.Error.WriteLine($"[Libro {sym} {tf}] {ex.Message}"); }
+            }
+        }
+        Console.WriteLine($"[Libro] Velas nuevas evaluadas: {checkedN} · con señal del libro: {hitsN}");
+    }
+
     private static bool TryOpenPaperPosition(
         PaperState paper, PaperConfig pcfg, string sym, string market, string tf,
-        string ruleCode, int side, double entry, double sl, double tp, double risk, double costSide, int maxBars)
+        string ruleCode, int side, double entry, double sl, double tp, double risk, double costSide, int maxBars, string src = "par", long expiresAt = 0)
     {
         lock (paper)
         {
@@ -544,8 +739,12 @@ public static class Program
             if (perUnit <= 0 || entry <= 0) return false;
 
             double lev = market == "futures" ? pcfg.Leverage : 1.0;
+            // v6: tope AGREGADO (antes cada posición podía usar el 100 % del capital: 5 posiciones Spot = 5× el capital)
+            double used = paper.Open.Sum(p => p.Market == "futures" ? p.Qty * p.Entry / Math.Max(1.0, pcfg.Leverage) : p.Qty * p.Entry);
+            double maxNot = Math.Max(0, eq - used) * lev;
+            if (maxNot < eq * 0.02) return false;
             double qty = riskUsd / perUnit;
-            if (qty * entry > eq * lev) qty = (eq * lev) / entry;
+            if (qty * entry > maxNot) qty = maxNot / entry;
 
             long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             paper.Open.Insert(0, new PaperPosition
@@ -553,8 +752,8 @@ public static class Program
                 Id = $"{nowMs}-{sym}-{tf}", OpenedAt = nowMs, Sym = sym, Market = market, Tf = tf,
                 Rule = ruleCode, Side = side, Entry = entry, LastPrice = entry, Sl = sl, Tp = tp,
                 Risk = risk, Qty = qty, CostSide = costSide,
-                ExpiresAt = nowMs + maxBars * QuantEngine.TfToMs(tf),
-                UnrealizedUsd = -qty * costSide * entry
+                ExpiresAt = expiresAt > 0 ? expiresAt : nowMs + maxBars * QuantEngine.TfToMs(tf),
+                UnrealizedUsd = -qty * costSide * entry, Chk = nowMs, Src = src
             });
             return true;
         }
