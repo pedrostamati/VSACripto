@@ -1,5 +1,18 @@
 name: Compilar App Android (APK)
 
+# v6 · Arma el proyecto Android en cada corrida (el repo NO necesita carpeta AndroidApp/)
+# y embebe el index.html de la raíz del repo.
+#
+# Firma estable (opcional, recomendado): creá el secreto APK_KEY_PASS en
+# Settings → Secrets and variables → Actions (mínimo 12 caracteres). La primera corrida
+# genera la llave, la guarda CIFRADA (AES-256 + PBKDF2) en android-signing/vsa-key.p12.enc
+# y desde ahí cada APK nuevo se instala encima del anterior sin perder los datos de la app.
+# Sin el secreto, funciona como antes (llave debug descartable).
+#
+# Descargas: los botones que bajan CSV o config.json guardan el archivo en Descargas/VSA
+# (Android 10+) o abren el menú Compartir (Android 7–9). Si esa versión no compilara,
+# el workflow compila la MainActivity clásica y avisa: siempre sale un APK.
+
 on:
   push:
     paths:
@@ -7,10 +20,18 @@ on:
       - '.github/workflows/build_android_apk.yml'
   workflow_dispatch:
 
+# contents: write solo se usa una vez, para guardar la llave cifrada en el repo.
+permissions:
+  contents: write
+
+concurrency:
+  group: build-android-apk
+  cancel-in-progress: false
+
 jobs:
   build-apk:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repositorio
@@ -26,6 +47,105 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
+
+      - name: Versión de la app (se lee del título de index.html)
+        run: |
+          VER=$(sed -nE 's/.*<title>[^<]*v([0-9]+(\.[0-9]+)*).*/\1/p' index.html | head -n 1)
+          [ -n "$VER" ] || VER="6.0"
+          # versionCode = minutos desde 2025-01-01 según la fecha del commit: siempre crece
+          CT=$(git log -1 --format=%ct)
+          CODE=$(( (CT - 1735689600) / 60 ))
+          [ "$CODE" -gt 60 ] || CODE=61
+          {
+            echo "VSA_VER=$VER"
+            echo "VSA_VERSION_NAME=$VER.$GITHUB_RUN_NUMBER"
+            echo "VSA_VERSION_CODE=$CODE"
+          } >> "$GITHUB_ENV"
+          echo "index.html v$VER → versionName $VER.$GITHUB_RUN_NUMBER · versionCode $CODE"
+
+      - name: Llave de firma estable (permite actualizar sin desinstalar)
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+        run: |
+          set +e
+          ENC="android-signing/vsa-key.p12.enc"
+          KS="$RUNNER_TEMP/vsa-key.p12"
+          BR="$GITHUB_REF_NAME"
+          debug_only() {
+            echo "VSA_SIGN=debug" >> "$GITHUB_ENV"
+            exit 0
+          }
+          if [ -z "${APK_KEY_PASS:-}" ]; then
+            echo "::warning title=APK sin firma estable::Falta el secreto APK_KEY_PASS. Este APK lleva una llave debug descartable: para instalar el próximo habrá que desinstalar la app."
+            debug_only
+          fi
+          if [ "${#APK_KEY_PASS}" -lt 12 ]; then
+            echo "::error title=APK_KEY_PASS demasiado corta::Usá al menos 12 caracteres (letras y números)."
+            exit 1
+          fi
+          tip()     { git fetch --quiet --no-tags origin "+refs/heads/$BR:refs/remotes/origin/$BR"; }
+          has_key() { git cat-file -e "refs/remotes/origin/$BR:$ENC" 2>/dev/null; }
+          restore() {
+            git show "refs/remotes/origin/$BR:$ENC" > "$RUNNER_TEMP/key.enc" &&
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 \
+              -in "$RUNNER_TEMP/key.enc" -out "$KS" -pass env:APK_KEY_PASS 2>/dev/null &&
+            keytool -list -keystore "$KS" -storetype PKCS12 -storepass:env APK_KEY_PASS -alias vsa >/dev/null 2>&1
+          }
+          wrong_pass() {
+            echo "::error title=APK_KEY_PASS no coincide::La contraseña del secreto no abre $ENC. Volvé a poner la contraseña original en el secreto (o borrá ese archivo para crear una llave nueva: implica desinstalar la app una vez)."
+            exit 1
+          }
+          if ! tip; then
+            echo "::warning title=Sin acceso a la rama::No pude leer origin/$BR; este APK sale con llave debug."
+            debug_only
+          fi
+          if has_key; then
+            restore || wrong_pass
+            echo "Llave estable restaurada desde $ENC"
+          else
+            rm -f "$KS"
+            if ! keytool -genkeypair -keystore "$KS" -storetype PKCS12 -alias vsa \
+                 -keyalg RSA -keysize 3072 -sigalg SHA256withRSA -validity 10950 \
+                 -dname "CN=VSA Cripto, OU=App personal, C=AR" \
+                 -storepass:env APK_KEY_PASS -keypass:env APK_KEY_PASS >/dev/null 2>&1; then
+              echo "::warning title=No se pudo crear la llave::keytool falló; este APK sale con llave debug."
+              debug_only
+            fi
+            openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -salt \
+              -in "$KS" -out "$RUNNER_TEMP/key.enc" -pass env:APK_KEY_PASS || debug_only
+            saved=0
+            for i in 1 2 3 4 5; do
+              tip || { sleep $(( i * 4 )); continue; }
+              if has_key; then
+                # Otra corrida guardó su llave mientras tanto: se usa esa para que todas coincidan
+                restore || wrong_pass
+                saved=1
+                echo "Se usa la llave que guardó otra corrida"
+                break
+              fi
+              WT="$RUNNER_TEMP/llave-wt-$i"
+              if git worktree add --quiet --detach "$WT" "refs/remotes/origin/$BR" &&
+                 mkdir -p "$WT/android-signing" &&
+                 cp "$RUNNER_TEMP/key.enc" "$WT/$ENC" &&
+                 git -C "$WT" add -f "$ENC" &&
+                 git -C "$WT" -c user.name="github-actions[bot]" \
+                   -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+                   commit --quiet -m "Llave de firma del APK (cifrada AES-256 + PBKDF2, generada por el workflow)" &&
+                 git -C "$WT" push --quiet origin "HEAD:refs/heads/$BR"; then
+                saved=1
+                echo "Llave estable nueva creada y guardada cifrada en $ENC"
+                break
+              fi
+              sleep $(( i * 4 ))
+            done
+            if [ "$saved" != "1" ]; then
+              rm -f "$KS"
+              echo "::warning title=No se guardó la llave::No pude guardar $ENC en el repo (revisá Settings → Actions → General → Workflow permissions: Read and write). Este APK sale con llave debug."
+              debug_only
+            fi
+          fi
+          echo "VSA_KEYSTORE=$KS" >> "$GITHUB_ENV"
+          echo "VSA_SIGN=stable" >> "$GITHUB_ENV"
 
       - name: Generar proyecto Android automáticamente y embeber index.html
         run: |
@@ -83,8 +203,8 @@ jobs:
                   applicationId = "ar.com.fanatics.vsacripto"
                   minSdk = 24
                   targetSdk = 34
-                  versionCode = 50
-                  versionName = "5.0"
+                  versionCode = 60
+                  versionName = "6.0"
               }
 
               buildTypes {
@@ -108,6 +228,12 @@ jobs:
               implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
           }
           EOF
+
+          # Versión calculada en el paso anterior (si faltara, quedan 60 / "6.0", también válidos)
+          if [ -n "${VSA_VERSION_CODE:-}" ] && [ -n "${VSA_VERSION_NAME:-}" ]; then
+            sed -i -E "s/versionCode = [0-9]+/versionCode = ${VSA_VERSION_CODE}/; s/versionName = \"[^\"]*\"/versionName = \"${VSA_VERSION_NAME}\"/" AndroidApp/app/build.gradle.kts
+          fi
+          grep -E "versionCode|versionName" AndroidApp/app/build.gradle.kts
 
           cat << 'EOF' > AndroidApp/app/src/main/res/drawable/ic_launcher.xml
           <vector xmlns:android="http://schemas.android.com/apk/res/android"
@@ -165,7 +291,8 @@ jobs:
           </manifest>
           EOF
 
-          cat << 'EOF' > AndroidApp/app/src/main/java/ar/com/fanatics/vsacripto/MainActivity.kt
+          # MainActivity clásica (la de v5, ya probada): queda de respaldo por si la nueva no compila
+          cat << 'EOF' > "$RUNNER_TEMP/MainActivity.classic.kt"
           package ar.com.fanatics.vsacripto
 
           import android.annotation.SuppressLint
@@ -237,18 +364,321 @@ jobs:
           }
           EOF
 
+          # MainActivity v6: igual a la clásica + puente de descargas + enlaces externos al navegador
+          cat << 'EOF' > AndroidApp/app/src/main/java/ar/com/fanatics/vsacripto/MainActivity.kt
+          package ar.com.fanatics.vsacripto
+
+          import android.annotation.SuppressLint
+          import android.content.ActivityNotFoundException
+          import android.content.ContentValues
+          import android.content.Intent
+          import android.graphics.Color
+          import android.net.Uri
+          import android.os.Build
+          import android.os.Bundle
+          import android.os.Environment
+          import android.provider.MediaStore
+          import android.util.Base64
+          import android.view.ViewGroup
+          import android.view.WindowManager
+          import android.webkit.JavascriptInterface
+          import android.webkit.WebChromeClient
+          import android.webkit.WebResourceRequest
+          import android.webkit.WebSettings
+          import android.webkit.WebView
+          import android.webkit.WebViewClient
+          import android.widget.Toast
+          import androidx.activity.OnBackPressedCallback
+          import androidx.appcompat.app.AppCompatActivity
+          import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+          import java.text.SimpleDateFormat
+          import java.util.Date
+          import java.util.Locale
+
+          class MainActivity : AppCompatActivity() {
+
+              private lateinit var webView: WebView
+              private lateinit var swipeRefresh: SwipeRefreshLayout
+              private val localAppUrl = "file:///android_asset/index.html"
+              private var bridgeJs = ""
+
+              @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
+              override fun onCreate(savedInstanceState: Bundle?) {
+                  super.onCreate(savedInstanceState)
+
+                  window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                  window.statusBarColor = Color.parseColor("#070b14")
+                  window.navigationBarColor = Color.parseColor("#070b14")
+
+                  bridgeJs = try {
+                      assets.open("vsa-bridge.js").bufferedReader().use { it.readText() }
+                  } catch (e: Exception) {
+                      ""
+                  }
+
+                  swipeRefresh = SwipeRefreshLayout(this).apply {
+                      setColorSchemeColors(Color.parseColor("#3b82f6"), Color.parseColor("#10b981"))
+                      setProgressBackgroundColorSchemeColor(Color.parseColor("#0f172a"))
+                  }
+
+                  webView = WebView(this).apply {
+                      setBackgroundColor(Color.parseColor("#070b14"))
+                      settings.apply {
+                          javaScriptEnabled = true
+                          domStorageEnabled = true
+                          databaseEnabled = true
+                          allowFileAccess = true
+                          allowFileAccessFromFileURLs = true
+                          allowUniversalAccessFromFileURLs = true
+                          mediaPlaybackRequiresUserGesture = false
+                          cacheMode = WebSettings.LOAD_DEFAULT
+                          mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+                      }
+                      webChromeClient = WebChromeClient()
+                      webViewClient = object : WebViewClient() {
+                          override fun onPageFinished(view: WebView?, url: String?) {
+                              swipeRefresh.isRefreshing = false
+                              if (bridgeJs.isNotEmpty()) view?.evaluateJavascript(bridgeJs, null)
+                          }
+
+                          override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                              val uri: Uri = request?.url ?: return false
+                              val scheme = (uri.scheme ?: "").lowercase(Locale.ROOT)
+                              if (scheme == "http" || scheme == "https") {
+                                  try {
+                                      startActivity(Intent(Intent.ACTION_VIEW, uri))
+                                  } catch (e: ActivityNotFoundException) {
+                                      toast("No hay una app para abrir el enlace")
+                                  }
+                                  return true
+                              }
+                              return false
+                          }
+                      }
+                      addJavascriptInterface(DownloadBridge(), "VSAAndroid")
+                  }
+
+                  swipeRefresh.addView(webView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                  swipeRefresh.setOnChildScrollUpCallback { _, _ -> webView.scrollY > 0 }
+                  swipeRefresh.setOnRefreshListener { webView.reload() }
+                  setContentView(swipeRefresh)
+
+                  onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+                      override fun handleOnBackPressed() {
+                          if (webView.canGoBack()) webView.goBack() else finish()
+                      }
+                  })
+
+                  webView.loadUrl(localAppUrl)
+              }
+
+              private fun toast(message: String) {
+                  runOnUiThread { Toast.makeText(this, message, Toast.LENGTH_LONG).show() }
+              }
+
+              private fun insertDownload(fileName: String, mimeType: String): Uri? {
+                  val values = ContentValues().apply {
+                      put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                      put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
+                      put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/VSA")
+                  }
+                  return contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+              }
+
+              private fun stampedName(fileName: String): String {
+                  val stamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
+                  val dot = fileName.lastIndexOf('.')
+                  return if (dot > 0) fileName.substring(0, dot) + "-" + stamp + fileName.substring(dot) else fileName + "-" + stamp
+              }
+
+              inner class DownloadBridge {
+                  @JavascriptInterface
+                  fun saveFile(name: String?, mime: String?, base64: String?): Boolean {
+                      val fileName = (name ?: "")
+                          .replace(Regex("[\\\\/:*?\"<>|\\p{Cntrl}]"), "_")
+                          .trim()
+                          .take(120)
+                          .ifEmpty { "archivo" }
+                      val mimeType = (mime ?: "").substringBefore(';').trim().ifEmpty { "application/octet-stream" }
+                      return try {
+                          val bytes = Base64.decode(base64 ?: "", Base64.DEFAULT)
+                          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                              val uri = (try { insertDownload(fileName, mimeType) } catch (e: Exception) { null })
+                                  ?: insertDownload(stampedName(fileName), mimeType)
+                                  ?: throw IllegalStateException("Android no creó el archivo")
+                              val out = contentResolver.openOutputStream(uri)
+                                  ?: throw IllegalStateException("sin acceso de escritura")
+                              out.use { it.write(bytes) }
+                              toast("Guardado en Descargas/VSA: " + fileName)
+                          } else {
+                              val text = String(bytes, Charsets.UTF_8)
+                              runOnUiThread {
+                                  try {
+                                      val send = Intent(Intent.ACTION_SEND)
+                                      send.setType("text/plain")
+                                      send.putExtra(Intent.EXTRA_SUBJECT, fileName)
+                                      send.putExtra(Intent.EXTRA_TITLE, fileName)
+                                      send.putExtra(Intent.EXTRA_TEXT, text)
+                                      startActivity(Intent.createChooser(send, "Guardar o compartir " + fileName))
+                                  } catch (e: Exception) {
+                                      Toast.makeText(this@MainActivity, "No se pudo compartir " + fileName, Toast.LENGTH_LONG).show()
+                                  }
+                              }
+                          }
+                          true
+                      } catch (e: Exception) {
+                          toast("No se pudo guardar " + fileName + ": " + (e.message ?: e.javaClass.simpleName))
+                          false
+                      }
+                  }
+              }
+          }
+          EOF
+
+          # Puente de descargas (JavaScript que la MainActivity inyecta al terminar de cargar la página)
+          cat << 'EOF' > AndroidApp/app/src/main/assets/vsa-bridge.js
+          /* VSA Cripto · puente de descargas del APK. Lo inyecta MainActivity al terminar de cargar la página. */
+          (function () {
+            'use strict';
+            var bridge = window.VSAAndroid;
+            if (!bridge || window.__vsaDownloadBridge) return;
+            window.__vsaDownloadBridge = true;
+
+            var blobs = {};
+            var nativeCreate = URL.createObjectURL;
+            var nativeRevoke = URL.revokeObjectURL;
+            URL.createObjectURL = function (obj) {
+              var url = nativeCreate.apply(URL, arguments);
+              try { if (obj instanceof Blob) blobs[url] = obj; } catch (e) {}
+              return url;
+            };
+            URL.revokeObjectURL = function (url) {
+              setTimeout(function () { delete blobs[url]; }, 60000);
+              return nativeRevoke.apply(URL, arguments);
+            };
+
+            function deliver(name, blob) {
+              var reader = new FileReader();
+              reader.onload = function () {
+                var s = String(reader.result || '');
+                var comma = s.indexOf(',');
+                var ok = false;
+                try { ok = bridge.saveFile(name, blob.type || '', comma >= 0 ? s.slice(comma + 1) : ''); } catch (e) { ok = false; }
+                if (!ok) console.warn('VSA: no se pudo guardar ' + name);
+              };
+              reader.onerror = function () { console.warn('VSA: no se pudo leer ' + name); };
+              reader.readAsDataURL(blob);
+            }
+
+            function handle(a) {
+              if (!a || !a.getAttribute) return false;
+              var name = a.getAttribute('download');
+              if (name === null) return false;
+              var href = a.getAttribute('href') || '';
+              if (href.indexOf('blob:') !== 0 && href.indexOf('data:') !== 0) return false;
+              name = name || 'archivo';
+              var blob = blobs[href];
+              if (blob) { deliver(name, blob); return true; }
+              if (typeof fetch !== 'function') return false;
+              fetch(href).then(function (r) { return r.blob(); }).then(function (b) { deliver(name, b); }, function () { console.warn('VSA: no se pudo leer ' + name); });
+              return true;
+            }
+
+            var nativeClick = HTMLAnchorElement.prototype.click;
+            HTMLAnchorElement.prototype.click = function () {
+              if (handle(this)) return;
+              return nativeClick.apply(this, arguments);
+            };
+            document.addEventListener('click', function (ev) {
+              var t = ev.target;
+              var a = t && t.closest ? t.closest('a[download]') : null;
+              if (a && handle(a)) { ev.preventDefault(); ev.stopPropagation(); }
+            }, true);
+          })();
+          EOF
+
       - name: Compilar APK instalable para Android
         working-directory: AndroidApp
-        run: gradle assembleDebug --no-daemon
-
-      - name: Renombrar APK final
         run: |
+          if gradle assembleDebug --no-daemon; then
+            echo "VSA_BRIDGE=on" >> "$GITHUB_ENV"
+          else
+            echo "::warning title=Descargas no incluidas::La compilación con el puente de descargas falló (ver el log de arriba). Se compila la MainActivity clásica: el APK sale igual, sin descargas."
+            cp "$RUNNER_TEMP/MainActivity.classic.kt" app/src/main/java/ar/com/fanatics/vsacripto/MainActivity.kt
+            rm -f app/src/main/assets/vsa-bridge.js
+            gradle assembleDebug --no-daemon
+            echo "VSA_BRIDGE=off" >> "$GITHUB_ENV"
+          fi
+
+      - name: Firmar con la llave estable y verificar el APK
+        env:
+          APK_KEY_PASS: ${{ secrets.APK_KEY_PASS }}
+        run: |
+          set +e
+          IN="AndroidApp/app/build/outputs/apk/debug/app-debug.apk"
           mkdir -p dist-apk
-          cp AndroidApp/app/build/outputs/apk/debug/app-debug.apk dist-apk/VSA-Orderflow-v5.apk
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/*/ 2>/dev/null | sort -V | tail -n 1)
+          BT="${BT%/}"
+          if ! unzip -p "$IN" assets/index.html | cmp -s - index.html; then
+            echo "::error title=APK incompleto::El APK no contiene el index.html de la raíz del repo."
+            exit 1
+          fi
+          SIGN="debug"
+          OUT="dist-apk/VSA-Orderflow-v${VSA_VER}.apk"
+          if [ "${VSA_SIGN:-debug}" = "stable" ] && [ -x "$BT/apksigner" ]; then
+            if "$BT/apksigner" sign --ks "$VSA_KEYSTORE" --ks-type PKCS12 --ks-key-alias vsa \
+                 --ks-pass env:APK_KEY_PASS --key-pass env:APK_KEY_PASS --out "$OUT" "$IN"; then
+              SIGN="stable"
+            else
+              echo "::warning title=Firma estable falló::apksigner no pudo firmar; se publica el APK con la llave debug."
+            fi
+          fi
+          if [ "$SIGN" != "stable" ]; then
+            OUT="dist-apk/VSA-Orderflow-v${VSA_VER}-FIRMA-DEBUG.apk"
+            cp "$IN" "$OUT"
+          fi
+          rm -f "${VSA_KEYSTORE:-/nonexistent}" "$RUNNER_TEMP/key.enc"
+          CERT=""
+          BADGE=""
+          if [ -x "$BT/apksigner" ]; then
+            if ! "$BT/apksigner" verify "$OUT"; then
+              echo "::error title=Firma inválida::La firma del APK no verifica."
+              exit 1
+            fi
+            CERT=$("$BT/apksigner" verify --print-certs "$OUT" | sed -nE 's/^Signer #1 certificate SHA-256 digest: //p' | head -n 1)
+          fi
+          if [ -x "$BT/aapt2" ]; then
+            BADGE=$("$BT/aapt2" dump badging "$OUT" 2>/dev/null | head -n 1)
+          fi
+          {
+            echo "## 📱 VSA Cripto ${VSA_VERSION_NAME}"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| APK | \`$(basename "$OUT")\` |"
+            echo "| versionCode | ${VSA_VERSION_CODE} |"
+            if [ "$SIGN" = "stable" ]; then
+              echo "| Firma | ✅ estable: se instala **encima** de la versión anterior y conserva los datos |"
+            else
+              echo "| Firma | ⚠️ debug descartable: hay que **desinstalar** la versión anterior para instalarlo |"
+            fi
+            if [ "${VSA_BRIDGE:-off}" = "on" ]; then
+              echo "| Descargas | ✅ CSV y config.json se guardan en Descargas/VSA (Android 7–9: menú Compartir) |"
+            else
+              echo "| Descargas | ⚠️ no incluidas en este APK (ver el aviso del paso de compilación) |"
+            fi
+            echo "| Huella SHA-256 | \`${CERT:-n/d}\` |"
+            if [ -n "$BADGE" ]; then
+              echo "| Paquete | \`${BADGE}\` |"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "VSA_APK=$OUT" >> "$GITHUB_ENV"
+          echo "APK listo: $OUT (firma $SIGN, SHA-256 ${CERT:-n/d})"
 
       - name: Publicar APK como Artifact descargable
         uses: actions/upload-artifact@v4
         with:
-          name: VSA-Orderflow-v5-Android-APK
-          path: dist-apk/VSA-Orderflow-v5.apk
+          name: VSA-Orderflow-v${{ env.VSA_VER }}-Android-APK
+          path: ${{ env.VSA_APK }}
+          if-no-files-found: error
           retention-days: 30
