@@ -71,13 +71,32 @@ Lo único digno de seguir (sin validar):
 
 ---
 
-## 3. Instalación (mismos pasos de siempre)
+## 3. Instalación
+
+El repo no tiene (ni necesita) carpeta `AndroidApp/`: el workflow `build_android_apk.yml` arma el proyecto Android en cada corrida y le mete adentro el `index.html` de la raíz.
+
+| Archivo | Dónde va |
+|---|---|
+| `index.html` | **GitHub**: raíz del repo · **Servidor**: `fanatics.com.ar/cripto/` |
+| `manifest.json`, `sw.js` | **Servidor**: `fanatics.com.ar/cripto/` (los íconos no cambian) |
+| `build_android_apk.yml` | **GitHub**: `.github/workflows/` (reemplaza al anterior) |
+| `Program.cs`, `Models.cs`, `QuantEngine.cs`, `VsaMonitor.csproj` | **GitHub**: `VsaMonitor/` |
+| `config.json`, `README.md` | **GitHub**: raíz (`config.json` lo mantiene la web con la sincronización) |
 
 ### Web / PWA (`fanatics.com.ar/cripto/`)
-Subí `index.html`, `manifest.json` y `sw.js` (los íconos no cambian). El service worker cambió de nombre de caché (`vsa-orderflow-v6-0`), así que el celular toma la versión nueva al abrir.
+Subí `index.html`, `manifest.json` y `sw.js`. El service worker cambió de nombre de caché (`vsa-orderflow-v6-0`), así que el celular toma la versión nueva al abrir (si no aparece, cerrá la app/pestaña y volvé a abrir).
 
-### APK Android
-Copiá `index.html` a `AndroidApp/app/src/main/assets/index.html` y reemplazá `AndroidApp/app/build.gradle.kts` (versionCode 60, versionName 6.0). Corré **Actions → Compilar App Android (APK)** como siempre. No hay cambios en Kotlin ni en el manifest.
+### APK Android (GitHub Actions)
+1. **Una sola vez**, creá el secreto `APK_KEY_PASS`: Settings → Secrets and variables → Actions → New repository secret. Contraseña de 12 caracteres o más; guardala.
+2. Subí `build_android_apk.yml` a `.github/workflows/` y `index.html` a la raíz. Cada vez que cambia `index.html`, el APK se compila solo.
+3. Actions → **Compilar App Android (APK)** → última corrida: el resumen muestra versión, tipo de firma y huella. Abajo, en Artifacts, está `VSA-Orderflow-v6.0-Android-APK` (un zip con el `.apk`).
+4. **Por única vez**, desinstalá la versión anterior: estaba firmada con una llave descartable y Android no deja instalar encima. Desde ahora cada APK se instala sobre el anterior y conserva los datos de la app.
+
+La primera corrida con el secreto crea `android-signing/vsa-key.p12.enc`: la llave de firma cifrada con AES-256 + PBKDF2 (600 000 iteraciones), inútil sin la contraseña. **No la borres**: si desaparece se genera otra llave y hay que desinstalar una vez más. Si el secreto cambia a otra contraseña, el workflow se detiene con un aviso en lugar de firmar con una llave distinta. Sin el secreto todo funciona como antes (llave descartable; el archivo sale como `…-FIRMA-DEBUG.apk`).
+
+`versionName` = versión del `<title>` de `index.html` + número de corrida (p. ej. 6.0.12). `versionCode` sale de la fecha del commit, así que siempre crece.
+
+Dentro del APK los botones que descargan archivos (CSV, `config.json`) no hacen nada: el WebView no tiene gestor de descargas. Para mandar la configuración al bot usá la sincronización con GitHub; para exportar CSV, la versión web.
 
 ### Backend `VsaMonitor/`
 Reemplazá `Program.cs`, `Models.cs` y `QuantEngine.cs` (`VsaMonitor.csproj` no cambia). El workflow `vsa_monitor.yml` **no necesita cambios**: mismas variables (`TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`, `LOOP_SECONDS`, `TEST_NOTIFY`, `VSA_WORKDIR`) y mismos archivos (`config.json`, `state.json`, `paper_state.json`). Los JSON viejos se leen sin problema; los campos nuevos tienen valores por defecto.
@@ -108,6 +127,7 @@ Reemplazá `Program.cs`, `Models.cs` y `QuantEngine.cs` (`VsaMonitor.csproj` no 
 | Paridad web (JS) ↔ backend (C#), reglas disparadas vela por vela | **286.457 velas, 0 diferencias** (26 pares × 4 TF + escenarios) |
 | Interfaz completa en jsdom con datos reales de Binance | laboratorio, libro, oportunidades, Paper, conciliación 1m, radar, vigilancia y exportación sin errores de consola |
 | Backend compilado contra Binance en vivo | modo libro, alertas validadas, salida Spot, conciliación Paper (cerró por STOP una mecha entre corridas) |
+| Workflow del APK en un emulador de GitHub Actions (pasos `run:` reales; Gradle y apksigner simulados) | 38/38: misma huella de firma entre corridas, contraseña equivocada, corrida en cola, carrera entre corridas, push denegado, control de que el APK lleva el `index.html` del repo |
 
 ---
 
@@ -122,10 +142,15 @@ Reemplazá `Program.cs`, `Models.cs` y `QuantEngine.cs` (`VsaMonitor.csproj` no 
 
 ## Archivos de esta entrega
 ```
-index.html            → web/PWA y assets del APK (v6.0)
-manifest.json, sw.js  → PWA (caché v6)
-config.json           → configuración del backend (+ thr, rvol, edgeBook)
-AndroidApp/app/build.gradle.kts         → versionCode 60
-AndroidApp/app/src/main/assets/index.html
-VsaMonitor/Program.cs, Models.cs, QuantEngine.cs, VsaMonitor.csproj
+GitHub (pedrostamati/VSACripto)
+  index.html                                → web y contenido del APK (v6.0)
+  config.json                               → configuración del bot (la escribe la web)
+  README.md
+  VsaMonitor/Program.cs, Models.cs, QuantEngine.cs, VsaMonitor.csproj
+  .github/workflows/build_android_apk.yml   → v6: firma estable + versión automática
+  .github/workflows/vsa_monitor.yml         → sin cambios
+  android-signing/vsa-key.p12.enc           → lo crea el workflow (no tocar)
+
+Servidor (fanatics.com.ar/cripto/)
+  index.html, manifest.json, sw.js          (+ icon-192.png, icon-512.png que ya están)
 ```

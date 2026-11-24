@@ -12,8 +12,8 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="description" content="Terminal VSA & Orderflow v4.0 QuantPulse Edition: 56 reglas con triggers adaptativos, filtro duro de régimen HTF (EMA50/200), simulador aislado de Paper Trading en vivo y gestor de favoritas.">
-<title>VSA & Orderflow v5.1 · Squeeze & Institutional Pro</title>
+<meta name="description" content="Terminal VSA & Orderflow v6.0 Edge Lab: 64 reglas, Laboratorio de Ventaja con evidencia agrupada en el universo líquido, validación fuera de muestra, oportunidades validadas con vigilancia y Paper Trading conciliado.">
+<title>VSA & Orderflow v6.0 · Edge Lab</title>
 <style>
 :root {
   --bg: #070b14; --card: #0f172a; --card2: #162036; --input: #0a101d;
@@ -143,7 +143,7 @@ select:focus, input:focus { border-color: var(--acc); box-shadow: 0 0 0 3px var(
 .chip.solid-bear { background: var(--bear); color: #fff; }
 
 /* pestañas */
-.tabs { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background: var(--bg); padding: 6px 0; border-bottom: 1px solid var(--line); }
+.tabs { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; background: var(--bg); padding: 6px 0; border-bottom: 1px solid var(--line); }
 .tabs button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 1px solid transparent; background: transparent; border-radius: var(--r2); padding: 7px 3px; color: var(--tx2); font-size: .74rem; font-weight: 700; line-height: 1.18; min-height: 54px; text-align: center; }
 .tabs button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .tabs button[aria-selected="true"] { color: var(--tx); background: var(--card); border-color: var(--line2); }
@@ -455,6 +455,32 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
 .liq-ln b { color: var(--tx); }
 @media (max-width: 460px) { .sq-meters, .liq-grid { grid-template-columns: 1fr; } }
 
+/* v6.0 · Laboratorio de Ventaja y Oportunidades validadas */
+.lab-cfg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 10px 12px; }
+.lab-cfg .wide { grid-column: 1 / -1; }
+.lab-sum { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 10px 12px; }
+.lab-tbl { width: 100%; border-collapse: collapse; font-size: .78rem; }
+.lab-tbl th, .lab-tbl td { padding: 7px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.lab-tbl th { color: var(--tx3); font-size: .7rem; text-transform: uppercase; letter-spacing: .3px; position: sticky; top: 0; background: var(--card); }
+.lab-tbl td.r, .lab-tbl th.r { text-align: right; white-space: nowrap; }
+.lab-tbl tr.sel td { background: var(--accbg); }
+.lab-scroll { max-height: 520px; overflow: auto; -webkit-overflow-scrolling: touch; }
+.funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 8px 12px; }
+.funnel div { background: var(--card2); border: 1px solid var(--line); border-radius: var(--r2); padding: 6px 6px; text-align: center; font-size: .72rem; color: var(--tx2); }
+.funnel div b { display: block; font-size: 1.05rem; color: var(--tx); }
+.opp-row { padding: 11px 12px; border-top: 1px solid var(--line); }
+.opp-row.val { background: linear-gradient(90deg, var(--bullbg), transparent 75%); }
+.opp-row.val.dn { background: linear-gradient(90deg, var(--bearbg), transparent 75%); }
+.opp-row.cand { background: linear-gradient(90deg, var(--cyanbg), transparent 75%); }
+.opp-h { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.opp-h .sym { font-weight: 900; font-size: 1rem; }
+.opp-h .px { margin-left: auto; font-weight: 800; }
+.opp-m { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .82rem; color: var(--tx2); margin-top: 5px; }
+.opp-m b { color: var(--tx); }
+.costr { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 12px 10px; }
+@media (max-width: 559px) { .lab-cfg, .lab-sum { grid-template-columns: 1fr 1fr; } .funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 390px) { .tabs button { font-size: .62rem; } }
+
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
@@ -464,8 +490,8 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
     <div class="brand">
       <svg class="logo" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="10" width="3" height="10" rx="1"></rect><rect x="10.5" y="4" width="3" height="16" rx="1"></rect><rect x="18" y="13" width="3" height="7" rx="1"></rect></svg>
       <div class="brand-txt">
-        <div class="brand-t">VSA &amp; Orderflow <span class="chip acc" style="vertical-align:1px">v5.1</span> <span class="chip pur" style="vertical-align:1px">Institutional</span></div>
-        <div class="brand-s">60 reglas · Short Squeeze &amp; Short Selling · Funding/OI · Paper</div>
+        <div class="brand-t">VSA &amp; Orderflow <span class="chip acc" style="vertical-align:1px">v6.0</span> <span class="chip pur" style="vertical-align:1px">Edge Lab</span></div>
+        <div class="brand-s">64 reglas · Laboratorio de Ventaja · Oportunidades validadas · Paper conciliado</div>
       </div>
     </div>
     <div class="top-act">
@@ -540,13 +566,30 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
   </section>
 
   <nav class="tabs" role="tablist">
+    <button type="button" role="tab" data-tab="opps" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v10M9.5 9.5c0-1.2 1.1-2 2.5-2s2.5.8 2.5 2-1.1 1.7-2.5 2-2.5.8-2.5 2 1.1 2 2.5 2 2.5-.8 2.5-2"></path></svg><span>Oportunidades</span></button>
     <button type="button" role="tab" data-tab="radar" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle><path d="M12 12 19 5"></path></svg><span>Radar y evidencia</span></button>
     <button type="button" role="tab" data-tab="chart" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"></path><path d="m7 15 4-4 3 3 6-7"></path></svg><span>Gráfico y flujo</span></button>
-    <button type="button" role="tab" data-tab="rules" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"></path><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"></path></svg><span>60 reglas y Paper</span></button>
+    <button type="button" role="tab" data-tab="rules" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"></path><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"></path></svg><span>64 reglas y Paper</span></button>
     <button type="button" role="tab" data-tab="scan" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg><span>Escáner y riesgo</span></button>
   </nav>
 
   <main>
+    <!-- 0 · OPORTUNIDADES VALIDADAS (v6) -->
+    <section id="v-opps" class="view" role="tabpanel">
+      <div class="card" id="cOpps"></div>
+      <div class="card" id="cLab"></div>
+      <details class="card method">
+        <summary>Cómo funciona el Laboratorio de Ventaja (v6 · sin trampas)</summary>
+        <div class="method-body">
+          <p><b>Por qué existe.</b> Probar 60+ reglas × 5 horizontes en cada par por separado da muestras chicas (n≈20–80) y ~300 pruebas por par y temporalidad. En un escaneo de 25 pares × 4 TF eso son 100 familias de pruebas independientes: aunque no exista ninguna ventaja, el azar fabrica varias «señales con respaldo» por escaneo. El laboratorio prueba cada regla×TF <b>una sola vez sobre todo el universo líquido</b>, con muestras 20–50 veces más grandes.</p>
+          <p><b>Qué mide.</b> El resultado neto en <b>R</b> de cada operación con la <b>misma salida que se opera</b> (stop en ATR, objetivo en R, tope de velas, comisión + medio spread real de cada par). Con el Filtro HTF activo, la evidencia es condicional al mismo filtro (solo cuenta lo que realmente se habría operado), con el régimen HTF reconstruido sin mirar el futuro.</p>
+          <p><b>Cómo decide.</b> 1) Entrenamiento = 70 % inicial (con purga en el corte). 2) Error estándar robusto por clúster temporal (bloques de 4× la duración máxima), porque las criptos disparan juntas en los mismos movimientos. 3) Benjamini-Hochberg global (q = 10 %) sobre todas las reglas×TF. 4) Estabilidad: positiva en las dos mitades del entrenamiento y con exceso sobre la entrada al azar. 5) <b>Validación pre-registrada fuera de muestra</b> en el 30 % más reciente: media > 0, exceso > 0 y t ≥ umbral (que sube si probaste varias configuraciones: corrección por corridas).</p>
+          <p><b>Etiquetas.</b> <b>Validada</b>: pasó todo (BH q=10 % + fuera de muestra); se usa para alertas y Paper. <b>Candidata</b>: pasó el entrenamiento con FDR laxa (q=25 %) o su fuera de muestra es débil o chico: solo Paper (validación hacia adelante), nunca capital real. <b>Refutada</b>: pasó el entrenamiento y falló fuera de muestra (sobreajuste). <b>En contra</b>: pierde plata de forma significativa.</p>
+          <p><b>Costos en R.</b> La tabla muestra cuánto de cada operación se comen comisión + medio spread. Medido en 26 pares líquidos de Binance Spot con stop de 1,3 ATR: ≈0,38 R en 15m, 0,21 R en 1H, 0,09 R en 4H y 0,03 R en 1D. En intradía casi nada puede ganar: es la razón número uno por la que esas señales pierden plata.</p>
+        </div>
+      </details>
+    </section>
+
     <!-- 1 · RADAR Y EVIDENCIA -->
     <section id="v-radar" class="view on" role="tabpanel">
       <div class="card" id="cVerdict"></div>
@@ -555,7 +598,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
       <div class="card" id="cPlan"></div>
       <div class="card" id="cMtf"></div>
       <details class="card method">
-        <summary>Cómo se calcula todo esto (v4.0 QuantPulse · sin trampas)</summary>
+        <summary>Cómo se calcula todo esto (v6.0 · sin trampas)</summary>
         <div class="method-body">
           <p><b>Solo velas cerradas y cero sesgo de futuro.</b> Cada regla se evalúa sobre velas cerradas (reloj del servidor de Binance). Perfil de volumen (60 velas previas), VWAP anclado, medias, ATR, régimen de volatilidad y puntajes z usan estrictamente datos previos. Entrada siempre en la apertura de la vela siguiente.</p>
           <p><b>Qué mejoró en v3.0 para encontrar más oportunidades reales:</b></p>
@@ -565,7 +608,8 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
           <p>4) <b>Spot y Futuros USDT-M:</b> Podés alternar entre Spot (solo compras, comisión estándar 0,10 %) y Futuros Perpetuos USDT-M (compras y ventas en corto, comisión taker estándar 0,04 %), duplicando las oportunidades direccionales y permitiendo operar caídas con costos realistas.</p>
           <p>5) <b>Walk-Forward corregido y de 3 tramos:</b> Ahora el examen hacia adelante evalúa <i>todas</i> las reglas activas en cada vela contra las aprobadas en entrenamiento (en v2.1 solo revisaba la de más puntos arbitrarios) e incorpora Walk-Forward expansivo en 3 tramos fuera de muestra.</p>
           <p><b>Novedades QuantPulse v4.0:</b> <b>Filtro Duro de Régimen HTF</b> (evalúa EMA 50 vs EMA 200 en temporalidad superior antes de autorizar largos o cortos intradía), <b>Triggers Adaptativos</b> (umbrales de RSI y z-score de flujo ajustados dinámicamente a la compresión de volatilidad ATR/SMA50, más reglas V53–V56 y Exponente de Hurst causal), <b>Simulador Aislado de Paper Trading</b> en vivo con P&amp;L independiente, y <b>Backend C# .NET 8 con WebSockets</b> de Binance.</p>
-          <p><b>Niveles de evidencia:</b> «Con respaldo» exige pasar BH (q=10 %), ser positivo en ambas mitades de la historia (estabilidad temporal) y dejar retorno neto positivo tras costos con margen estadístico (t ≥ 1,28 si n ≥ 20; t ≥ 1,65 si 12 ≤ n &lt; 20). «Prometedora» marca setups con p &lt; 0,05, neto positivo y estables que aún no alcanzan el umbral global de BH.</p>
+          <p><b>Niveles de evidencia (por par):</b> «Con respaldo» exige pasar BH (q=10 %), ser positivo en ambas mitades de la historia (estabilidad temporal) y dejar retorno neto positivo tras costos con margen estadístico (t ≥ 1,28 si n ≥ 20; t ≥ 1,65 si 12 ≤ n &lt; 20). «Prometedora» exige pasar BH con FDR laxa (q=25 %), neto positivo y estabilidad.</p>
+          <p><b>Novedades v6.0:</b> 1) <b>p-valores sin piso</b>: con pocas excedencias en la permutación se usa la cola t de Student calibrada con la propia distribución permutada (antes el p mínimo 1/(K+1) hacía imposible BH para una regla sola, o dependía de que otras co-dispararan). 2) <b>«Prometedora» con FDR controlada</b>: antes era p &lt; 0,05 crudo sobre ~300 pruebas por par/TF; en datos reales de Binance eso producía ~3,8 «prometedoras» por par×TF por puro azar. 3) <b>Laboratorio de Ventaja</b> (pestaña Oportunidades): evidencia agrupada en el universo líquido con la salida real, régimen HTF causal, error estándar por clúster temporal, BH global y validación fuera de muestra. Con libro vigente, las alertas y el Paper automático salen solo de ahí. 4) Reglas nuevas V61–V64 (absorción pasiva con flujo taker y sequía de volumen tras expansión).</p>
         </div>
       </details>
     </section>
@@ -607,7 +651,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
       <div class="card" id="cBt"></div>
       <div class="card">
         <div class="card-head">
-          <div class="card-title">60 reglas · <span id="rTf">—</span></div>
+          <div class="card-title">64 reglas · <span id="rTf">—</span></div>
           <span id="rSum" class="card-sub">—</span>
         </div>
         <div class="filters" id="rFilters">
@@ -718,7 +762,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* VSA & Orderflow · Institutional Microstructure · build 2026-11-20.v5.0 */
+/* VSA & Orderflow · Edge Lab · build 2026-11-22.v6.0 */
 /* ============================================================================
    VSA & ORDERFLOW · NÚCLEO CUANTITATIVO (v3.0)
    Corre igual en el navegador y en Node.js (pruebas). No toca el DOM ni la red.
@@ -764,6 +808,44 @@ function bhMark(list, q, field) {
   list.forEach(function (x) { x[field] = false; });
   for (i = 0; i <= cut; i++) L[i][field] = true;
   return list;
+}
+// ─── distribuciones (v6): normal y t de Student para colas sin piso de resolución ───
+function erfc(x) { // Numerical Recipes erfcc, error relativo < 1,2e-7 en todo el dominio
+  var z = Math.abs(x), t = 1 / (1 + 0.5 * z);
+  var r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+  return x >= 0 ? r : 2 - r;
+}
+function normSf(z) { return isNum(z) ? 0.5 * erfc(z / Math.SQRT2) : NaN; }
+function lgamma(x) {
+  var C = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+  if (x < 0.5) return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * x))) - lgamma(1 - x);
+  x -= 1; var a = C[0], t = x + 7.5;
+  for (var i = 1; i < 9; i++) a += C[i] / (x + i);
+  return 0.9189385332046727 + (x + 0.5) * Math.log(t) - t + Math.log(a);
+}
+function betacf(a, b, x) {
+  var FP = 1e-300, qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap, m, m2, aa, del, h;
+  if (Math.abs(d) < FP) d = FP; d = 1 / d; h = d;
+  for (m = 1; m <= 300; m++) {
+    m2 = 2 * m; aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d; h *= d * c;
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d; del = d * c; h *= del;
+    if (Math.abs(del - 1) < 3e-14) break;
+  }
+  return h;
+}
+function ibeta(x, a, b) {
+  if (x <= 0) return 0; if (x >= 1) return 1;
+  var bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+  return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+}
+// P(T > t) con df grados de libertad (unilateral)
+function tSf(t, df) {
+  if (!isNum(t)) return NaN;
+  if (!(df > 0) || df > 1e6) return normSf(t);
+  var p = 0.5 * ibeta(df / (df + t * t), df / 2, 0.5);
+  return t > 0 ? p : 1 - p;
 }
 
 // ─── indicadores causales ───
@@ -1171,7 +1253,7 @@ var RULES = [
     v: function (x) { return ['RVOL ' + fx(x.rvol), 'Rango/ATR ' + fnum(x.spreadAtr)]; },
     d: 'Volumen y rango muy chicos. Hipótesis: después viene un movimiento más grande (sin dirección).' },
   { id: 40, code: 'V40', cat: 'NEUTRAL', name: 'Equilibrio / sin anomalía', bias: 0, tag: 'ESPERAR', pts: 0,
-    f: { esc: 'Ninguna de las otras 51 reglas se cumple' },
+    f: { esc: 'Ninguna de las otras 63 reglas se cumple' },
     t: function () { return false; },
     v: function (x) { return ['RVOL ' + fx(x.rvol), 'CLV ' + fsig(x.clv), 'Compras ' + fshare(x.share)]; },
     d: 'Oferta y demanda sin desequilibrio medible en esta vela.' },
@@ -1277,7 +1359,28 @@ var RULES = [
     f: { esc: 'Máx > Máx(10) · Cierre < Máx(10) · Mecha sup. > 35 % · Compras < 44 % y cayendo · RVOL > 1,35' },
     t: function (x) { return x.h > x.hi10 && x.c < x.hi10 && x.upW > 0.35 && x.share < 0.44 && x.share < x.share1 && x.rvol > 1.35; },
     v: function (x) { return ['Máx ' + fpx(x.h) + ' > Máx10 ' + fpx(x.hi10), 'Mecha sup. ' + fshare(x.upW), 'Compras ' + fshare(x.share), 'RVOL ' + fx(x.rvol)]; },
-    d: 'Los compradores tardíos quedan atrapados sobre la resistencia y se dispara distribución/liquidación de largos en cascada.' }
+    d: 'Los compradores tardíos quedan atrapados sobre la resistencia y se dispara distribución/liquidación de largos en cascada.' },
+  // ─── NUEVAS REGLAS v6.0: ABSORCIÓN PASIVA Y SEQUÍA DE VOLUMEN (hipótesis propias, pensadas para el flujo taker de cripto) ───
+  { id: 61, code: 'V61', cat: 'FLOW', name: 'Absorción pasiva en mínimo (ventas agresivas sin avance)', bias: 1, tag: 'COMPRA', pts: 1.8,
+    f: { esc: 'Mínimo < Mín(20) · Compras agresivas z < −1,5 · RVOL > 1,5 · CLV > 0 · Rango/ATR < 1,2' },
+    t: function (x) { return x.l < x.lo20 && x.shareZ < -1.5 && x.rvol > 1.5 && x.clv > 0 && x.spreadAtr < 1.2; },
+    v: function (x) { return ['Mín ' + fpx(x.l) + ' < Mín20 ' + fpx(x.lo20), 'Compras ' + fshare(x.share) + ' (' + fz(x.shareZ) + ')', 'RVOL ' + fx(x.rvol), 'CLV ' + fsig(x.clv)]; },
+    d: 'Perfora el mínimo de 20 velas con ventas a mercado muy por encima de lo normal, pero cierra en la mitad superior sin expandir el rango. Hipótesis: órdenes límite pasivas absorben la venta agresiva y la oferta se agota.' },
+  { id: 62, code: 'V62', cat: 'FLOW', name: 'Distribución pasiva en máximo (compras agresivas sin avance)', bias: -1, tag: 'VENTA', pts: -1.8,
+    f: { esc: 'Máximo > Máx(20) · Compras agresivas z > +1,5 · RVOL > 1,5 · CLV < 0 · Rango/ATR < 1,2' },
+    t: function (x) { return x.h > x.hi20 && x.shareZ > 1.5 && x.rvol > 1.5 && x.clv < 0 && x.spreadAtr < 1.2; },
+    v: function (x) { return ['Máx ' + fpx(x.h) + ' > Máx20 ' + fpx(x.hi20), 'Compras ' + fshare(x.share) + ' (' + fz(x.shareZ) + ')', 'RVOL ' + fx(x.rvol), 'CLV ' + fsig(x.clv)]; },
+    d: 'Supera el máximo de 20 velas con compras a mercado muy por encima de lo normal, pero cierra en la mitad inferior sin expandir el rango. Hipótesis: vendedores pasivos absorben la demanda agresiva.' },
+  { id: 63, code: 'V63', cat: 'WYCKOFF', name: 'Sequía de volumen tras expansión alcista (bandera)', bias: 1, tag: 'COMPRA', pts: 1.7,
+    f: { esc: 'Expansión alcista (RVOL > 2, cuerpo > 1 ATR) hace 2–10 velas · mínimos posteriores sobre la mitad de su cuerpo · RVOL < 0,70 · Rango/ATR < 0,80 · Compras ≥ 48 %' },
+    t: function (x) { return isNum(x.expUpAgo) && x.expUpAgo >= 2 && !(x.expDnAgo < x.expUpAgo) && x.minLoUp > x.expUpMid && x.c > x.expUpMid && x.rvol < 0.70 && x.spreadAtr < 0.80 && x.share >= 0.48; },
+    v: function (x) { return ['Expansión hace ' + x.expUpAgo + ' velas', 'Mín. posterior ' + fpx(x.minLoUp) + ' > mitad ' + fpx(x.expUpMid), 'RVOL ' + fx(x.rvol), 'Compras ' + fshare(x.share)]; },
+    d: 'Tras una vela de expansión con volumen, el precio pausa por encima de la mitad de esa vela mientras el volumen se seca y no aparecen ventas agresivas. Hipótesis: la oferta no reacciona al impulso y la tendencia continúa.' },
+  { id: 64, code: 'V64', cat: 'WYCKOFF', name: 'Sequía de volumen tras expansión bajista (bandera bajista)', bias: -1, tag: 'VENTA', pts: -1.7,
+    f: { esc: 'Expansión bajista (RVOL > 2, cuerpo < −1 ATR) hace 2–10 velas · máximos posteriores bajo la mitad de su cuerpo · RVOL < 0,70 · Rango/ATR < 0,80 · Compras ≤ 52 %' },
+    t: function (x) { return isNum(x.expDnAgo) && x.expDnAgo >= 2 && !(x.expUpAgo < x.expDnAgo) && x.maxHiDn < x.expDnMid && x.c < x.expDnMid && x.rvol < 0.70 && x.spreadAtr < 0.80 && x.share <= 0.52; },
+    v: function (x) { return ['Expansión hace ' + x.expDnAgo + ' velas', 'Máx. posterior ' + fpx(x.maxHiDn) + ' < mitad ' + fpx(x.expDnMid), 'RVOL ' + fx(x.rvol), 'Compras ' + fshare(x.share)]; },
+    d: 'Tras una vela de expansión bajista con volumen, los rebotes no recuperan la mitad de esa vela y el volumen se seca sin compras agresivas. Hipótesis: la demanda no aparece y la baja continúa.' }
 ];
 var RMAP = {}; RULES.forEach(function (r) { RMAP[r.id] = r; });
 function formula(r, mode) { return (mode === 'orig' && r.f.orig) ? r.f.orig : r.f.esc; }
@@ -1304,13 +1407,26 @@ function analyze(c, opts) {
   var feats = new Array(n), fired = new Array(n), primary = new Array(n).fill(0);
   for (i = start; i < n; i++) {
     var k = c[i], k1 = c[i - 1], k2 = c[i - 2], k3 = c[i - 3], a = atr[i], rng = k.h - k.l;
-    var lo15 = Infinity, hi15 = -Infinity, lo10 = Infinity, hi10 = -Infinity, lo5 = Infinity, hi5 = -Infinity;
-    for (j = i - 15; j < i; j++) {
-      if (c[j].l < lo15) lo15 = c[j].l;
-      if (c[j].h > hi15) hi15 = c[j].h;
+    var lo20 = Infinity, hi20 = -Infinity, lo15 = Infinity, hi15 = -Infinity, lo10 = Infinity, hi10 = -Infinity, lo5 = Infinity, hi5 = -Infinity;
+    for (j = i - 20; j < i; j++) {
+      if (c[j].l < lo20) lo20 = c[j].l;
+      if (c[j].h > hi20) hi20 = c[j].h;
+      if (j >= i - 15) { if (c[j].l < lo15) lo15 = c[j].l; if (c[j].h > hi15) hi15 = c[j].h; }
       if (j >= i - 10) { if (c[j].l < lo10) lo10 = c[j].l; if (c[j].h > hi10) hi10 = c[j].h; }
       if (j >= i - 5) { if (c[j].l < lo5) lo5 = c[j].l; if (c[j].h > hi5) hi5 = c[j].h; }
     }
+    // v6: última vela de expansión (RVOL > 2 y cuerpo > 1 ATR) dentro de las 10 previas, para V63/V64
+    var expUpAgo = NaN, expUpMid = NaN, minLoUp = Infinity, expDnAgo = NaN, expDnMid = NaN, maxHiDn = -Infinity;
+    for (j = i - 1; j >= i - 10; j--) {
+      var aj = atr[j], rvj = rv.rv[j];
+      if (!(aj > 0) || !(rvj > 2)) continue;
+      var bj = (c[j].c - c[j].o) / aj;
+      if (isNaN(expUpAgo) && bj > 1) { expUpAgo = i - j; expUpMid = (c[j].o + c[j].c) / 2; }
+      if (isNaN(expDnAgo) && bj < -1) { expDnAgo = i - j; expDnMid = (c[j].o + c[j].c) / 2; }
+      if (!isNaN(expUpAgo) && !isNaN(expDnAgo)) break;
+    }
+    if (isNum(expUpAgo)) for (j = i - expUpAgo + 1; j <= i; j++) if (c[j].l < minLoUp) minLoUp = c[j].l;
+    if (isNum(expDnAgo)) for (j = i - expDnAgo + 1; j <= i; j++) if (c[j].h > maxHiDn) maxHiDn = c[j].h;
     var pf = profileAt(c, i, 60, 32);
     var volRank = pctRankPrev(atrPct, i, 100, 30);
     var volComp = isNum(atr[i]) && isNum(atrSma50[i]) && atrSma50[i] > 0 ? atr[i] / atrSma50[i] : 1.0;
@@ -1330,7 +1446,8 @@ function analyze(c, opts) {
       atrRatioPrev: isNum(atr[i - 1]) && isNum(atrSma50[i - 1]) && atrSma50[i - 1] > 0 ? atr[i - 1] / atrSma50[i - 1] : NaN,
       volRank: volRank, volComp: ab.vc, rsiLow: ab.rsiLow, rsiHigh: ab.rsiHigh, zTrig: ab.zTrig, trendReg: trendReg,
       move8: (k1.c - c[i - 8].o) / c[i - 8].o, move8a: atr[i - 1] > 0 ? (k1.c - c[i - 8].o) / atr[i - 1] : NaN,
-      lo15: lo15, hi15: hi15, lo10: lo10, hi10: hi10, lo5: lo5, hi5: hi5,
+      lo20: lo20, hi20: hi20, lo15: lo15, hi15: hi15, lo10: lo10, hi10: hi10, lo5: lo5, hi5: hi5,
+      expUpAgo: expUpAgo, expUpMid: expUpMid, minLoUp: minLoUp, expDnAgo: expDnAgo, expDnMid: expDnMid, maxHiDn: maxHiDn,
       poc: pf ? pf.poc : null, vah: pf ? pf.vah : null, val: pf ? pf.val : null,
       vwap: vw.v[i], vwapU1: vw.u1[i], vwapD1: vw.d1[i], vwapU2: vw.u2[i], vwapD2: vw.d2[i], vwapN: vw.cnt[i],
       share: fl.share[i], share1: fl.share[i - 1], share2: fl.share[i - 2], shareZ: zPrev(fl.share, i, 100, 30), delta: fl.d[i],
@@ -1352,16 +1469,27 @@ function analyze(c, opts) {
 // ─── evidencia v3.0: permutación circular adaptativa en 2 etapas + BH por horizonte y global ───
 function fwd(c, i, h) { var e = i + 1, x = i + h; if (x >= c.length) return NaN; return (c[x].c - c[e].o) / c[e].o; }
 
+// v6: p-valor sin piso de resolución. Con menos de 10 excedencias, el p empírico (1+ge)/(K+1) queda pegado al piso 1/(K+1)
+// y BH se vuelve imposible (o depende de que otras reglas co-disparen). Se usa la cola de la propia distribución de permutación
+// (media y desvío de las K medias permutadas) con una t de Student de n−1 g.l., más conservadora que la normal
+// (aprox. de cola tipo Knijnenburg et al., 2009, «Fewer permutations, more accurate P-values»).
 function permTest(src, ev, L, b, mw, K, seedStr) {
-  var rng = mulberry32(hashStr(seedStr)), ge = 0, le = 0, en = ev.length;
+  var rng = mulberry32(hashStr(seedStr)), ge = 0, le = 0, en = ev.length, s1 = 0, s2 = 0;
   for (var k = 0; k < K; k++) {
     var off = 1 + Math.floor(rng() * (L - 1)), acc = 0;
     for (var z = 0; z < en; z++) acc += src[(ev[z] + off) % L];
     var pm = b ? b * acc / en : acc / en;
+    s1 += pm; s2 += pm * pm;
     if (pm >= mw - 1e-15) ge++;
     if (pm <= mw + 1e-15) le++;
   }
-  return { p: (1 + ge) / (K + 1), pNeg: (1 + le) / (K + 1), K: K };
+  var pE = (1 + ge) / (K + 1), pNE = (1 + le) / (K + 1), mu = s1 / K, sdp = K > 1 ? Math.sqrt(Math.max(0, (s2 - K * mu * mu) / (K - 1))) : NaN;
+  var zz = sdp > 0 ? (mw - mu) / sdp : NaN, df = Math.max(5, en - 1), p = pE, pNeg = pNE;
+  if (isNum(zz)) {
+    if (ge < 10) p = Math.max(1e-12, tSf(zz, df));
+    if (le < 10) pNeg = Math.max(1e-12, tSf(-zz, df));
+  }
+  return { p: p, pNeg: pNeg, pEmp: pE, z: zz, K: K };
 }
 
 function evidence(an, opts) {
@@ -1425,8 +1553,10 @@ function evidence(an, opts) {
       if (res.n >= minN && isNum(res.p)) { out.tests.push(res); out.testsByH[h].push(res); }
     });
     bhMark(out.testsByH[h], q, 'bhH');
+    bhMark(out.testsByH[h], 0.25, 'bhLH'); // v6: FDR laxa (25 %) solo para «prometedora»
   });
   bhMark(out.tests, q, 'bh');
+  bhMark(out.tests, 0.25, 'bhL');
   RULES.forEach(function (rule) {
     hs.forEach(function (h) {
       var x = out.rules[rule.id][h];
@@ -1441,6 +1571,7 @@ function evidence(an, opts) {
 
 function labelOf(rule, x, minN, bhField) {
   bhField = bhField || 'bh';
+  var looseField = bhField === 'bh' ? 'bhL' : 'bhLH';
   if (x && x.short) return 'poca historia';
   if (!x || !x.n) return 'sin casos';
   if (x.n < minN) return 'poca muestra';
@@ -1448,7 +1579,8 @@ function labelOf(rule, x, minN, bhField) {
   var tReq = x.n >= 20 ? 1.28 : 1.65;
   if (x[bhField] && x.stable && x.excess > 0 && (rule.bias === 0 || (x.net > 0 && x.tNet >= tReq))) return 'respaldo';
   if (isNum(x.pNeg) && x.pNeg < 0.05 && x.excess < 0) return 'en contra';
-  if (x.p < 0.05 && x.stable && x.excess > 0 && (rule.bias === 0 || (x.net > 0 && x.tNet >= 1.0))) return 'prometedora';
+  // v6: «prometedora» exige FDR controlada (BH q=25 %). Con ~300 pruebas por par/TF, p<0,05 crudo dejaba ~15 falsas por puro azar.
+  if (x[looseField] && x.stable && x.excess > 0 && (rule.bias === 0 || (x.net > 0 && x.tNet >= 1.0))) return 'prometedora';
   if (x.p < 0.10 || (x[bhField] && x.excess > 0)) return 'débil';
   return 'sin evidencia';
 }
@@ -1664,7 +1796,11 @@ var SCEN = [
   { id: 'V53', name: 'Reversión RSI adaptativo sobrevendido' },
   { id: 'V55', name: 'Expansión adaptativa alcista en compresión' },
   { id: 'V57', name: 'Short Squeeze activo (ruptura de cortos)' },
-  { id: 'V59', name: 'Short Selling institucional agresivo' }
+  { id: 'V59', name: 'Short Selling institucional agresivo' },
+  { id: 'V61', name: 'Absorción pasiva en mínimo (v6)' },
+  { id: 'V62', name: 'Distribución pasiva en máximo (v6)' },
+  { id: 'V63', name: 'Sequía de volumen tras expansión alcista (v6)' },
+  { id: 'V64', name: 'Sequía de volumen tras expansión bajista (v6)' }
 ];
 function baseSeries(seed, n, tfMs, p0) {
   var rnd = mulberry32(seed), c = [], p = p0 || 100, t0 = Math.floor(Date.UTC(2026, 0, 5) / tfMs) * tfMs, sig = 0.004 * Math.sqrt(Math.max(1, tfMs / 36e5));
@@ -1751,6 +1887,40 @@ function scenario(code, tfId, seed, endT) {
       o = c[L - 1].c; var cc59 = Math.min(lo5v - 0.3 * a, o - 1.2 * a);
       set(o, o + 0.05 * a, cc59 - 0.08 * a, cc59, avgV * 2.5, 0.16); break;
     }
+    case 'V61': {
+      for (q = L - 20; q < L; q++) { f = 1 - 0.003 * (q - (L - 20)); c[q].o *= f; c[q].h *= f; c[q].l *= f; c[q].c *= f; }
+      var lo20v = Infinity; for (q = L - 20; q < L; q++) lo20v = Math.min(lo20v, c[q].l);
+      o = c[L - 1].c; var l61 = Math.min(lo20v, o) - 0.25 * a, h61 = o + 0.15 * a, c61 = l61 + 0.68 * (h61 - l61);
+      set(o, Math.max(h61, c61), l61, c61, avgV * 2.6, 0.24); break;
+    }
+    case 'V62': {
+      for (q = L - 20; q < L; q++) { f = 1 + 0.003 * (q - (L - 20)); c[q].o *= f; c[q].h *= f; c[q].l *= f; c[q].c *= f; }
+      var hi20v = -Infinity; for (q = L - 20; q < L; q++) hi20v = Math.max(hi20v, c[q].h);
+      o = c[L - 1].c; var h62 = Math.max(hi20v, o) + 0.12 * a, l62 = o - 0.1 * a, c62 = h62 - 0.68 * (h62 - l62);
+      set(o, h62, Math.min(l62, c62), c62, avgV * 2.6, 0.76); break;
+    }
+    case 'V63': {
+      var kE = c[L - 4], oE = c[L - 5].c;
+      kE.o = oE; kE.c = oE + 1.6 * a; kE.h = kE.c + 0.1 * a; kE.l = oE - 0.05 * a; kE.v = avgV * 3; kE.tb = kE.v * 0.65; kE.q = kE.v * kE.c; kE.tq = kE.tb * kE.c;
+      var midE = (kE.o + kE.c) / 2;
+      for (q = L - 3; q < L; q++) {
+        var oq3 = c[q - 1].c, kq3 = c[q];
+        kq3.o = oq3; kq3.c = oq3 - 0.05 * a; kq3.h = oq3 + 0.15 * a; kq3.l = Math.max(midE + 0.2 * a, oq3 - 0.2 * a);
+        kq3.v = avgV * 0.8; kq3.tb = kq3.v * 0.5; kq3.q = kq3.v * kq3.c; kq3.tq = kq3.tb * kq3.c;
+      }
+      o = c[L - 1].c; set(o, o + 0.2 * a, Math.max(midE + 0.15 * a, o - 0.2 * a), o + 0.08 * a, avgV * 0.45, 0.52); break;
+    }
+    case 'V64': {
+      var kD = c[L - 4], oD = c[L - 5].c;
+      kD.o = oD; kD.c = oD - 1.6 * a; kD.l = kD.c - 0.1 * a; kD.h = oD + 0.05 * a; kD.v = avgV * 3; kD.tb = kD.v * 0.35; kD.q = kD.v * kD.c; kD.tq = kD.tb * kD.c;
+      var midD = (kD.o + kD.c) / 2;
+      for (q = L - 3; q < L; q++) {
+        var oq4 = c[q - 1].c, kq4 = c[q];
+        kq4.o = oq4; kq4.c = oq4 + 0.05 * a; kq4.l = oq4 - 0.15 * a; kq4.h = Math.min(midD - 0.2 * a, oq4 + 0.2 * a);
+        kq4.v = avgV * 0.8; kq4.tb = kq4.v * 0.5; kq4.q = kq4.v * kq4.c; kq4.tq = kq4.tb * kq4.c;
+      }
+      o = c[L - 1].c; set(o, Math.min(midD - 0.15 * a, o + 0.2 * a), o - 0.2 * a, o - 0.08 * a, avgV * 0.45, 0.48); break;
+    }
   }
   var nk = { t: k.t + tf.ms, T: k.t + 2 * tf.ms - 1, o: k.c, h: k.c * 1.001, l: k.c * 0.999, c: k.c * 1.0005, v: avgV * 0.2, q: avgV * 0.2 * k.c, n: 100, tb: avgV * 0.1, tq: avgV * 0.1 * k.c, open: true };
   if (isNum(endT)) {
@@ -1760,7 +1930,187 @@ function scenario(code, tfId, seed, endT) {
   return { closed: c, forming: nk };
 }
 
-root.VSA = { v: 4, TF: TF, hurstRS: hurstRS, htfFor: htfFor, regimeOf: regimeOf, regimeAllows: regimeAllows, adaptiveBounds: adaptiveBounds, TFMAP: TFMAP, ANCHOR_TXT: ANCHOR_TXT, HORIZONS: HORIZONS, RULES: RULES, RMAP: RMAP, START: START, START_SHORT: START_SHORT, startFor: startFor, SCEN: SCEN, ruleItems: ruleItems,
+/* ═══════════════════════════════════════════════════════════════════════════
+   v6.0 · LABORATORIO DE VENTAJA UNIVERSAL (evidencia agrupada entre pares)
+   Por qué: la evidencia por par (n≈20–80 eventos) tiene poca potencia y ~300 pruebas por par/TF; en un escaneo de
+   25 pares × 4 TF hay 100 familias BH independientes → aparecen ~10 «respaldos» falsos por escaneo aunque no haya
+   ninguna ventaja real. Acá cada regla×TF se prueba UNA vez sobre todo el universo líquido (n≈500–3.000), con:
+   · resultado por operación en R con la MISMA salida que se opera (stop ATR, objetivo R, tope de velas, costos reales);
+   · filtro de régimen HTF causal aplicado al histórico (evidencia condicional = lo que realmente se opera);
+   · error estándar robusto por clúster temporal (bloques de 4× la duración máxima): corrige la correlación entre
+     criptos que disparan juntas en el mismo movimiento de mercado;
+   · BH global (q=10 %) sobre todas las reglas×TF en entrenamiento (70 % inicial, con purga en el corte);
+   · validación fuera de muestra pre-registrada en el 30 % más reciente: media > 0, t ≥ 1,28 y exceso vs azar > 0.
+   ═══════════════════════════════════════════════════════════════════════════ */
+var LAB_REV = { PROFILE: 1, ADAPTIVE: 1 };
+function htfRegimeSeries(ltf, htf) {
+  var n = ltf.length, dir = new Int8Array(n), ready = new Uint8Array(n);
+  if (!htf || htf.length < 52) return { dir: dir, ready: ready };
+  var cl = htf.map(function (k) { return k.c; }), e21 = emaSeries(cl, 21), e50 = emaSeries(cl, 50), e200 = emaSeries(cl, 200);
+  var m = htf.length, hd = new Int8Array(m), hr = new Uint8Array(m), j, p = -1;
+  for (j = 51; j < m; j++) {
+    var sp = NaN;
+    if (isNum(e50[j]) && isNum(e200[j]) && e200[j] > 0) sp = (e50[j] - e200[j]) / e200[j];
+    else if (isNum(e21[j]) && isNum(e50[j]) && e50[j] > 0) sp = (e21[j] - e50[j]) / e50[j];
+    if (isNum(sp)) { hr[j] = 1; hd[j] = sp > 0.0025 ? 1 : sp < -0.0025 ? -1 : 0; }
+  }
+  for (var i = 0; i < n; i++) {
+    var T = ltf[i].T;
+    while (p + 1 < m && htf[p + 1].T <= T) p++; // última vela HTF cerrada al cierre de la vela LTF (causal)
+    if (p >= 0) { dir[i] = hd[p]; ready[i] = hr[p]; }
+  }
+  return { dir: dir, ready: ready };
+}
+function labAllowed(bias, cat, d, rdy, o) { return !o.hard || !rdy ? true : regimeAllows(bias, d, cat, !!o.strictLat); }
+// Resultado neto de cada vela como señal: entrada en la apertura de i+1, salida del plan; se descartan señales sin ventana completa.
+function tradeSeries(an, o) {
+  var c = an.c, n = an.n, last = n - 1 - o.maxBars, s = an.start;
+  var RL = new Float64Array(n).fill(NaN), RS = new Float64Array(n).fill(NaN), XL = new Int32Array(n), XS = new Int32Array(n), BL = new Int32Array(n), BS = new Int32Array(n), cR = 0, cN = 0;
+  for (var i = s; i <= last; i++) {
+    var tl = simTrade(c, an.atr, i, 1, n, o.slAtr, o.rr, o.maxBars, o.cost);
+    if (tl) { var rp = Math.abs(tl.entry - tl.sl) / tl.entry; RL[i] = tl.net / rp; XL[i] = tl.exitIdx; BL[i] = tl.bars; cR += o.cost / rp; cN++; }
+    var ts = simTrade(c, an.atr, i, -1, n, o.slAtr, o.rr, o.maxBars, o.cost);
+    if (ts) { RS[i] = ts.net / (Math.abs(ts.entry - ts.sl) / ts.entry); XS[i] = ts.exitIdx; BS[i] = ts.bars; }
+  }
+  return { from: s, last: last, RL: RL, RS: RS, XL: XL, XS: XS, BL: BL, BS: BS, costR: cN ? cR / cN : NaN };
+}
+function labPool(o) {
+  // o: { tfs, now, hist, slAtr, rr, maxBars, hard, strictLat, splitTest (0.30), minTrain (30), q (0.10) }
+  var P = { o: o, tf: {}, syms: [], states: [] };
+  o.splitTest = isNum(o.splitTest) ? o.splitTest : 0.30; o.minTrain = o.minTrain || 30; o.q = o.q || 0.10;
+  o.tfs.forEach(function (tf) {
+    var ms = TFMAP[tf].ms, tEnd = Math.floor(o.now / ms) * ms, tStart = tEnd - o.hist * ms, span = tEnd - tStart;
+    var cut = tStart + (1 - o.splitTest) * span;
+    P.tf[tf] = { tf: tf, ms: ms, tStart: tStart, tEnd: tEnd, cut: cut, mid: tStart + (1 - o.splitTest) * span / 2, block: 4 * o.maxBars * ms, rules: {}, nSym: 0, bars: 0, costRs: 0, costRn: 0 };
+  });
+  return P;
+}
+// Agrega un par×TF al universo. costSide = comisión + deslizamiento (incluye medio spread real) por lado.
+function labAdd(P, sym, tf, an, reg, costSide) {
+  var T = P.tf[tf], o = P.o; if (!T || !an || an.n < an.start + o.maxBars + 30) return null;
+  var oo = { slAtr: o.slAtr, rr: o.rr, maxBars: o.maxBars, cost: 2 * costSide, hard: o.hard, strictLat: o.strictLat };
+  var ts = tradeSeries(an, oo), c = an.c, i, per;
+  // línea base de entrada al azar (mismo filtro de régimen, misma salida), por lado × grupo × período
+  var base = {}; ['L1', 'L0', 'S1', 'S0'].forEach(function (k) { base[k] = [[0, 0], [0, 0], [0, 0]]; });
+  function perOf(idx, exitIdx) {
+    var te = c[idx + 1] ? c[idx + 1].t : c[idx].T + 1;
+    if (te >= T.cut) return 2;
+    if (c[exitIdx] && c[exitIdx].T >= T.cut) return -1; // purga: la operación de entrenamiento cruza el corte
+    return te < T.mid ? 0 : 1;
+  }
+  for (i = ts.from; i <= ts.last; i++) {
+    var d = reg ? reg.dir[i] : 0, rd = reg ? reg.ready[i] : 0;
+    if (isNum(ts.RL[i])) { per = perOf(i, ts.XL[i]); if (per >= 0) {
+      if (labAllowed(1, 'X', d, rd, oo)) { base.L0[per][0] += ts.RL[i]; base.L0[per][1]++; }
+      if (labAllowed(1, 'PROFILE', d, rd, oo)) { base.L1[per][0] += ts.RL[i]; base.L1[per][1]++; } } }
+    if (isNum(ts.RS[i])) { per = perOf(i, ts.XS[i]); if (per >= 0) {
+      if (labAllowed(-1, 'X', d, rd, oo)) { base.S0[per][0] += ts.RS[i]; base.S0[per][1]++; }
+      if (labAllowed(-1, 'PROFILE', d, rd, oo)) { base.S1[per][0] += ts.RS[i]; base.S1[per][1]++; } } }
+  }
+  var symIdx = P.syms.indexOf(sym); if (symIdx < 0) { P.syms.push(sym); symIdx = P.syms.length - 1; }
+  T.nSym++; T.bars += ts.last - ts.from + 1; if (isNum(ts.costR)) { T.costRs += ts.costR; T.costRn++; }
+  RULES.forEach(function (rule) {
+    if (!rule.bias || rule.id === 40) return;
+    var side = rule.bias, R = side > 0 ? ts.RL : ts.RS, X = side > 0 ? ts.XL : ts.XS, B = side > 0 ? ts.BL : ts.BS;
+    var bk = (side > 0 ? 'L' : 'S') + (LAB_REV[rule.cat] ? '1' : '0'), nextFree = -1;
+    var acc = T.rules[rule.id] || (T.rules[rule.id] = { t: [], R: [], ex: [], per: [], sym: [], bars: [] });
+    for (i = ts.from; i <= ts.last; i++) {
+      if (i < nextFree || !isNum(R[i])) continue;
+      var f = an.fired[i]; if (!f || f.indexOf(rule.id) < 0) continue;
+      if (!labAllowed(side, rule.cat, reg ? reg.dir[i] : 0, reg ? reg.ready[i] : 0, oo)) continue;
+      nextFree = X[i]; // no se abre otra operación de la misma regla en el mismo par hasta la vela de salida
+      per = perOf(i, X[i]); if (per < 0) continue;
+      var bs = base[bk][per], bm = bs[1] ? bs[0] / bs[1] : 0;
+      acc.t.push(c[i + 1].t); acc.R.push(R[i]); acc.ex.push(R[i] - bm); acc.per.push(per); acc.sym.push(symIdx); acc.bars.push(B[i]);
+    }
+  });
+  return ts;
+}
+function clusterStat(xs, keys) {
+  var n = xs.length, m = 0, i;
+  if (!n) return { n: 0, mean: NaN, se: NaN, t: NaN, G: 0, df: 0 };
+  for (i = 0; i < n; i++) m += xs[i]; m /= n;
+  var S = {}, G = 0, V = 0;
+  for (i = 0; i < n; i++) { var k = keys[i]; if (S[k] === undefined) { S[k] = 0; G++; } S[k] += xs[i] - m; }
+  for (var kk in S) V += S[kk] * S[kk];
+  var se = G > 1 ? Math.sqrt(V * G / (G - 1)) / n : NaN, t = se > 0 ? m / se : NaN;
+  return { n: n, mean: m, se: se, t: t, G: G, df: Math.max(1, G - 1) };
+}
+// t tal que P(T > t) = p (bisección; para umbrales de validación)
+function tInvSf(p, df) { var lo = -50, hi = 50; for (var k = 0; k < 80; k++) { var md = (lo + hi) / 2; if (tSf(md, df) > p) lo = md; else hi = md; } return (lo + hi) / 2; }
+function labFinalize(P) {
+  var o = P.o, all = [], alphaOos = isNum(o.oosAlpha) && o.oosAlpha > 0 ? o.oosAlpha : 0.10;
+  o.tfs.forEach(function (tf) {
+    var T = P.tf[tf];
+    RULES.forEach(function (rule) {
+      if (!rule.bias || rule.id === 40) return;
+      var a = T.rules[rule.id] || { t: [], R: [], ex: [], per: [], sym: [], bars: [] }, sel = function (ps) {
+        var xs = [], ex = [], ks = [];
+        for (var i = 0; i < a.R.length; i++) if (ps.indexOf(a.per[i]) >= 0) { xs.push(a.R[i]); ex.push(a.ex[i]); ks.push(o.iidSE ? i : Math.floor(a.t[i] / T.block)); } // iidSE: solo para pruebas (muestra el sesgo sin clústeres)
+        return { R: clusterStat(xs, ks), ex: clusterStat(ex, ks) };
+      };
+      var tr = sel([0, 1]), A = sel([0]), B = sel([1]), te = sel([2]), full = sel([0, 1, 2]);
+      var wins = 0, gw = 0, gl = 0, bySym = {}, bars = 0;
+      for (var i = 0; i < a.R.length; i++) {
+        var r = a.R[i]; if (r > 0) { wins++; gw += r; } else gl -= r; bars += a.bars[i];
+        var sk = a.sym[i]; if (!bySym[sk]) bySym[sk] = { n: 0, s: 0 }; bySym[sk].n++; bySym[sk].s += r;
+      }
+      var symKeys = Object.keys(bySym), elig = symKeys.filter(function (k) { return bySym[k].n >= 3; });
+      var pos = elig.filter(function (k) { return bySym[k].s > 0; }).length, topPos = 0, totPos = 0;
+      symKeys.forEach(function (k) { if (bySym[k].s > 0) { totPos += bySym[k].s; if (bySym[k].s > topPos) topPos = bySym[k].s; } });
+      var teWeeks = Math.max(1e-9, (T.tEnd - T.cut) / 6048e5);
+      var res = { tf: tf, id: rule.id, code: rule.code, name: rule.name, bias: rule.bias, cat: rule.cat,
+        n: a.R.length, tr: tr.R, trEx: tr.ex, A: A.R, B: B.R, te: te.R, teEx: te.ex, full: full.R,
+        hit: a.R.length ? wins / a.R.length : NaN, pf: gl > 0 ? gw / gl : (gw > 0 ? Infinity : NaN), avgBars: a.R.length ? bars / a.R.length : NaN,
+        nSym: symKeys.length, breadth: elig.length ? pos / elig.length : NaN, top: totPos > 0 ? topPos / totPos : NaN,
+        perWeek: te.R.n / teWeeks, testable: tr.R.n >= o.minTrain && tr.R.G >= 10 };
+      // Prueba de intersección-unión: la regla tiene que ganar plata (media R > 0) Y ganarle a la entrada al azar (exceso > 0).
+      // p = máx(p_neto, p_exceso) es válido al nivel α y evita «ventajas» que son solo beta de un mercado que subió en la muestra.
+      res.pNet = res.testable ? tSf(tr.R.t, tr.R.df) : NaN; res.pEx = res.testable ? tSf(tr.ex.t, tr.ex.df) : NaN;
+      res.p = res.testable ? Math.max(res.pNet, res.pEx) : NaN;
+      res.pNeg = res.testable ? tSf(-tr.R.t, tr.R.df) : NaN;
+      all.push(res);
+    });
+  });
+  var testable = all.filter(function (r) { return r.testable; });
+  bhMark(testable, o.q, 'bh');
+  bhMark(testable, 0.25, 'bhL'); // FDR laxa: solo para «candidata» (validación hacia adelante en Paper, nunca capital real)
+  bhMark(testable.map(function (r) { return { p: r.pNeg, ref: r }; }), o.q, 'bhNeg').forEach(function (z) { z.ref.bhNeg = z.bhNeg; });
+  all.forEach(function (r) {
+    var stable = r.A.n >= 10 && r.B.n >= 10 && r.A.mean > 0 && r.B.mean > 0, oosOk = r.te.n >= 10 && r.te.G >= 5;
+    r.stable = stable; r.tReq = tInvSf(alphaOos, Math.max(1, r.te.df || 1));
+    if (!r.testable) r.label = r.n ? 'poca muestra' : 'sin casos';
+    else if ((r.bh || r.bhL) && stable && r.trEx.mean > 0) {
+      // VALIDADA (capital real): BH estricta (q=10 %) en entrenamiento + OOS pre-registrado. CANDIDATA (solo Paper): BH laxa o OOS débil.
+      if (r.bh && oosOk && r.te.mean > 0 && r.te.t >= r.tReq && r.teEx.mean > 0) r.label = 'validada';
+      else if (oosOk && r.te.mean <= 0) r.label = 'refutada';
+      else r.label = 'candidata';
+    } else if (r.bhNeg) r.label = 'en contra';
+    else r.label = 'sin ventaja';
+    // Expectativa para operar: la media fuera de muestra (no sesgada por la selección en entrenamiento) y su cota de 1 σ
+    r.E = oosOk ? r.te.mean : NaN; r.LB = oosOk ? r.te.mean - r.te.se : NaN;
+  });
+  return { at: Date.now(), o: o, alphaOos: alphaOos, results: all, nTests: testable.length, nBh: testable.filter(function (r) { return r.bh; }).length,
+    nVal: all.filter(function (r) { return r.label === 'validada'; }).length, syms: P.syms.slice(),
+    tfInfo: o.tfs.map(function (tf) { var T = P.tf[tf]; return { tf: tf, nSym: T.nSym, bars: T.bars, cut: T.cut, tStart: T.tStart, tEnd: T.tEnd, costR: T.costRn ? T.costRs / T.costRn : NaN }; }) };
+}
+// Señales vivas: reglas VALIDADAS que dispararon en la última vela cerrada, con régimen HTF actual y sin conflicto con otra validada opuesta.
+function labSignalsAt(book, tf, fired, regNow, o) {
+  o = o || {};
+  if (!book || !book.results || !fired) return [];
+  var f = fired, val = {}, hits = [];
+  book.results.forEach(function (r) { if (r.tf === tf && (r.label === 'validada' || (o.includeCand && r.label === 'candidata'))) val[r.id] = r; });
+  f.forEach(function (id) {
+    var r = val[id], rule = RMAP[id]; if (!r || !rule) return;
+    if (!labAllowed(rule.bias, rule.cat, regNow ? regNow.dir : 0, regNow ? regNow.ready : 0, { hard: book.o.hard, strictLat: book.o.strictLat })) return;
+    hits.push({ rule: rule, ev: r });
+  });
+  var up = hits.filter(function (h) { return h.rule.bias > 0 && h.ev.label === 'validada'; }), dn = hits.filter(function (h) { return h.rule.bias < 0 && h.ev.label === 'validada'; });
+  if (up.length && dn.length) return []; // conflicto entre ventajas validadas: no operar
+  return hits.sort(function (a, b) { return (b.ev.LB || -9) - (a.ev.LB || -9); });
+}
+
+root.VSA = { v: 6, TF: TF, normSf: normSf, tSf: tSf, tInvSf: tInvSf, htfRegimeSeries: htfRegimeSeries, labAllowed: labAllowed, tradeSeries: tradeSeries, labPool: labPool, labAdd: labAdd, labFinalize: labFinalize, labSignalsAt: labSignalsAt, clusterStat: clusterStat, hurstRS: hurstRS, htfFor: htfFor, regimeOf: regimeOf, regimeAllows: regimeAllows, adaptiveBounds: adaptiveBounds, TFMAP: TFMAP, ANCHOR_TXT: ANCHOR_TXT, HORIZONS: HORIZONS, RULES: RULES, RMAP: RMAP, START: START, START_SHORT: START_SHORT, startFor: startFor, SCEN: SCEN, ruleItems: ruleItems,
   isNum: isNum, mean: mean, sdev: sdev, median: median, wilson: wilson, bhMark: bhMark, mulberry32: mulberry32, hashStr: hashStr,
   emaSeries: emaSeries, smaSeries: smaSeries, atrSeries: atrSeries, rsiSeries: rsiSeries, vwapSeries: vwapSeries, anchorKey: anchorKey, flowSeries: flowSeries,
   rvolSeries: rvolSeries, zPrev: zPrev, slopeNorm: slopeNorm, profileAt: profileAt,
@@ -2088,13 +2438,16 @@ var SYMBOLS = [
 var SYM_NAMES = {}; SYMBOLS.forEach(function (x) { SYM_NAMES[x[0]] = x[1]; });
 var SCAN_TF_MAP = { all4: ['15m', '1h', '4h', '1d'], intra: ['15m', '1h'], swing: ['1h', '4h'], macro: ['4h', '1d'], all3: ['15m', '1h', '4h'] };
 var DEF = {
-  v: 4.0, market: 'spot', hardRegime: true, regimeHtf: 'auto', strictLateral: false, sym: 'BTCUSDT', tf: '1h', thr: 'esc', rvol: 'seas', hist: 3000, h: 0, // h=0 -> Auto multi-horizonte
+  v: 6.0, market: 'spot', hardRegime: true, regimeHtf: 'auto', strictLateral: false, sym: 'BTCUSDT', tf: '1h', thr: 'esc', rvol: 'seas', hist: 3000, h: 0, // h=0 -> Auto multi-horizonte
   feeSpot: 0.10, feeFut: 0.04, slip: 0.02, Kfine: 4000, fontScale: 1.15, refresh: 15, sound: true, sigAlert: 'BOTH', sigAlertOn: true, tgOn: false, tgToken: '', tgChat: '', ghOn: false, ghRepo: '', ghToken: '', ghBranch: 'main', theme: 'dark',
   slAtr: 1.3, rr: 2, maxBars: 12,
   scanList: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'ADAUSDT', 'DOGEUSDT', 'AVAXUSDT', 'LINKUSDT', 'SUIUSDT', 'NEARUSDT', 'ARBUSDT', 'DOTUSDT', 'INJUSDT', 'TONUSDT', 'OPUSDT'],
   scanTf: 'all4', scanFilter: 'ALL',
   custom: [], favs: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT'], risk: { cap: 1000, pct: 1, lev: 1 },
-  layers: { emas: true, vwap: true, levels: true, prof: true, sig: true }, rfilter: 'ACTIVE', btMode: 'C'
+  layers: { emas: true, vwap: true, levels: true, prof: true, sig: true }, rfilter: 'ACTIVE', btMode: 'C',
+  // v6: Laboratorio de Ventaja, filtro de validación y vigilancia del universo
+  lab: { n: 30, tf: 'macro', hist: 3000, exit: 'plan', minQv: 5, maxSpread: 15, excl: 'PAXG,XAUT', lfilter: 'TOP' },
+  gate: 'auto', vigil: false, paperCand: true
 };
 var SYM_RE = /^[A-Z0-9]{2,22}$/;
 function validate(o) {
@@ -2138,6 +2491,18 @@ function validate(o) {
   o.strictLateral = !!o.strictLateral;
   if (['ACTIVE', 'SUPPORT', 'PROM', 'ALL', 'BUY', 'SELL', 'SQUEEZE', 'ADAPTIVE', 'REGIME', 'CONFLUENCE', 'LOWVOL', 'HIGHVOL', 'WYCKOFF', 'PROFILE', 'FLOW'].indexOf(o.rfilter) < 0) o.rfilter = 'ACTIVE';
   if (['A', 'B', 'C'].indexOf(o.btMode) < 0) o.btMode = 'C';
+  if (!o.lab || typeof o.lab !== 'object') o.lab = JSON.parse(JSON.stringify(DEF.lab));
+  o.lab = {
+    n: [15, 30, 50].indexOf(+o.lab.n) >= 0 ? +o.lab.n : 30,
+    tf: SCAN_TF_MAP[o.lab.tf] ? o.lab.tf : 'macro',
+    hist: [1500, 3000].indexOf(+o.lab.hist) >= 0 ? +o.lab.hist : 3000,
+    exit: ['plan', 'swing', 'trend'].indexOf(o.lab.exit) >= 0 ? o.lab.exit : 'plan',
+    minQv: clampNum(o.lab.minQv, 0.5, 1000, 5), maxSpread: clampNum(o.lab.maxSpread, 1, 200, 15),
+    excl: typeof o.lab.excl === 'string' ? o.lab.excl.toUpperCase().replace(/[^A-Z0-9,]/g, '').slice(0, 300) : 'PAXG,XAUT',
+    lfilter: ['TOP', 'VAL', 'CAND', 'REF', 'NEG', 'ALL'].indexOf(o.lab.lfilter) >= 0 ? o.lab.lfilter : 'TOP'
+  };
+  if (['auto', 'book', 'pair'].indexOf(o.gate) < 0) o.gate = 'auto';
+  o.vigil = !!o.vigil; o.paperCand = o.paperCand !== false;
   return o;
 }
 function loadSettings() {
@@ -2163,12 +2528,14 @@ function saveSettings() { LS.set(SKEY, S.set); }
 
 var S = {
   set: loadSettings(), gen: 0, sym: null, data: {}, an: {}, ev: {}, bt: {}, evQ: [], evBusy: false,
-  ticker: null, micro: null, book: null, lastMicroAt: 0, loading: false, loadErr: null, lastLive: 0, demo: null, tab: 'radar', journal: [], alerted: {}, armed: false,
+  ticker: null, micro: null, obook: null, lastMicroAt: 0, loading: false, loadErr: null, lastLive: 0, demo: null, tab: 'radar', journal: [], alerted: {}, armed: false,
   ch: { off: 0, span: 0, selT: null, hoverT: null }, chGeom: null, scan: { rows: [], running: false, at: 0 }, selfTest: null, audio: null,
   riskBuilt: false, jBusy: false,
   catalog: { spot: [], futures: [], loading: {} }, cFilter: 'ALL',
   alerts: [], alertsBuilt: false, alarm: { active: false, timer: 0, titleTimer: 0, origTitle: document.title, sym: null, tf: null }, wakeLock: null, lastAlertChk: 0,
-  paper: { cap0: 10000, cash: 10000, riskPct: 1, lev: 2, maxOpen: 5, autoExec: true, open: [], closed: [], curve: [{ t: Date.now(), eq: 10000 }] }
+  paper: { cap0: 10000, cash: 10000, riskPct: 1, lev: 2, maxOpen: 5, autoExec: true, open: [], closed: [], curve: [{ t: Date.now(), eq: 10000 }] },
+  lab: { running: false, stage: '', done: 0, total: 0, accepted: 0, skipped: 0, err: null, gen: 0 },
+  book: null, opps: { list: [], at: 0, busy: false, err: null }, vigil: { last: {}, seen: {}, timer: 0, busy: false }
 };
 function mk() { return S.set.market; }
 function mkLabel(m) { return (m || mk()) === 'futures' ? 'Futuros USDT-M' : 'Spot'; }
@@ -2265,10 +2632,24 @@ function sendTelegram(text, silent) {
     return Promise.resolve(false);
   }
 }
+// v6: libro de ventajas para el backend 24/7 (solo validadas y candidatas, con la salida exacta con la que se validaron)
+function edgeBookExport() {
+  var b = S.book; if (!b) return null;
+  var rnd = function (x, d) { return isNum(x) ? +x.toFixed(d) : null; };
+  return { at: b.at, market: b.market, timeframes: b.o.tfs.slice(), slAtr: b.o.slAtr, rr: b.o.rr, maxBars: b.o.maxBars, hardRegime: !!b.o.hard, strictLateral: !!b.o.strictLat,
+    regimeHtf: b.o.regimeHtf || 'auto', thr: b.cfg.thr, rvol: b.cfg.rvol, symbols: b.syms.slice(0, 60), paperCandidates: !!S.set.paperCand,
+    edges: b.results.filter(function (r) { return r.label === 'validada' || r.label === 'candidata'; }).map(function (r) {
+      return { tf: r.tf, code: r.code, bias: r.bias, label: r.label, e: rnd(r.E, 4), lb: rnd(r.LB, 4), nTest: r.te ? r.te.n : 0, tTest: r.te ? rnd(r.te.t, 3) : null,
+        eTrain: r.tr ? rnd(r.tr.mean, 4) : null, nTrain: r.tr ? r.tr.n : 0, nSym: r.nSym, hit: rnd(r.hit, 3) };
+    }) };
+}
 function buildServerConfig() {
   return {
-    version: '4.0',
+    version: '6.0',
     market: mk(),
+    thr: S.set.thr,
+    rvol: S.set.rvol,
+    edgeBook: edgeBookExport(),
     favorites: S.set.favs.slice(0, 40),
     symbols: S.set.scanList.slice(0, 25),
     timeframes: SCAN_TF_MAP[S.set.scanTf] || ['1h', '4h'],
@@ -2434,6 +2815,8 @@ function labChip(label, bias, n) {
     case 'calculando': cls = 'acc'; txt = 'calculando…'; break;
     case 'sin señal': txt = 'sin señal'; break;
     case 'demo': txt = 'demo'; break;
+    case 'universo': cls = bias > 0 ? 'solid-bull' : bias < 0 ? 'solid-bear' : 'acc'; txt = 'validada (universo)'; break;
+    case 'candidata': cls = 'cyan'; txt = 'candidata (universo)'; break;
   }
   return '<span class="chip ' + cls + '">' + esc(txt) + '</span>';
 }
@@ -2469,7 +2852,7 @@ function loadPaper() {
       lev: clampNum(p.lev, 1, 20, 2),
       maxOpen: Math.round(clampNum(p.maxOpen, 1, 20, 5)),
       autoExec: p.autoExec !== false,
-      open: Array.isArray(p.open) ? p.open : [],
+      open: Array.isArray(p.open) ? p.open.map(function (x) { x.busy = false; return x; }) : [],
       closed: Array.isArray(p.closed) ? p.closed : [],
       curve: Array.isArray(p.curve) && p.curve.length ? p.curve : [{ t: Date.now(), eq: p.cap0 }]
     };
@@ -2486,11 +2869,15 @@ function openPaperTrade(opts) {
   if (P.open.length >= P.maxOpen) { if (!opts.silent) toast('Paper: tope de ' + P.maxOpen + ' posiciones abiertas'); return false; }
   var dup = P.open.some(function (x) { return x.sym === opts.sym && x.tf === opts.tf && x.side === opts.side; });
   if (dup) { if (!opts.silent) toast('Paper: ya tenés una posición abierta en ' + opts.sym + ' ' + opts.tf); return false; }
-  var eq = paperEquity(), riskUsd = eq * (P.riskPct / 100), f = costSide(opts.market);
+  var eq = paperEquity(), riskUsd = eq * (P.riskPct / 100), f = isNum(opts.costS) ? opts.costS : costSide(opts.market);
   var perUnit = Math.abs(opts.entry - opts.sl) + f * (opts.entry + opts.sl);
   if (!(perUnit > 0) || !(opts.entry > 0)) return false;
   var lev = opts.market === 'futures' ? P.lev : 1;
-  var qty = riskUsd / perUnit, notional = qty * opts.entry, maxNot = eq * lev;
+  // v6: tope AGREGADO. Antes cada posición podía usar el 100 % del capital → 5 posiciones en Spot = 5× el capital (imposible sin margen).
+  var used = 0; P.open.forEach(function (x) { used += x.market === 'futures' ? x.notional / Math.max(1, P.lev) : x.notional; });
+  var free = Math.max(0, eq - used), maxNot = free * lev;
+  if (maxNot < eq * 0.02) { if (!opts.silent) toast('Paper: sin capital libre (' + fnum(used, 0) + ' USDT ya invertidos)'); return false; }
+  var qty = riskUsd / perUnit, notional = qty * opts.entry;
   if (notional > maxNot) { qty = maxNot / opts.entry; notional = maxNot; }
   var pos = {
     id: Date.now() + Math.floor(Math.random() * 1000),
@@ -2498,7 +2885,7 @@ function openPaperTrade(opts) {
     rule: opts.rule || 'MANUAL', ruleName: opts.ruleName || '', side: opts.side > 0 ? 1 : -1,
     entry: opts.entry, curPx: opts.entry, sl: opts.sl, tp: opts.tp, risk: Math.abs(opts.entry - opts.sl),
     qty: qty, notional: notional, costSide: f, maxT: opts.expiry || (Date.now() + 12 * 36e5),
-    unrealUsd: -qty * f * opts.entry, unrealPct: -f, auto: !!opts.auto
+    unrealUsd: -qty * f * opts.entry, unrealPct: -f, auto: !!opts.auto, src: opts.src || (opts.auto ? 'par' : 'manual'), chk: Date.now()
   };
   P.open.unshift(pos);
   savePaper();
@@ -2506,8 +2893,9 @@ function openPaperTrade(opts) {
   render('all');
   return true;
 }
-function closePaperPos(pos, why, px) {
+function closePaperPos(pos, why, px, tExit) {
   var P = S.paper, f = pos.costSide || costSide(pos.market);
+  if (!P.open.some(function (x) { return x.id === pos.id; })) return;
   var grossUsd = pos.qty * pos.side * (px - pos.entry);
   var feesUsd = pos.qty * f * (pos.entry + px);
   var netUsd = grossUsd - feesUsd;
@@ -2516,13 +2904,12 @@ function closePaperPos(pos, why, px) {
   P.cash += netUsd;
   P.open = P.open.filter(function (x) { return x.id !== pos.id; });
   P.closed.unshift({
-    id: pos.id, t: pos.t, exitT: Date.now(), sym: pos.sym, market: pos.market, tf: pos.tf,
+    id: pos.id, t: pos.t, exitT: isNum(tExit) ? tExit : Date.now(), sym: pos.sym, market: pos.market, tf: pos.tf,
     rule: pos.rule, side: pos.side, entry: pos.entry, exitPx: px, why: why,
-    netUsd: netUsd, netPct: netPct, R: R, auto: pos.auto
+    netUsd: netUsd, netPct: netPct, R: R, auto: pos.auto, src: pos.src || (pos.auto ? 'par' : 'manual')
   });
-  if (P.closed.length > 300) P.closed.length = 300;
-  P.curve.push({ t: Date.now(), eq: P.cash });
-  if (P.curve.length > 400) P.curve.shift();
+  if (P.closed.length > 500) P.closed.length = 500;
+  paperMark(true);
   savePaper();
   toast('Paper cerrado (' + why + '): ' + pos.sym + ' ' + (netUsd >= 0 ? '+' : '−') + fnum(Math.abs(netUsd), 2) + ' USDT', 3200);
   render('all');
@@ -2539,12 +2926,48 @@ function updatePaperLive(sym, market, px) {
     changed = true;
     var hitSl = pos.side > 0 ? px <= pos.sl : px >= pos.sl;
     var hitTp = pos.side > 0 ? px >= pos.tp : px <= pos.tp;
-    if (hitSl) toClose.push({ pos: pos, why: 'STOP', px: pos.sl });
-    else if (hitTp) toClose.push({ pos: pos, why: 'OBJETIVO', px: pos.tp });
-    else if (pos.maxT && Date.now() >= pos.maxT) toClose.push({ pos: pos, why: 'TIEMPO', px: px });
+    if (hitSl || hitTp || (pos.maxT && D.now() >= pos.maxT)) toClose.push(pos);
   });
-  toClose.forEach(function (c) { closePaperPos(c.pos, c.why, c.px); });
-  if (changed && !toClose.length) { savePaper(); if (S.tab === 'rules' || S.tab === 'radar') render('all'); }
+  toClose.forEach(function (pos) { reconcileOne(pos); });
+  if (changed) { savePaper(); if (S.tab === 'rules' || S.tab === 'radar') render('all'); }
+}
+// v6: conciliación con velas de 1m (5m/15m si la app estuvo cerrada mucho tiempo). Antes el stop/objetivo se miraba con el
+// ticker cada 15 s: las mechas que tocaban el stop y volvían no se registraban → Paper más optimista que la realidad.
+function reconcileOne(pos, depth) {
+  if (S.demo || !pos || pos.busy) return Promise.resolve();
+  var m = pos.market === 'futures' ? 'futures' : 'spot', start = Math.max(pos.chk || pos.t, pos.t), nowS = D.now(), gap = nowS - start;
+  var iv = gap <= 16 * 36e5 ? '1m' : gap <= 3.4 * 864e5 ? '5m' : '15m', ivMs = V.TFMAP[iv].ms;
+  pos.busy = true;
+  return D.klines(m, pos.sym, iv, 1000, null, Math.floor(start / ivMs) * ivMs).then(function (rows) {
+    pos.busy = false;
+    var done = false, last = null;
+    for (var i = 0; i < rows.length && !done; i++) {
+      var k = rows[i]; if (k.t < pos.t) continue; // la vela que contiene la entrada tiene precios previos: no se usa
+      last = k;
+      var closed = k.T < nowS, L = pos.side > 0;
+      if (L ? k.o <= pos.sl : k.o >= pos.sl) { closePaperPos(pos, 'STOP', k.o, k.t); done = true; break; }          // gap a través del stop
+      if (L ? k.o >= pos.tp : k.o <= pos.tp) { closePaperPos(pos, 'OBJETIVO', k.o, k.t); done = true; break; }
+      var hitSl = L ? k.l <= pos.sl : k.h >= pos.sl, hitTp = L ? k.h >= pos.tp : k.l <= pos.tp;
+      if (hitSl) { closePaperPos(pos, 'STOP', pos.sl, k.t); done = true; break; }                                        // ambos en la misma vela: cuenta el stop
+      if (hitTp) { closePaperPos(pos, 'OBJETIVO', pos.tp, k.t); done = true; break; }
+      if (closed && pos.maxT && k.T + 1 >= pos.maxT) { closePaperPos(pos, 'TIEMPO', k.c, k.T + 1); done = true; break; }
+      if (closed) pos.chk = k.T + 1;
+    }
+    if (!done && last) { pos.curPx = last.c; var f = pos.costSide || costSide(pos.market); pos.unrealUsd = pos.qty * (pos.side * (last.c - pos.entry) - f * (pos.entry + last.c)); pos.unrealPct = pos.side * (last.c - pos.entry) / pos.entry - 2 * f; savePaper(); }
+    if (!done && rows.length >= 1000 && (depth || 0) < 4) return reconcileOne(pos, (depth || 0) + 1);
+  }, function () { pos.busy = false; });
+}
+function reconcilePaper() {
+  if (S.demo || !S.paper.open.length) return;
+  D.pool(S.paper.open.slice(), 2, function (pos) { return reconcileOne(pos); }).then(function () { paperMark(false); render(S.tab === 'rules' || S.tab === 'radar' ? 'all' : 'status'); });
+}
+// Curva de capital marcada a mercado (antes solo se registraba al cerrar → el drawdown flotante quedaba oculto)
+function paperMark(force) {
+  var P = S.paper, eq = paperEquity(), last = P.curve[P.curve.length - 1], now = Date.now();
+  if (!force && last && now - last.t < 5 * 60000 && Math.abs(eq / last.eq - 1) < 0.0025) return;
+  P.curve.push({ t: now, eq: eq });
+  if (P.curve.length > 1500) { var old = P.curve.slice(0, 750).filter(function (_, i) { return i % 2 === 0; }); P.curve = old.concat(P.curve.slice(750)); }
+  savePaper();
 }
 function pollPaperPositions() {
   if (S.demo || !S.paper.open.length) return;
@@ -2565,7 +2988,8 @@ function renderPaper() {
   cl.forEach(function (x) { if (x.netUsd > 0) gw += x.netUsd; else gl -= x.netUsd; });
   P.curve.forEach(function (pt) { if (pt.eq > pk) pk = pt.eq; var dd = pk > 0 ? pt.eq / pk - 1 : 0; if (dd < mdd) mdd = dd; });
   var pf = gl > 0 ? gw / gl : (gw > 0 ? Infinity : NaN);
-  var rs = cl.filter(function (x) { return isNum(x.R); }), expR = rs.length ? V.mean(rs.map(function (x) { return x.R; })) : NaN;
+  var rs = cl.filter(function (x) { return isNum(x.R); }), rArr = rs.map(function (x) { return x.R; }), expR = rs.length ? V.mean(rArr) : NaN;
+  var sdR = rArr.length > 1 ? V.sdev(rArr) : NaN, seR = sdR / Math.sqrt(rArr.length), tR = seR > 0 ? expR / seR : NaN;
   var tile = function (t, v, s, cls) { return '<div class="tile"><div class="t">' + t + '</div><div class="v ' + (cls || '') + '">' + v + '</div>' + (s ? '<div class="s">' + s + '</div>' : '') + '</div>'; };
   var openHtml = P.open.length ? P.open.map(function (p) {
     return '<div class="paper-pos"><div class="paper-pos-h"><b>' + esc(p.sym) + '</b><span class="tfc">' + esc(p.tf.toUpperCase()) + '</span><span class="chip ' + (p.side > 0 ? 'bull' : 'bear') + '">' + (p.side > 0 ? 'LONG' : 'SHORT') + '</span><span class="code">' + esc(p.rule) + '</span>' +
@@ -2580,11 +3004,15 @@ function renderPaper() {
   }).join('');
 
   // ─── Auditoría en vivo pre-capital real (por regla y por temporalidad) ───
-  var cN = cl.length >= 20, cExp = isNum(expR) && expR >= 0.15, cPf = isFinite(pf) ? pf >= 1.30 : pf === Infinity, cDd = mdd > -0.15;
+  // v6: con N=20 el error estándar de la media en R es ~0,25R: «Exp ≥ 0,15R» no distinguía ventaja de suerte. Ahora exige t ≥ 1,645 (95 % unilateral).
+  var cN = rArr.length >= 30, cExp = isNum(tR) && tR >= 1.645 && expR > 0, cPf = isFinite(pf) ? pf >= 1.20 : pf === Infinity, cDd = mdd > -0.15;
   var passAll = cN && cExp && cPf && cDd;
   var chk = function (ok, lbl) { return '<span class="chip ' + (ok ? 'bull' : 'mut') + '">' + (ok ? '✓ ' : '○ ') + lbl + '</span>'; };
-  var byRule = {}, byTfP = {};
+  var byRule = {}, byTfP = {}, bySrc = {}, SRC_TXT = { universo: 'Validada (universo)', candidata: 'Candidata (universo)', par: 'Evidencia por par', manual: 'Manual' };
   cl.forEach(function (x) {
+    var sk = SRC_TXT[x.src || (x.auto ? 'par' : 'manual')] || 'Otro';
+    if (!bySrc[sk]) bySrc[sk] = { k: sk, n: 0, w: 0, usd: 0, rs: [] };
+    bySrc[sk].n++; if (x.netUsd > 0) bySrc[sk].w++; bySrc[sk].usd += x.netUsd; if (isNum(x.R)) bySrc[sk].rs.push(x.R);
     var rk = x.rule || 'MANUAL';
     if (!byRule[rk]) byRule[rk] = { k: rk, n: 0, w: 0, usd: 0, rs: [] };
     byRule[rk].n++; if (x.netUsd > 0) byRule[rk].w++; byRule[rk].usd += x.netUsd; if (isNum(x.R)) byRule[rk].rs.push(x.R);
@@ -2595,29 +3023,29 @@ function renderPaper() {
   var mkAuditRows = function (map) {
     var arr = Object.keys(map).map(function (k) { return map[k]; }).sort(function (a, b) { return b.usd - a.usd; });
     if (!arr.length) return '';
-    return '<table class="audit-tbl"><thead><tr><th>Grupo</th><th class="r">N</th><th class="r">Acierto</th><th class="r">Exp (R)</th><th class="r">P&amp;L USDT</th><th class="r">Estado</th></tr></thead><tbody>' +
+    return '<table class="audit-tbl"><thead><tr><th>Grupo</th><th class="r">N</th><th class="r">Acierto</th><th class="r">Exp (R) · t</th><th class="r">P&amp;L USDT</th><th class="r">Estado</th></tr></thead><tbody>' +
       arr.slice(0, 10).map(function (g) {
-        var er = g.rs.length ? V.mean(g.rs) : NaN;
-        var st = g.n < 5 ? '<span class="chip mut">muestra</span>' : (er >= 0.15 && g.usd > 0 ? '<span class="chip bull">APTA</span>' : (g.usd < 0 ? '<span class="chip bear">PAUSAR</span>' : '<span class="chip warn">OBS</span>'));
-        return '<tr><td><b>' + esc(g.k) + '</b></td><td class="r">' + g.n + '</td><td class="r">' + fshare(g.w / g.n) + '</td><td class="r">' + (isNum(er) ? fsig(er, 2) + 'R' : '—') + '</td><td class="r ' + (g.usd >= 0 ? 'c-bull' : 'c-bear') + '">' + (g.usd >= 0 ? '+' : '−') + fnum(Math.abs(g.usd), 2) + '</td><td class="r">' + st + '</td></tr>';
+        var er = g.rs.length ? V.mean(g.rs) : NaN, sg = g.rs.length > 1 ? V.sdev(g.rs) : NaN, tg = sg > 0 ? er / (sg / Math.sqrt(g.rs.length)) : NaN;
+        var st = g.rs.length < 10 ? '<span class="chip mut">muestra</span>' : (tg >= 1.645 && er > 0 ? '<span class="chip bull">APTA</span>' : (er < 0 && tg <= -1 ? '<span class="chip bear">PAUSAR</span>' : '<span class="chip warn">OBS</span>'));
+        return '<tr><td><b>' + esc(g.k) + '</b></td><td class="r">' + g.n + '</td><td class="r">' + fshare(g.w / g.n) + '</td><td class="r">' + (isNum(er) ? fsig(er, 2) + 'R' : '—') + (isNum(tg) ? '<div class="card-sub">t ' + fnum(tg, 1) + '</div>' : '') + '</td><td class="r ' + (g.usd >= 0 ? 'c-bull' : 'c-bear') + '">' + (g.usd >= 0 ? '+' : '−') + fnum(Math.abs(g.usd), 2) + '</td><td class="r">' + st + '</td></tr>';
       }).join('') + '</tbody></table>';
   };
   var auditHtml = '<div class="audit-box"><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap">' +
     '<span class="kick">📊 Auditoría en vivo (pre-capital real)</span>' +
-    '<span class="chip ' + (passAll ? 'solid-bull' : 'warn') + '">' + (passAll ? 'LISTA PARA ESCALAR' : 'EN INCUBACIÓN (' + cl.length + '/20 trades)') + '</span></div>' +
-    '<div class="audit-checks">' + chk(cN, 'N ≥ 20 (' + cl.length + ')') + chk(cExp, 'Exp ≥ +0,15R') + chk(cPf, 'PF ≥ 1,30') + chk(cDd, 'MDD < 15 %') + '</div>' +
-    (cl.length ? '<div style="margin-top:8px"><div class="card-sub">Desglose por regla</div>' + mkAuditRows(byRule) + '<div class="card-sub" style="margin-top:8px">Desglose por temporalidad</div>' + mkAuditRows(byTfP) + '</div>' : '<div class="hint">Cuando se cierren operaciones virtuales aparecerá aquí el ranking real por regla y temporalidad.</div>') +
+    '<span class="chip ' + (passAll ? 'solid-bull' : 'warn') + '">' + (passAll ? 'LISTA PARA ESCALAR' : 'EN INCUBACIÓN (' + rArr.length + '/30 trades)') + '</span></div>' +
+    '<div class="audit-checks">' + chk(cN, 'N ≥ 30 (' + rArr.length + ')') + chk(cExp, 'Exp > 0 al 95 % (t ' + (isNum(tR) ? fnum(tR, 2) : '—') + ')') + chk(cPf, 'PF ≥ 1,20') + chk(cDd, 'MDD flotante < 15 %') + '</div>' +
+    (cl.length ? '<div style="margin-top:8px"><div class="card-sub">Por origen de la señal (¿las validadas rinden más que el resto?)</div>' + mkAuditRows(bySrc) + '<div class="card-sub" style="margin-top:8px">Desglose por regla</div>' + mkAuditRows(byRule) + '<div class="card-sub" style="margin-top:8px">Desglose por temporalidad</div>' + mkAuditRows(byTfP) + '</div>' : '<div class="hint">Cuando se cierren operaciones virtuales aparecerá aquí el ranking real por origen, regla y temporalidad.</div>') +
     '</div>';
   el.innerHTML = '<div class="card-head"><div class="card-title">🧪 Simulador Aislado · Paper Trading y Auditoría</div><div class="row-btns"><button type="button" class="pbtn sm" data-paper="csv">CSV</button><button type="button" class="pbtn sm" data-paper="cfg">Configurar</button><button type="button" class="pbtn sm" data-paper="reset">Reiniciar</button></div></div>' +
-    '<div class="paper-ctl"><label class="switch-lbl"><input type="checkbox" id="paperAuto"' + (P.autoExec ? ' checked' : '') + '> Auto-ejecutar alertas confirmadas en segundo plano</label>' +
-    '<span class="card-sub">Aislado del diario real · Riesgo ' + fnum(P.riskPct, 1) + ' % · Máx ' + P.maxOpen + ' abiertas</span></div>' +
+    '<div class="paper-ctl"><label class="switch-lbl"><input type="checkbox" id="paperAuto"' + (P.autoExec ? ' checked' : '') + '> Auto-ejecutar señales ' + (gateMode() === 'book' ? 'validadas del libro' + (S.set.paperCand ? ' y candidatas' : '') : 'confirmadas') + '</label>' +
+    '<span class="card-sub">Aislado del diario real · Riesgo ' + fnum(P.riskPct, 1) + ' % · Máx ' + P.maxOpen + ' abiertas · stops conciliados con velas de 1m</span></div>' +
     '<div class="paper-grid">' +
     tile('Capital Virtual', fnum(eq, 2) + ' USDT', 'inicial ' + fnum(P.cap0, 0) + ' USDT', pnlUsd >= 0 ? 'c-bull' : 'c-bear') +
     tile('P&L Total (aislado)', (pnlUsd >= 0 ? '+' : '−') + fnum(Math.abs(pnlUsd), 2) + ' USDT', fpct(pnlPct) + ' neto', pnlUsd >= 0 ? 'c-bull' : 'c-bear') +
     tile('P&L Abierto', (unrl >= 0 ? '+' : '−') + fnum(Math.abs(unrl), 2) + ' USDT', P.open.length + ' posición(es)', unrl >= 0 ? 'c-bull' : 'c-bear') +
     tile('Acierto / PF', cl.length ? fshare(wins / cl.length) : '—', 'PF ' + (isFinite(pf) ? fnum(pf, 2) : (pf === Infinity ? '∞' : '—')) + ' · ' + cl.length + ' cerradas') +
-    tile('Expectancy', isNum(expR) ? fsig(expR, 2) + 'R' : '—', 'promedio por trade') +
-    tile('Máx. Drawdown', fpct(mdd), 'caída máx. virtual', 'c-bear') +
+    tile('Expectancy', isNum(expR) ? fsig(expR, 2) + 'R' : '—', isNum(tR) ? 't ' + fnum(tR, 2) + ' · ±' + fnum(seR, 2) + 'R (1σ)' : 'promedio por trade') +
+    tile('Máx. Drawdown', fpct(mdd), 'flotante (marcado a mercado)', 'c-bear') +
     '</div>' +
     (P.curve.length > 1 ? '<div class="eq-wrap" style="height:125px"><canvas id="paperEq" aria-label="Curva de capital Paper Trading"></canvas></div>' : '') +
     '<div class="card-head" style="border-top:1px solid var(--line);padding:8px 12px"><span class="kick">Posiciones abiertas (' + P.open.length + '/' + P.maxOpen + ')</span></div>' + openHtml +
@@ -2654,6 +3082,368 @@ function openPaperConfig() {
     '</div><div style="margin-top:8px;max-width:180px"><label class="lbl" for="pcMax">Máx. posiciones abiertas</label><input id="pcMax" type="text" inputmode="numeric" value="' + P.maxOpen + '"></div>' +
     '<div class="row-btns" style="margin-top:12px"><button type="button" class="abtn sm" id="pcSave">Guardar configuración</button></div></div>';
   $('#sheet').hidden = false; $('#sheetBody').scrollTop = 0; document.body.style.overflow = 'hidden';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// v6.0 · LABORATORIO DE VENTAJA Y OPORTUNIDADES VALIDADAS (interfaz)
+// ═══════════════════════════════════════════════════════════════════════════
+var BKEY = 'vsa_edge_book_v6', RKEY = 'vsa_lab_runs_v6';
+var LAB_EXIT = { swing: { slAtr: 2, rr: 1.5, maxBars: 24 }, trend: { slAtr: 1, rr: 3, maxBars: 24 } };
+var LAB_STABLE_RE = /^(USDC|FDUSD|TUSD|BUSD|DAI|USDP|USDE|USD1|RLUSD|XUSD|EUR|AEUR|EURI|BFUSD|U|RWUSD|PYUSD|USDS)$/;
+function yieldUI() { return new Promise(function (r) { setTimeout(r, 0); }); }
+function labExit() { var e = LAB_EXIT[S.set.lab.exit]; return e ? { slAtr: e.slAtr, rr: e.rr, maxBars: e.maxBars, name: S.set.lab.exit } : { slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars, name: 'plan' }; }
+function labExitLabel(o) { return 'stop ' + fnum(o.slAtr, 1) + ' ATR · obj ' + fnum(o.rr, 1) + 'R · ' + o.maxBars + ' velas'; }
+function labCfg() {
+  var L = S.set.lab, ex = labExit(), tfs = (SCAN_TF_MAP[L.tf] || ['4h', '1d']).slice().sort(function (a, b) { return V.TFMAP[a].ms - V.TFMAP[b].ms; });
+  var cfg = { market: mk(), tfs: tfs, hist: L.hist, n: L.n, minQv: L.minQv, maxSpread: L.maxSpread, excl: L.excl, exit: ex, hard: !!S.set.hardRegime, strictLat: !!S.set.strictLateral,
+    regimeHtf: S.set.regimeHtf || 'auto', thr: S.set.thr, rvol: S.set.rvol, fee: feeSide(), slip: S.set.slip / 100 };
+  cfg.key = [cfg.market, tfs.join('+'), cfg.hist, cfg.n, cfg.minQv, cfg.maxSpread, cfg.excl, ex.slAtr, ex.rr, ex.maxBars, cfg.hard ? 1 : 0, cfg.strictLat ? 1 : 0, cfg.regimeHtf, cfg.thr, cfg.rvol].join('|');
+  return cfg;
+}
+function loadBook() { var b = LS.get(BKEY, null); S.book = b && b.v === 6 && Array.isArray(b.results) ? b : null; }
+function saveBook() { if (S.book && !LS.set(BKEY, S.book)) { var lite = JSON.parse(JSON.stringify(S.book)); lite.states = []; LS.set(BKEY, lite); } }
+function labRuns() { var r = LS.get(RKEY, []); return Array.isArray(r) ? r : []; }
+// Corrección por corridas: cada configuración distinta probada sobre (casi) el mismo período gasta parte del α fuera de muestra
+function labK(market, key) {
+  var since = Date.now() - 30 * 864e5, keys = {};
+  labRuns().forEach(function (x) { if (x && x.market === market && x.at >= since && x.key) keys[x.key] = 1; });
+  keys[key] = 1;
+  return Object.keys(keys).length;
+}
+function logLabRun(market, key) { var r = labRuns().filter(function (x) { return x && x.at >= Date.now() - 60 * 864e5; }); r.push({ at: Date.now(), market: market, key: key }); LS.set(RKEY, r.slice(-200)); }
+function bookAge() { return S.book ? Date.now() - S.book.at : Infinity; }
+function bookUsable(m) { return !!(S.book && S.book.market === (m || mk()) && bookAge() < 14 * 864e5 && S.book.cfg && S.book.cfg.thr === S.set.thr && S.book.cfg.rvol === S.set.rvol); }
+function gateMode() { return S.set.gate === 'pair' ? 'pair' : S.set.gate === 'book' ? 'book' : (bookUsable() ? 'book' : 'pair'); }
+function bookEntry(tf, id) {
+  if (!bookUsable()) return null;
+  for (var i = 0; i < S.book.results.length; i++) { var r = S.book.results[i]; if (r.tf === tf && r.id === id) return r; }
+  return null;
+}
+// Señales del libro en la última vela cerrada del par actual (mismo régimen HTF que el laboratorio)
+function bookHitsFor(tf) {
+  if (!bookUsable() || S.demo || S.book.o.tfs.indexOf(tf) < 0) return [];
+  var an = S.an[tf]; if (!an || an.n <= an.start) return [];
+  var htfReg = V.regimeOf(S.an[V.htfFor(tf, S.book.o.regimeHtf)] || null);
+  return V.labSignalsAt(S.book, tf, an.fired[an.n - 1], htfReg && htfReg.ready ? { dir: htfReg.dir, ready: 1 } : { dir: 0, ready: 0 }, { includeCand: true });
+}
+function bookChip(l) {
+  var m = { validada: ['solid-bull', 'validada OOS'], candidata: ['cyan', 'candidata'], refutada: ['pur', 'refutada OOS'], 'en contra': ['bear', 'en contra'], 'sin ventaja': ['mut', 'sin ventaja'], 'poca muestra': ['mut', 'poca muestra'], 'sin casos': ['mut', 'sin casos'] }[l] || ['mut', l || '—'];
+  return '<span class="chip ' + m[0] + '">' + esc(m[1]) + '</span>';
+}
+function fR(x, d) { return isNum(x) ? fsig(x, d == null ? 2 : d) + 'R' : '—'; }
+
+function fetchLabUniverse(m, cfg) {
+  var bookPath = m === 'futures' ? '/fapi/v1/ticker/bookTicker' : '/api/v3/ticker/bookTicker', excl = {};
+  String(cfg.excl || '').split(',').forEach(function (b) { b = b.trim(); if (b) excl[b] = 1; });
+  return Promise.all([
+    D.get(m, D.PATHS[m].ticker, {}, { timeout: 16000 }),
+    D.get(m, bookPath, {}, { timeout: 16000 }).catch(function () { return []; })
+  ]).then(function (arr) {
+    var tick = Array.isArray(arr[0]) ? arr[0] : [], bk = Array.isArray(arr[1]) ? arr[1] : [], spread = {}, out = [], why = { estable: 0, excl: 0, liq: 0, spread: 0 };
+    bk.forEach(function (b) { var bid = +b.bidPrice, ask = +b.askPrice; if (bid > 0 && ask > 0) spread[b.symbol] = (ask - bid) / ((ask + bid) / 2) * 1e4; });
+    tick.forEach(function (x) {
+      var sym = x && x.symbol; if (typeof sym !== 'string' || !/USDT$/.test(sym) || /(UP|DOWN|BULL|BEAR)USDT$/.test(sym)) return;
+      var base = sym.slice(0, -4), last = +x.lastPrice, hi = +x.highPrice, lo = +x.lowPrice, qv = +x.quoteVolume, sp = spread[sym];
+      if (!(last > 0)) return;
+      if (LAB_STABLE_RE.test(base) || (Math.abs(last - 1) < 0.03 && hi > 0 && (hi - lo) / last < 0.012)) { why.estable++; return; }
+      if (excl[base] || excl[sym]) { why.excl++; return; }
+      if (!(qv >= cfg.minQv * 1e6)) { why.liq++; return; }
+      if (isNum(sp) && sp > cfg.maxSpread) { why.spread++; return; }
+      out.push({ sym: sym, qv: qv, last: last, spreadBps: isNum(sp) ? sp : NaN });
+    });
+    out.sort(function (a, b) { return b.qv - a.qv; });
+    return { cands: out, why: why };
+  });
+}
+// Corre fn sobre candidatos en orden de liquidez hasta aceptar n (los rechazados, p. ej. listados recientes, dejan lugar al siguiente)
+function labRunCands(cands, n, conc, fn) {
+  return new Promise(function (resolve) {
+    var i = 0, active = 0, acc = 0, done = false;
+    function fin() { if (!done) { done = true; resolve(acc); } }
+    function next() {
+      while (active < conc && acc + active < n && i < cands.length) {
+        (function (cd) {
+          active++;
+          Promise.resolve().then(function () { return fn(cd); }).then(function (ok) { if (ok) acc++; }, function () {}).then(function () { active--; S.lab.accepted = acc; render('opps'); next(); });
+        })(cands[i++]);
+      }
+      if (active === 0 && (acc >= n || i >= cands.length)) fin();
+    }
+    next();
+  });
+}
+function labSymbol(P, cand, cfg, m, needHtf, states, g) {
+  var sym = cand.sym, data = {}, skip = '', costS = cfg.fee + Math.max(cfg.slip, isNum(cand.spreadBps) ? cand.spreadBps / 2 / 1e4 : 0);
+  var order = ['1d'].concat(cfg.tfs.filter(function (t) { return t !== '1d'; })).concat(Object.keys(needHtf).filter(function (t) { return t !== '1d'; }));
+  var chain = Promise.resolve();
+  order.forEach(function (tf) {
+    chain = chain.then(function () {
+      if (g !== S.lab.gen || skip) return;
+      var inLab = cfg.tfs.indexOf(tf) >= 0, nBars = inLab ? cfg.hist : 1000;
+      if (tf === '1d' && !inLab && !needHtf['1d']) nBars = 400; // solo para exigir ≥ 365 días de historia
+      return D.history(m, sym, tf, nBars).then(function (rows) {
+        var sp = D.split(rows, D.now()); data[tf] = sp;
+        if (tf === '1d' && sp.closed.length < 365) skip = 'joven';
+      });
+    });
+  });
+  return chain.then(function () {
+    if (g !== S.lab.gen) return false;
+    if (skip) { S.lab.young = (S.lab.young || 0) + 1; return false; }
+    var j = 0;
+    function step() {
+      if (j >= cfg.tfs.length) return Promise.resolve(true);
+      var tf = cfg.tfs[j++];
+      return yieldUI().then(function () {
+        if (g !== S.lab.gen) return false;
+        var d = data[tf]; if (!d || d.closed.length < V.START + cfg.exit.maxBars + 60) return step();
+        var an = V.analyze(d.closed, { tf: tf, thr: cfg.thr, rvol: cfg.rvol });
+        var hd = data[V.htfFor(tf, cfg.regimeHtf)], reg = cfg.hard ? V.htfRegimeSeries(d.closed, hd ? hd.closed : null) : null;
+        V.labAdd(P, sym, tf, an, reg, costS);
+        var L = an.n - 1, k = an.c[L];
+        states.push({ sym: sym, tf: tf, fired: (an.fired[L] || []).slice(), atr: an.atr[L], c: k.c, t: k.t, T: k.T, px: d.forming ? d.forming.c : k.c,
+          reg: reg ? { dir: reg.dir[L], ready: reg.ready[L] } : { dir: 0, ready: 0 }, costS: costS, spreadBps: cand.spreadBps, qv: cand.qv });
+        return step();
+      });
+    }
+    return step().then(function (ok) { if (ok) S.lab.done++; return ok; });
+  });
+}
+function compactBook(full, cfg, k) {
+  var st = function (x) { return x ? { n: x.n, mean: x.mean, se: x.se, t: x.t, G: x.G, df: x.df } : null; };
+  return { v: 6, at: full.at, market: cfg.market, cfg: cfg, k: k, alphaOos: full.alphaOos,
+    o: { tfs: cfg.tfs, hist: cfg.hist, slAtr: cfg.exit.slAtr, rr: cfg.exit.rr, maxBars: cfg.exit.maxBars, hard: cfg.hard, strictLat: cfg.strictLat, regimeHtf: cfg.regimeHtf },
+    nTests: full.nTests, nBh: full.nBh, nVal: full.nVal, syms: full.syms, tfInfo: full.tfInfo,
+    results: full.results.map(function (r) {
+      return { tf: r.tf, id: r.id, code: r.code, name: r.name, bias: r.bias, cat: r.cat, label: r.label, n: r.n, tr: st(r.tr), te: st(r.te),
+        A: r.A.mean, An: r.A.n, B: r.B.mean, Bn: r.B.n, trEx: r.trEx.mean, teEx: r.teEx.mean, hit: r.hit, pf: isFinite(r.pf) ? r.pf : null, avgBars: r.avgBars,
+        nSym: r.nSym, breadth: r.breadth, top: r.top, perWeek: r.perWeek, p: r.p, bh: !!r.bh, bhL: !!r.bhL, bhNeg: !!r.bhNeg, tReq: r.tReq, E: r.E, LB: r.LB, stable: r.stable, testable: r.testable };
+    }) };
+}
+function runLab() {
+  if (S.lab.running) return;
+  if (S.demo) { toast('Salí de la demostración para correr el laboratorio'); return; }
+  var cfg = labCfg(), m = cfg.market, k = labK(m, cfg.key), g = (S.lab.gen || 0) + 1, P = null, states = [];
+  var needHtf = {}; if (cfg.hard) cfg.tfs.forEach(function (tf) { var h = V.htfFor(tf, cfg.regimeHtf); if (cfg.tfs.indexOf(h) < 0) needHtf[h] = 1; });
+  S.lab = { running: true, stage: 'Leyendo el universo de Binance ' + mkLabel(m) + '…', done: 0, accepted: 0, young: 0, err: null, gen: g, t0: Date.now(), n: cfg.n };
+  render('opps');
+  D.syncTime(m).catch(function () { return null; }).then(function () { return fetchLabUniverse(m, cfg); }).then(function (u) {
+    if (g !== S.lab.gen) return null;
+    if (!u.cands.length) throw D.NetError('bad', 'ningún par cumple los filtros de liquidez y spread');
+    S.lab.why = u.why; S.lab.stage = 'Descargando y analizando los pares más líquidos (' + cfg.tfs.join(' + ').toUpperCase() + ')…'; render('opps');
+    P = V.labPool({ tfs: cfg.tfs, now: D.now(), hist: cfg.hist, slAtr: cfg.exit.slAtr, rr: cfg.exit.rr, maxBars: cfg.exit.maxBars, hard: cfg.hard, strictLat: cfg.strictLat, oosAlpha: 0.10 / k });
+    return labRunCands(u.cands, cfg.n, 3, function (cd) { return labSymbol(P, cd, cfg, m, needHtf, states, g); });
+  }).then(function (acc) {
+    if (g !== S.lab.gen || !P) return;
+    if (!acc) throw D.NetError('net', 'no se pudo descargar ningún par');
+    S.lab.stage = 'Evidencia agrupada, BH global y validación fuera de muestra…'; render('opps');
+    return yieldUI().then(function () {
+      var full = V.labFinalize(P);
+      S.book = compactBook(full, cfg, k); S.book.states = states; S.book.statesAt = Date.now();
+      logLabRun(m, cfg.key); saveBook();
+      S.opps.list = buildOpps(states); S.opps.at = Date.now(); S.opps.err = null;
+      S.lab.running = false; S.lab.stage = ''; S.lab.secs = (Date.now() - S.lab.t0) / 1000;
+      seedVigil(); scheduleGitHubSync();
+      render('all');
+      toast('Laboratorio listo: ' + S.book.nVal + ' ventaja(s) validada(s) de ' + S.book.nTests + ' pruebas (' + Math.round(S.lab.secs) + ' s)', 4500);
+    });
+  }).catch(function (e) {
+    if (g !== S.lab.gen) return;
+    S.lab.running = false; S.lab.err = D.errText(e); render('opps');
+  });
+}
+function buildOpps(states) {
+  var b = S.book; if (!b) return [];
+  var o = b.o, list = [], nowS = D.now();
+  (states || []).forEach(function (st) {
+    V.labSignalsAt(b, st.tf, st.fired, st.reg, { includeCand: true }).forEach(function (h) {
+      var r = h.ev, rule = h.rule, side = rule.bias, T = V.TFMAP[st.tf], ref = st.px > 0 ? st.px : st.c, risk = Math.max(o.slAtr * st.atr, ref * 0.0035);
+      if (!(risk > 0) || !(ref > 0)) return;
+      if (nowS >= st.T + 1 + T.ms) return; // ya cerró la vela de entrada: la señal venció (hay una vela más nueva sin evaluar)
+      var entryT = st.T + 1, age = nowS - entryT;
+      list.push({ key: st.sym + '|' + st.tf + '|' + rule.code + '|' + st.t, sym: st.sym, tf: st.tf, id: rule.id, code: rule.code, name: rule.name, bias: side, cat: rule.cat,
+        label: r.label, E: r.E, LB: r.LB, tTe: r.te ? r.te.t : NaN, nTe: r.te ? r.te.n : 0, nTr: r.tr ? r.tr.n : 0, Etr: r.tr ? r.tr.mean : NaN, perWeek: r.perWeek, nSym: r.nSym, hit: r.hit,
+        px: ref, close: st.c, atr: st.atr, t: st.t, T: st.T, entryT: entryT, age: age, frac: age / T.ms, drift: st.atr > 0 ? side * (ref - st.c) / st.atr : NaN,
+        sl: ref - side * risk, tp: ref + side * o.rr * risk, risk: risk, rPct: risk / ref, expiry: entryT + o.maxBars * T.ms, maxBars: o.maxBars,
+        tradable: side > 0 || b.market === 'futures', exitOnly: side < 0 && b.market !== 'futures', costS: st.costS, costR: 2 * st.costS / (risk / ref) });
+    });
+  });
+  var rank = function (x) { return (x.label === 'validada' ? 1e6 : 0) + (isNum(x.LB) ? x.LB * 1000 : (isNum(x.E) ? x.E * 500 : -999)) - (x.drift > 0.5 ? 100 : 0); };
+  return list.sort(function (a, c) { return rank(c) - rank(a); });
+}
+// Re-evalúa la última vela cerrada de cada par del libro (sin re-entrenar): para «Actualizar» y para la vigilancia
+function refreshOpps(tfs, silent) {
+  var b = S.book; if (!b || S.opps.busy || S.lab.running || S.demo) return Promise.resolve(false);
+  var m = b.market, cfg = b.cfg, list = (tfs || b.o.tfs).filter(function (t) { return b.o.tfs.indexOf(t) >= 0; });
+  if (!list.length) return Promise.resolve(false);
+  S.opps.busy = true; S.opps.err = null; if (!silent) render('opps');
+  var costOf = {}, fresh = [], fails = 0;
+  (b.states || []).forEach(function (st) { costOf[st.sym] = st.costS; });
+  return D.pool(b.syms.slice(), 3, function (sym) {
+    var cache = {}, getTf = function (tf, nBars) { return cache[tf] || (cache[tf] = D.history(m, sym, tf, nBars).then(function (rows) { return D.split(rows, D.now()); })); };
+    return list.reduce(function (pr, tf) {
+      return pr.then(function () {
+        var htfId = V.htfFor(tf, b.o.regimeHtf);
+        return Promise.all([getTf(tf, tf === '15m' ? 2000 : 1000), b.o.hard ? getTf(htfId, 1000) : null]).then(function (arr) {
+          var d = arr[0], h = arr[1]; if (!d || d.closed.length < V.START + 40) return;
+          var an = V.analyze(d.closed, { tf: tf, thr: cfg.thr, rvol: cfg.rvol }), L = an.n - 1, k = an.c[L];
+          var rg = b.o.hard ? V.htfRegimeSeries([k], h ? h.closed : null) : null;
+          fresh.push({ sym: sym, tf: tf, fired: (an.fired[L] || []).slice(), atr: an.atr[L], c: k.c, t: k.t, T: k.T, px: d.forming ? d.forming.c : k.c,
+            reg: rg ? { dir: rg.dir[0], ready: rg.ready[0] } : { dir: 0, ready: 0 }, costS: isNum(costOf[sym]) ? costOf[sym] : cfg.fee + cfg.slip });
+        });
+      });
+    }, Promise.resolve()).catch(function () { fails++; });
+  }).then(function () {
+    var keep = (b.states || []).filter(function (st) { return list.indexOf(st.tf) < 0; });
+    b.states = keep.concat(fresh); b.statesAt = Date.now(); saveBook();
+    S.opps.list = buildOpps(b.states); S.opps.at = Date.now();
+    if (fails) S.opps.err = fails + ' par(es) no respondieron; se reintenta en el próximo cierre.';
+    S.opps.busy = false; render('opps');
+    return true;
+  }, function (e) { S.opps.busy = false; S.opps.err = D.errText(e); render('opps'); return false; });
+}
+function tfBoundary(tf, nowS) { var ms = V.TFMAP[tf].ms; if (tf === '1w') { var off = 4 * 864e5; return Math.floor((nowS - off) / ms) * ms + off; } return Math.floor(nowS / ms) * ms; }
+var VSKEY = 'vsa_vigil_seen_v6';
+function saveSeen() { var k = Object.keys(S.vigil.seen); LS.set(VSKEY, k.slice(-400)); }
+function loadSeen() { var a = LS.get(VSKEY, []); S.vigil.seen = {}; if (Array.isArray(a)) a.forEach(function (k) { S.vigil.seen[k] = 1; }); }
+function seedVigil(stale) {
+  var nowS = D.now(); S.vigil.last = {};
+  // stale=true (arranque): no se marca la vela actual como revisada → la primera vuelta de vigilancia re-evalúa todo
+  if (S.book && !stale) S.book.o.tfs.forEach(function (tf) { S.vigil.last[tf] = tfBoundary(tf, nowS); });
+  (S.opps.list || []).forEach(function (o) { S.vigil.seen[o.key] = 1; });
+  saveSeen();
+}
+function vigilTick() {
+  if (!S.set.vigil || !bookUsable() || S.vigil.busy || S.lab.running || S.demo || Date.now() < D.Net.pausedUntil) return;
+  var nowS = D.now(), due = [];
+  S.book.o.tfs.forEach(function (tf) { var bnd = tfBoundary(tf, nowS); if ((S.vigil.last[tf] || 0) < bnd && nowS >= bnd + 5000) due.push(tf); });
+  if (!due.length) return;
+  S.vigil.busy = true;
+  refreshOpps(due, true).then(function (ok) {
+    if (!ok) return;
+    due.forEach(function (tf) { S.vigil.last[tf] = tfBoundary(tf, D.now()); });
+    S.opps.list.filter(function (o) { return !S.vigil.seen[o.key]; }).forEach(function (o) { S.vigil.seen[o.key] = 1; if (o.frac < 0.5) onNewOpp(o); });
+    saveSeen();
+  }).then(function () { S.vigil.busy = false; }, function () { S.vigil.busy = false; });
+}
+function oppPaper(o, auto) {
+  return openPaperTrade({ sym: o.sym, market: S.book ? S.book.market : mk(), tf: o.tf, rule: o.code, ruleName: o.name, side: o.bias, entry: o.px, sl: o.sl, tp: o.tp, expiry: o.expiry,
+    auto: !!auto, silent: !!auto, src: o.label === 'validada' ? 'universo' : 'candidata' });
+}
+function onNewOpp(o) {
+  var isVal = o.label === 'validada';
+  if (S.paper.autoExec && o.tradable && (isVal || S.set.paperCand)) oppPaper(o, true);
+  if (!isVal || !S.set.sigAlertOn) return;
+  if (S.set.sigAlert === 'BUY' && o.bias < 0) return;
+  if (S.set.sigAlert === 'SELL' && o.bias > 0) return;
+  var up = o.bias > 0, T = V.TFMAP[o.tf].label, line = o.code + ' ' + o.name + ' · fuera de muestra ' + fR(o.E) + '/op (t ' + fnum(o.tTe, 1) + ', n ' + o.nTe + ')';
+  fireLoudAlarm({ up: up, sym: o.sym, tf: o.tf,
+    title: o.exitOnly ? 'SALIDA VALIDADA · ' + o.sym : (up ? 'COMPRA VALIDADA · ' : 'VENTA VALIDADA · ') + o.sym,
+    body: o.sym + ' ' + T + ' · ' + line + (o.exitOnly ? ' · si tenés ' + baseOf(o.sym) + ', salir o reducir' : ' · Ref ' + fpx(o.px) + ' · SL ' + fpx(o.sl) + ' · Obj ' + fpx(o.tp)),
+    html: '<b>' + esc(o.sym) + ' · ' + esc(T) + '</b><br>' + esc(line) + (o.exitOnly ? '<br>Si tenés ' + esc(baseOf(o.sym)) + ', la evidencia sugiere salir o reducir.' : '<br>Ref ' + fpx(o.px) + ' · SL <b>' + fpx(o.sl) + '</b> · Obj <b>' + fpx(o.tp) + '</b>') });
+}
+function renderOppsTab() { renderOpps(); renderLab(); }
+function renderOpps() {
+  var el = $('#cOpps'); if (!el) return;
+  var b = S.book, head = '<div class="card-head"><div class="card-title">🎯 Oportunidades validadas · ' + esc(mkLabel()) + '</div><div class="row-btns">' +
+    '<button type="button" class="pbtn sm" id="oppRefresh"' + (!b || S.opps.busy || S.lab.running ? ' disabled' : '') + '>' + (S.opps.busy ? 'Actualizando…' : 'Actualizar') + '</button>' +
+    '<button type="button" class="pbtn sm' + (S.set.vigil ? ' c-bull' : '') + '" id="oppVigil">' + (S.set.vigil ? '👁 Vigilancia ON' : '👁 Vigilancia OFF') + '</button></div></div>';
+  if (!b) {
+    el.innerHTML = head + '<div class="empty">Todavía no hay libro de ventajas. Corré el <b>Laboratorio de Ventaja</b> (abajo): prueba cada regla en todo el universo líquido, con costos reales y validación fuera de muestra, y deja acá solo las señales que lo superan.</div>';
+    return;
+  }
+  var stale = b.market !== mk() ? 'Este libro es de ' + mkLabel(b.market) + '. Corré el laboratorio para ' + mkLabel() + ' o volvé a ese mercado.'
+    : bookAge() > 14 * 864e5 ? 'El libro tiene más de 14 días: corré el laboratorio de nuevo.'
+    : !bookUsable() ? 'Cambiaron los umbrales o el RVOL desde que se generó el libro: corré el laboratorio de nuevo.' : '';
+  var info = '<div class="note" style="border-top:0">Libro del ' + ftime(b.at, 'clock') + ' · ' + b.syms.length + ' pares · ' + esc(b.o.tfs.join('+').toUpperCase()) + ' · ' + esc(labExitLabel(b.o)) +
+    ' · <b>' + b.nVal + ' validada(s)</b> de ' + b.nTests + ' pruebas' + (S.opps.at ? ' · señales ' + esc(ago(Date.now() - S.opps.at)) : '') + (S.set.vigil ? ' · vigilando cada cierre de vela' : '') + '</div>' +
+    (stale ? '<div class="warnbox">' + esc(stale) + '</div>' : '') + (S.opps.err ? '<div class="warnbox bad">' + esc(S.opps.err) + '</div>' : '');
+  var L = S.opps.list || [];
+  var val = L.filter(function (o) { return o.label === 'validada' && o.tradable; });
+  var exits = L.filter(function (o) { return o.label === 'validada' && o.exitOnly; });
+  var cand = L.filter(function (o) { return o.label === 'candidata' && o.tradable; });
+  var row = function (o) {
+    var T = V.TFMAP[o.tf], late = isNum(o.drift) && o.drift > 0.5, freshB = o.frac < 0.25;
+    var cls = o.label === 'validada' ? ' val' + (o.bias < 0 ? ' dn' : '') : ' cand';
+    var when = freshB ? '<span class="chip bull">fresca</span>' : '<span class="chip warn">vela al ' + fnum(Math.min(100, o.frac * 100), 0) + ' %</span>';
+    return '<div class="opp-row' + cls + '"><div class="opp-h"><span class="sym">' + esc(o.sym) + '</span><span class="tfc">' + esc(T.label) + '</span><span class="code">' + esc(o.code) + '</span>' + bookChip(o.label) +
+      (o.exitOnly ? '<span class="chip bear">SALIDA</span>' : (o.bias > 0 ? '<span class="chip bull">LONG</span>' : '<span class="chip bear">SHORT</span>')) + when + (late ? '<span class="chip warn">tarde ' + fsig(o.drift, 1) + ' ATR</span>' : '') +
+      '<span class="px">' + fpx(o.px) + '</span></div><div class="opp-m"><span>' + esc(o.name) + '</span></div>' +
+      '<div class="opp-m"><span>fuera de muestra <b>' + fR(o.E) + '</b>/op (t ' + fnum(o.tTe, 1) + ', n ' + o.nTe + ')</span><span>cota −1σ <b>' + fR(o.LB) + '</b></span><span>entren. ' + fR(o.Etr) + ' (n ' + o.nTr + ')</span><span>' + fnum(o.perWeek, 1) + ' señales/sem en el universo</span><span>costos ' + fnum(o.costR, 2) + 'R</span></div>' +
+      (o.exitOnly ? '<div class="opp-m"><span>Spot: si tenés ' + esc(baseOf(o.sym)) + ', la evidencia sugiere salir o reducir; si no, no comprar ahora.</span></div>'
+        : '<div class="opp-m"><span>Stop <b class="c-bear">' + fpx(o.sl) + '</b> (' + fpct((o.sl - o.px) / o.px) + ')</span><span>Obj <b class="c-bull">' + fpx(o.tp) + '</b> (' + fpct((o.tp - o.px) / o.px) + ')</span><span>vence ' + ftime(o.expiry, 'clock') + '</span></div>' +
+          '<div class="scan-row-acts"><button type="button" class="pbtn sm" data-opp="paper" data-key="' + esc(o.key) + '">⚡ Paper</button><button type="button" class="pbtn sm" data-opp="open" data-key="' + esc(o.key) + '">Abrir en Radar</button><button type="button" class="pbtn sm" data-opp="risk" data-key="' + esc(o.key) + '">Calcular tamaño</button></div>') + '</div>';
+  };
+  var sec = function (t, arr, empty) { return '<div class="card-head" style="border-top:1px solid var(--line);padding:8px 12px"><span class="kick">' + t + ' (' + arr.length + ')</span></div>' + (arr.length ? arr.map(row).join('') : '<div class="empty" style="padding:12px">' + empty + '</div>'); };
+  el.innerHTML = head + info +
+    sec('✅ Validadas fuera de muestra · operables', val, b.nVal ? 'Ninguna ventaja validada disparó en la última vela cerrada. Con la vigilancia encendida, te avisa apenas dispare una.' : 'El laboratorio no encontró ventajas que sobrevivan fuera de muestra con esta configuración. No operar también protege el capital.') +
+    (exits.length ? sec('🚪 Salidas validadas (Spot)', exits, '') : '') +
+    sec('🧪 Candidatas · solo Paper (validación hacia adelante)', cand, 'Sin candidatas activas en la última vela cerrada.');
+}
+function renderLab() {
+  var el = $('#cLab'); if (!el) return;
+  var L = S.set.lab, cfg = labCfg(), k = labK(cfg.market, cfg.key), b = S.book;
+  var o = function (key, val, label) { return '<button type="button" data-lab="' + key + '" data-val="' + esc(String(val)) + '" class="' + (String(L[key]) === String(val) ? 'on' : '') + '">' + label + '</button>'; };
+  var og = function (key, val, label) { return '<button type="button" data-setg="' + key + '" data-val="' + esc(String(val)) + '" class="' + (String(S.set[key]) === String(val) ? 'on' : '') + '">' + label + '</button>'; };
+  var tfOpts = [['macro', '4H + 1D'], ['swing', '1H + 4H'], ['all4', '15m + 1H + 4H + 1D'], ['intra', '15m + 1H'], ['all3', '15m + 1H + 4H']];
+  var html = '<div class="card-head"><div class="card-title">🧪 Laboratorio de Ventaja · universo agrupado</div><button type="button" class="abtn sm" id="labRun"' + (S.lab.running ? ' disabled' : '') + '>' + (S.lab.running ? 'Corriendo…' : 'Correr laboratorio') + '</button></div>';
+  if (S.lab.running) {
+    var pct = Math.round(100 * (S.lab.accepted || 0) / Math.max(1, cfg.n));
+    html += '<div class="scan-prog"><div class="scan-prog-top"><span>' + esc(S.lab.stage) + '</span><b>' + (S.lab.accepted || 0) + '/' + cfg.n + ' pares</b></div><div class="bar prog" style="margin-top:0"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="card-sub" style="margin-top:5px">' + fdur(Date.now() - S.lab.t0) + ' · ' + (S.lab.young || 0) + ' descartado(s) por tener menos de 1 año · podés seguir usando la app</div></div>';
+  } else if (S.lab.err) html += '<div class="warnbox bad" style="margin-top:10px">' + esc(S.lab.err) + '</div>';
+  html += '<div class="pad" style="padding-bottom:0">' +
+    '<div class="set-g" style="padding-top:0"><div class="t">Universo</div><div class="d">Pares USDT más líquidos de Binance ' + esc(mkLabel()) + ', sin estables, oro tokenizado ni listados con menos de 1 año.</div><div class="opts">' + o('n', 15, '15 pares') + o('n', 30, '30 pares') + o('n', 50, '50 pares') + '</div></div>' +
+    '<div class="set-g"><div class="t">Temporalidades</div><div class="d">Medido en 26 pares líquidos de Spot (nov 2026): los costos se comen ≈0,38 R por operación en 15m, 0,21 R en 1H, 0,09 R en 4H y 0,03 R en 1D.</div><div class="opts">' + tfOpts.map(function (x) { return o('tf', x[0], x[1]); }).join('') + '</div></div>' +
+    '<div class="set-g"><div class="t">Salida a validar (la misma que se opera)</div><div class="d">Plan actual: ' + esc(labExitLabel({ slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars })) + '. Cada salida distinta cuenta como otra configuración.</div><div class="opts">' + o('exit', 'plan', 'Plan actual') + o('exit', 'swing', 'Swing · 2 ATR · 1,5R · 24v') + o('exit', 'trend', 'Tendencia · 1 ATR · 3R · 24v') + '</div></div>' +
+    '<div class="set-g"><div class="t">Historia y filtros</div><div class="opts" style="margin-bottom:7px">' + o('hist', 1500, '1.500 velas (rápido)') + o('hist', 3000, '3.000 velas') + '</div>' +
+    '<div class="set-in"><div><label class="lbl" for="labQv">Vol. mín. 24 h (M USDT)</label><input id="labQv" type="text" inputmode="decimal" value="' + esc(String(L.minQv)) + '"></div><div><label class="lbl" for="labSp">Spread máx. (bps)</label><input id="labSp" type="text" inputmode="decimal" value="' + esc(String(L.maxSpread)) + '"></div><div><label class="lbl" for="labEx">Excluir (bases)</label><input id="labEx" type="text" autocapitalize="characters" value="' + esc(L.excl) + '"></div></div></div>' +
+    '<div class="set-g"><div class="t">Qué filtra el libro</div><div class="opts">' + og('gate', 'auto', 'Alertas: libro si está vigente') + og('gate', 'book', 'Solo libro') + og('gate', 'pair', 'Evidencia por par (clásico)') + '</div>' +
+    '<div class="opts" style="margin-top:6px">' + og('paperCand', 'true', 'Paper también prueba candidatas') + og('paperCand', 'false', 'Paper solo validadas') + '</div></div></div>' +
+    '<div class="note" style="border-top:0">Configuraciones distintas probadas en 30 días: <b>' + k + '</b> → α fuera de muestra = ' + fnum(10 / k, 1) + ' % (corrección por corridas). Filtro HTF ' + (S.set.hardRegime ? 'activo' : 'desactivado') +
+    ' · costos ' + fnum(feeSide() * 100, 3) + ' % + máx(desliz. ' + fnum(S.set.slip, 2) + ' %, ½ spread real) por lado · ' + (L.tf === 'all4' ? '~2–4 min' : '~1–2 min') + ' en el celular.</div>';
+  if (b) {
+    var res = b.results, f = L.lfilter;
+    var nStab = res.filter(function (r) { return r.bh && r.stable && r.trEx > 0; }).length, nRef = res.filter(function (r) { return r.label === 'refutada'; }).length, nNeg = res.filter(function (r) { return r.label === 'en contra'; }).length;
+    var rows = res.filter(function (r) { switch (f) { case 'VAL': return r.label === 'validada'; case 'CAND': return r.label === 'candidata'; case 'REF': return r.label === 'refutada'; case 'NEG': return r.label === 'en contra'; case 'ALL': return true; default: return r.testable; } })
+      .sort(function (a, c) { return (c.tr && isNum(c.tr.t) ? c.tr.t : -99) - (a.tr && isNum(a.tr.t) ? a.tr.t : -99); });
+    if (f === 'TOP') rows = rows.slice(0, 25);
+    var lf = function (v, t) { return '<button type="button" data-lf="' + v + '" class="' + (f === v ? 'on' : '') + '">' + t + '</button>'; };
+    html += '<div class="card-head" style="border-top:1px solid var(--line);padding:8px 12px"><span class="kick">Último libro · ' + ftime(b.at, 'clock') + ' · ' + esc(mkLabel(b.market)) + ' · ' + esc(labExitLabel(b.o)) + '</span><div class="row-btns"><button type="button" class="pbtn sm" id="labSend">Enviar al backend</button><button type="button" class="pbtn sm" id="labCsv">CSV</button></div></div>' +
+      '<div class="funnel"><div><b>' + b.nTests + '</b>pruebas</div><div><b>' + b.nBh + '</b>pasan BH (entren.)</div><div><b>' + nStab + '</b>estables + exceso</div><div><b class="' + (b.nVal ? 'c-bull' : '') + '">' + b.nVal + '</b>validadas OOS</div></div>' +
+      '<div class="costr"><span class="card-sub">Costos por operación:</span>' + (b.tfInfo || []).map(function (t) { var cr = t.costR; return '<span class="chip ' + (cr > 0.25 ? 'bear' : cr > 0.12 ? 'warn' : 'bull') + '">' + esc(V.TFMAP[t.tf].label) + ' ' + (isNum(cr) ? fnum(cr, 2) + 'R' : '—') + ' · ' + t.nSym + ' pares</span>'; }).join('') +
+      '<span class="card-sub">· ' + nRef + ' refutadas · ' + nNeg + ' en contra · α OOS ' + fnum((b.alphaOos || 0.1) * 100, 1) + ' % (k=' + (b.k || 1) + ')</span></div>' +
+      '<div class="filters" style="border-top:1px solid var(--line)">' + lf('TOP', 'Top 25 (t entren.)') + lf('VAL', 'Validadas') + lf('CAND', 'Candidatas') + lf('REF', 'Refutadas') + lf('NEG', 'En contra') + lf('ALL', 'Todas') + '</div>';
+    if (!rows.length) html += '<div class="empty">Sin reglas en este filtro.</div>';
+    else html += '<div class="lab-scroll"><table class="lab-tbl"><thead><tr><th>Regla</th><th>Etiqueta</th><th class="r">Entren. (R · t · n)</th><th class="r">Fuera de muestra</th><th class="r">Mitades</th><th class="r">vs azar</th><th class="r">Amplitud</th></tr></thead><tbody>' +
+      rows.map(function (r) {
+        var tr = r.tr || {}, te = r.te || {};
+        return '<tr><td><span class="tfc">' + esc(V.TFMAP[r.tf].label) + '</span> <b class="code">' + esc(r.code) + '</b> <span class="chip ' + (r.bias > 0 ? 'bull' : 'bear') + '">' + (r.bias > 0 ? 'L' : 'S') + '</span><div class="card-sub">' + esc(r.name) + '</div></td>' +
+          '<td>' + bookChip(r.label) + (r.bh ? ' <span class="chip acc">BH 10 %</span>' : r.bhL ? ' <span class="chip mut">BH 25 %</span>' : '') + '</td>' +
+          '<td class="r"><b class="' + (tr.mean > 0 ? 'c-bull' : 'c-bear') + '">' + fR(tr.mean) + '</b><div class="card-sub">t ' + fnum(tr.t, 2) + ' · n ' + (tr.n || 0) + '</div></td>' +
+          '<td class="r"><b class="' + (te.mean > 0 ? 'c-bull' : 'c-bear') + '">' + fR(te.mean) + '</b><div class="card-sub">t ' + fnum(te.t, 2) + ' · n ' + (te.n || 0) + (isNum(r.tReq) ? ' · req ' + fnum(r.tReq, 2) : '') + '</div></td>' +
+          '<td class="r">' + fR(r.A) + '<div class="card-sub">' + fR(r.B) + '</div></td>' +
+          '<td class="r">' + fR(r.trEx) + '<div class="card-sub">OOS ' + fR(r.teEx) + '</div></td>' +
+          '<td class="r">' + (isNum(r.breadth) ? fshare(r.breadth) : '—') + '<div class="card-sub">' + r.nSym + ' pares · ' + fshare(r.hit) + ' acierto</div></td></tr>';
+      }).join('') + '</tbody></table></div>';
+    html += '<div class="note">Entren. = 70 % inicial (purgado en el corte); fuera de muestra = 30 % más reciente, nunca usado para elegir. «Mitades» = media en cada mitad del entrenamiento. «vs azar» = exceso sobre entrar en cualquier vela del mismo par con el mismo filtro y la misma salida. «Amplitud» = % de pares con media positiva (≥ 3 casos).</div>';
+  }
+  el.innerHTML = html;
+}
+function labCsv() {
+  var b = S.book; if (!b) return;
+  var rows = [['tf', 'regla', 'nombre', 'lado', 'etiqueta', 'bh', 'n_entren', 'R_entren', 't_entren', 'p_entren', 'R_mitadA', 'R_mitadB', 'exceso_entren', 'n_oos', 'R_oos', 't_oos', 't_req', 'exceso_oos', 'acierto', 'amplitud', 'pares', 'senales_sem']];
+  b.results.forEach(function (r) {
+    var n = function (x, d) { return isNum(x) ? (+x.toFixed(d)).toString().replace('.', ',') : ''; };
+    rows.push([r.tf, r.code, r.name, r.bias > 0 ? 'L' : 'S', r.label, r.bh ? 1 : 0, r.tr ? r.tr.n : 0, n(r.tr && r.tr.mean, 4), n(r.tr && r.tr.t, 3), isNum(r.p) ? r.p.toExponential(2) : '', n(r.A, 4), n(r.B, 4), n(r.trEx, 4),
+      r.te ? r.te.n : 0, n(r.te && r.te.mean, 4), n(r.te && r.te.t, 3), n(r.tReq, 3), n(r.teEx, 4), n(r.hit, 4), n(r.breadth, 3), r.nSym, n(r.perWeek, 2)]);
+  });
+  var csv = rows.map(function (r) { return r.map(csvCell).join(';'); }).join('\r\n');
+  try {
+    var blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }), a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'laboratorio_ventaja_v6_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  } catch (e) { copyText(csv, 'CSV del laboratorio copiado'); }
 }
 
 // ─── GESTOR DE FAVORITAS (v4.0) ───
@@ -2701,7 +3491,7 @@ function renderFavManagerBody() {
 }
 
 // ─── carga de datos ───
-function resetData() { S.data = {}; S.an = {}; S.ev = {}; S.bt = {}; S.evQ = []; S.ticker = null; S.micro = null; S.book = null; S.loadErr = null; S.armed = false; S.alerted = {}; S.ch.selT = null; S.ch.off = 0; }
+function resetData() { S.data = {}; S.an = {}; S.ev = {}; S.bt = {}; S.evQ = []; S.ticker = null; S.micro = null; S.obook = null; S.loadErr = null; S.armed = false; S.alerted = {}; S.ch.selT = null; S.ch.off = 0; }
 function loadAll() {
   var g = ++S.gen, m = mk();
   S.demo = null; resetData(); S.loading = true; render('all');
@@ -2744,7 +3534,7 @@ function loadMicro(g) {
   var symNow = S.sym, mNow = mk();
   D.orderBook(mNow, symNow, 20).then(function (ob) {
     if (g !== S.gen) return;
-    S.book = ob; render('radar');
+    S.obook = ob; render('radar');
   }, function () {});
   D.futuresMicro(symNow).then(function (mc) {
     if (g !== S.gen) return;
@@ -2796,6 +3586,7 @@ function tick() {
     });
     if (S.set.refresh > 0 && nowL - S.lastLive >= S.set.refresh * 1000) { S.lastLive = nowL; refreshTf(S.set.tf, g); loadTicker(g); if (nowL - S.lastMicroAt >= 30000) loadMicro(g); }
     if (nowL - S.lastAlertChk >= 15000) { S.lastAlertChk = nowL; pollOtherAlerts(); pollPaperPositions(); }
+    if (nowL - (S.lastPaperRec || 0) >= 60000) { S.lastPaperRec = nowL; reconcilePaper(); }
   } catch (e) { if (window.console) console.warn(e); }
 }
 function catchUp() { if (S.demo || S.loading || !S.sym) return; var g = S.gen; V.TF.forEach(function (t) { refreshTf(t.id, g); }); loadTicker(g); }
@@ -2830,6 +3621,24 @@ function checkAlert(tf) {
   var L = an.n - 1, t = an.c[L].t; if (S.alerted[tf] === t) return;
   var first = S.alerted[tf] === undefined; S.alerted[tf] = t;
   if (first) return;
+  // v6: con libro vigente, las alertas y el Paper automático salen SOLO de ventajas validadas en el universo
+  if (gateMode() === 'book') {
+    if (S.set.vigil && S.book && S.book.syms.indexOf(S.sym) >= 0 && S.book.o.tfs.indexOf(tf) >= 0) return; // ya lo cubre la vigilancia (evita doble alarma)
+    var hitsB = bookHitsFor(tf).filter(function (h) { return !(S.set.sigAlert === 'BUY' && h.rule.bias < 0) && !(S.set.sigAlert === 'SELL' && h.rule.bias > 0); });
+    var valB = hitsB.filter(function (h) { return h.ev.label === 'validada'; });
+    if (!hitsB.length) return;
+    if (S.paper.autoExec && (valB.length || S.set.paperCand)) {
+      var pB = planFor(tf);
+      if (pB && !pB.none && !pB.sellSpot && pB.book) openPaperTrade({ sym: S.set.sym, market: mk(), tf: tf, rule: pB.rule.code, ruleName: pB.rule.name, side: pB.side, entry: pB.ref, sl: pB.sl, tp: pB.tp, expiry: pB.expiry, auto: true, silent: true, src: pB.label === 'universo' ? 'universo' : 'candidata' });
+    }
+    if (!valB.length || !S.set.sigAlertOn) return;
+    var hb = valB[0], upB = hb.rule.bias > 0, TB = V.TFMAP[tf].label, lineB = hb.rule.code + ' ' + hb.rule.name + ' · fuera de muestra ' + fR(hb.ev.E) + '/op (t ' + fnum(hb.ev.te && hb.ev.te.t, 1) + ', n ' + (hb.ev.te ? hb.ev.te.n : 0) + ')';
+    var spotExit = !upB && !allowShort();
+    fireLoudAlarm({ up: upB, sym: S.set.sym, tf: tf, title: spotExit ? 'SALIDA VALIDADA · ' + S.set.sym : (upB ? 'COMPRA VALIDADA · ' : 'VENTA VALIDADA · ') + S.set.sym,
+      body: S.set.sym + ' ' + TB + ' · ' + lineB + (spotExit ? ' · si tenés ' + baseOf(S.set.sym) + ', salir o reducir' : ''),
+      html: '<b>' + esc(S.set.sym) + ' (' + esc(mkLabel()) + ') · ' + esc(TB) + '</b><br>' + esc(lineB) });
+    return;
+  }
   if (!S.set.sigAlertOn) return;
   var htfId = V.htfFor(tf, S.set.regimeHtf), htfReg = V.regimeOf(S.an[htfId] || an);
   var items = V.ruleItems(an, L, ev, S.set.h).filter(function (it) {
@@ -2869,27 +3678,31 @@ function planFor(tf) {
   var L = an.n - 1, items = V.ruleItems(an, L, S.demo ? null : S.ev[tf], S.set.h);
   var sup = items.filter(function (it) { return it.rule.bias && it.label === 'respaldo'; }).sort(function (a, b) { return ((b.ev && b.ev.tNet) || 0) - ((a.ev && a.ev.tNet) || 0); });
   var prom = items.filter(function (it) { return it.rule.bias && it.label === 'prometedora'; }).sort(function (a, b) { return ((b.ev && b.ev.tNet) || 0) - ((a.ev && a.ev.tNet) || 0); });
-  var main = sup[0] || prom[0] || items.filter(function (it) { return it.rule.id === an.primary[L]; })[0];
+  // v6: si una ventaja del libro disparó en esta vela (con el régimen HTF actual), manda ella y se usa la salida con la que se validó
+  var bh = gateMode() === 'book' ? bookHitsFor(tf) : [], bmain = null;
+  if (bh.length) { var bv = bh.filter(function (h) { return h.ev.label === 'validada'; })[0] || bh[0]; bmain = { rule: bv.rule, label: bv.ev.label === 'validada' ? 'universo' : 'candidata', ev: null, bev: bv.ev, h: 0, book: true }; }
+  var main = bmain || sup[0] || prom[0] || items.filter(function (it) { return it.rule.id === an.primary[L]; })[0];
   if (!main || !main.rule.bias) return { none: true, main: main || { rule: V.RMAP[40] } };
   if (main.rule.bias < 0 && !allowShort()) {
-    return { sellSpot: true, side: -1, rule: main.rule, label: S.demo ? 'demo' : main.label, ev: main.ev, h: main.h, tf: tf, t: an.c[L].t, items: items };
+    return { sellSpot: true, side: -1, rule: main.rule, label: S.demo ? 'demo' : main.label, ev: main.ev, bev: main.bev, book: !!main.book, h: main.h, tf: tf, t: an.c[L].t, items: items };
   }
+  var pol = main.book ? { slAtr: S.book.o.slAtr, rr: S.book.o.rr, maxBars: S.book.o.maxBars } : { slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars };
   var side = main.rule.bias > 0 ? 1 : -1;
   var F = st.forming, ref = S.ticker && !S.demo ? S.ticker.last : (F ? F.c : an.c[L].c);
   if (!(ref > 0)) ref = F ? F.c : an.c[L].c;
-  var open = F ? F.o : an.c[L].c, atr = an.atr[L], risk = Math.max(S.set.slAtr * atr, ref * 0.0035);
+  var open = F ? F.o : an.c[L].c, atr = an.atr[L], risk = Math.max(pol.slAtr * atr, ref * 0.0035);
   var cost = costRT(), rPct = risk / ref, T = V.TFMAP[tf];
-  var mb = Math.max(S.set.maxBars, main.h || 0);
+  var mb = main.book ? pol.maxBars : Math.max(pol.maxBars, main.h || 0);
   var entryT = F ? F.t : an.c[L].T + 1;
-  return { rule: main.rule, label: S.demo ? 'demo' : main.label, ev: main.ev, h: main.h, side: side, ref: ref, open: open, atr: atr, risk: risk,
-    sl: ref - side * risk, tp1: ref + side * risk, tp: ref + side * S.set.rr * risk, rPct: rPct, cost: cost,
-    be: (rPct + cost) / ((S.set.rr + 1) * rPct), expiry: entryT + mb * T.ms, maxBars: mb,
+  return { rule: main.rule, label: S.demo ? 'demo' : main.label, ev: main.ev, bev: main.bev, book: !!main.book, pol: pol, h: main.h, side: side, ref: ref, open: open, atr: atr, risk: risk,
+    sl: ref - side * risk, tp1: ref + side * risk, tp: ref + side * pol.rr * risk, rPct: rPct, cost: cost, costR: cost / rPct,
+    be: (rPct + cost) / ((pol.rr + 1) * rPct), expiry: entryT + mb * T.ms, maxBars: mb,
     drift: atr > 0 ? side * (ref - open) / atr : NaN, tf: tf, t: an.c[L].t, items: items };
 }
 function planText(p) {
   var T = V.TFMAP[p.tf], vd = currentVerdict();
   var lines = [
-    'VSA & Orderflow v3 — ' + S.set.sym + ' (' + mkLabel() + ') · ' + T.label + ' · vela cerrada ' + ftime(p.t, p.tf),
+    'VSA & Orderflow v6 — ' + S.set.sym + ' (' + mkLabel() + ') · ' + T.label + ' · vela cerrada ' + ftime(p.t, p.tf),
     'Regla: ' + p.rule.code + ' ' + p.rule.name + ' · evidencia: ' + labText(p.label) + (p.ev && p.ev.n ? ' (' + evLine(p.ev, p.rule.bias, p.h) + ')' : '')
   ];
   if (p.sellSpot) lines.push('Señal de venta en Spot: si tenés ' + baseOf(S.set.sym) + ', sugiere vender/reducir; si no tenés, no comprar ahora. Cambiá a Futuros USDT-M para operar cortos.');
@@ -2912,6 +3725,7 @@ function flush() {
     if (S.tab === 'chart' && (all || selDirty || d.chart || d.forming)) renderChart();
     if (S.tab === 'rules' && (all || selDirty || d.rules)) renderRules();
     if (S.tab === 'scan' && (all || d.scan)) renderScan();
+    if (S.tab === 'opps' && (all || d.opps)) renderOppsTab();
     $('#footInfo').textContent = S.demo ? 'Modo demostración.' : (D.Net.lastHost ? 'Servidor: ' + D.Net.lastHost.replace('https://', '') + '.' : '');
   } catch (e) { if (window.console) console.error(e); }
 }
@@ -2983,7 +3797,7 @@ function renderMicro() {
     el.innerHTML = '<div class="card-head"><div class="card-title">🏛️ Microestructura Institucional · Derivados y Order Book</div><span class="chip mut">demo</span></div><div class="empty">En modo demostración no se consultan Funding, Open Interest ni Libro de Órdenes.</div>';
     return;
   }
-  var mc = S.micro, ob = S.book, tk = S.ticker;
+  var mc = S.micro, ob = S.obook, tk = S.ticker;
   if (!mc && !ob) {
     el.innerHTML = '<div class="card-head"><div class="card-title">🏛️ Microestructura Institucional · Derivados y Order Book</div><span class="card-sub">cargando…</span></div><div class="empty">Consultando Funding Rate, Open Interest y Libro de Órdenes (Top 20)…</div>';
     return;
@@ -3067,7 +3881,8 @@ function renderMicro() {
       '<div class="liq-ln"><span>Largos 25x (−3,8 %)</span><b>' + fpx(refP * 0.962) + '</b></div>' +
       '<div class="liq-ln"><span>Largos 10x (−9,5 %)</span><b>' + fpx(refP * 0.905) + '</b></div></div></div>';
   }
-  var sqBoxHtml = '<div class="sq-box"><div class="kick">⚡ Detector en vivo · Short Squeeze vs Short Selling</div>' +
+  if (liqHtml) liqHtml += '<div class="card-sub" style="margin-top:6px">Niveles teóricos según apalancamiento (≈ 1/apalancamiento): no son datos de liquidaciones reales.</div>';
+  var sqBoxHtml = '<div class="sq-box"><div class="kick">⚡ Detector en vivo · Short Squeeze vs Short Selling · heurístico (puntaje no validado)</div>' +
     '<div class="sq-meters">' +
     '<div class="sq-m"><div class="sq-m-h"><span class="c-bull">Short Squeeze</span><span>' + sqScore + '/100 · ' + esc(sqState) + '</span></div>' +
     '<div class="sq-m-bar bull"><i style="width:' + sqScore + '%"></i></div>' +
@@ -3094,6 +3909,23 @@ function renderVerdict() {
     return;
   }
   var head = S.demo ? 'DEMOSTRACIÓN · SIN EVIDENCIA' : vd.head, cls = S.demo ? 'muted' : vd.cls, sub;
+  // v6: el libro del universo tiene la última palabra cuando está vigente
+  var bookRows = [], useBook = !S.demo && gateMode() === 'book';
+  if (useBook) V.TF.forEach(function (t) { bookHitsFor(t.id).forEach(function (h) { bookRows.push({ tf: t, h: h }); }); });
+  var bVal = bookRows.filter(function (x) { return x.h.ev.label === 'validada'; }), bUp = bVal.filter(function (x) { return x.h.rule.bias > 0; }), bDn = bVal.filter(function (x) { return x.h.rule.bias < 0; });
+  var bookSub = '';
+  if (useBook) {
+    if (bUp.length && bDn.length) { head = 'VENTAJAS VALIDADAS OPUESTAS'; cls = 'warn'; }
+    else if (bUp.length) { head = 'COMPRA VALIDADA (UNIVERSO)'; cls = 'buy'; }
+    else if (bDn.length) { head = allowShort() ? 'VENTA VALIDADA (UNIVERSO)' : 'SALIDA VALIDADA (UNIVERSO)'; cls = 'sell'; }
+    else if (bookRows.length) { head = 'CANDIDATA DEL UNIVERSO · SOLO PAPER'; cls = 'cyan'; }
+    else if (vd.up.length || vd.dn.length || vd.prom.length) { head = 'SEÑALES DEL PAR SIN VALIDAR EN EL UNIVERSO'; cls = 'muted'; bookSub = 'El laboratorio (' + S.book.syms.length + ' pares) no validó estas reglas fuera de muestra: no generan alertas ni Paper automático. '; }
+  }
+  var bookHtml = bookRows.length ? '<div class="vlist">' + bookRows.map(function (x) {
+    var e = x.h.ev, rl = x.h.rule;
+    return '<div class="vrow" data-tf="' + x.tf.id + '"><div class="vrow-h"><span class="tfc">' + x.tf.label + '</span><span class="code">' + rl.code + '</span><span class="nm">' + esc(rl.name) + '</span>' + biasChip(rl) + labChip(e.label === 'validada' ? 'universo' : 'candidata', rl.bias) + '</div>' +
+      '<div class="vstat">' + esc('Universo (' + e.nSym + ' pares): fuera de muestra ' + fR(e.E) + '/op (t ' + fnum(e.te && e.te.t, 1) + ', n ' + (e.te ? e.te.n : 0) + ') · entrenamiento ' + fR(e.tr && e.tr.mean) + ' · acierto ' + fshare(e.hit)) + '</div></div>';
+  }).join('') + '</div>' : '';
   if (S.demo) sub = 'Datos inventados para mostrar cómo se ve cada regla. No describe el mercado real.';
   else if (vd.up.length || vd.dn.length) {
     sub = (vd.up.length ? vd.up.length + ' TF con compra con respaldo' : '') + (vd.up.length && vd.dn.length ? ' y ' : '') + (vd.dn.length ? vd.dn.length + ' TF con venta con respaldo' : '') +
@@ -3127,8 +3959,8 @@ function renderVerdict() {
     '<div class="qp-pill"><div class="k">Triggers Adaptativos (' + T.label + ')</div><div class="val c-cyan">' + (xs ? 'RSI ' + fnum(xs.rsiLow, 0) + '/' + fnum(xs.rsiHigh, 0) : '—') + '</div><div class="sub">' + (xs ? 'Comp. ' + fnum(xs.volComp, 2) + 'x · H=' + (isNum(hurstV) ? fnum(hurstV, 2) : '—') + ' (' + hurstLbl + ')' : '—') + '</div></div>' +
     '<div class="qp-pill" data-go="paper" style="cursor:pointer"><div class="k">Paper Trading (aislado)</div><div class="val ' + (pPnl >= 0 ? 'c-bull' : 'c-bear') + '">' + (pPnl >= 0 ? '+' : '−') + fnum(Math.abs(pPnl), 2) + ' USDT</div><div class="sub">' + S.paper.open.length + ' abiertas · ' + (S.paper.autoExec ? 'Auto ON' : 'Manual') + '</div></div>' +
     '</div>';
-  el.innerHTML = '<div class="verdict ' + cls + '"><div class="kick">Veredicto · ' + esc(mkLabel()) + ' · ' + esc(hLabel(S.set.h)) + ' · Filtro HTF ' + (S.set.hardRegime ? 'ACTIVO' : 'OFF') + '</div>' +
-    '<div class="vhead ' + cls + '">' + esc(head) + '</div><div class="vsub">' + esc(sub) + '</div>' + qpStrip + (list ? '<div class="vlist">' + list + '</div>' : '') + pend + desc + '</div>' +
+  el.innerHTML = '<div class="verdict ' + cls + '"><div class="kick">Veredicto · ' + esc(mkLabel()) + ' · ' + esc(hLabel(S.set.h)) + ' · Filtro HTF ' + (S.set.hardRegime ? 'ACTIVO' : 'OFF') + ' · ' + (useBook ? 'libro del universo ✓' : 'evidencia por par') + '</div>' +
+    '<div class="vhead ' + cls + '">' + esc(head) + '</div><div class="vsub">' + esc(bookSub + sub) + '</div>' + bookHtml + qpStrip + (list ? '<div class="vlist">' + list + '</div>' : '') + pend + desc + '</div>' +
     '<div class="note">Tocá cualquier tarjeta del veredicto para pasar a esa temporalidad. En <b>Futuros USDT-M</b> las ventas con respaldo arman plan en corto con comisiones de futuros (' + fnum(S.set.feeFut, 2) + ' % por lado); en <b>Spot</b> sirven para no comprar o tomar ganancias.</div>';
 }
 function expectedVol(closed, f, tf) {
@@ -3157,12 +3989,13 @@ function renderForming() {
     '<div class="hint">Nunca se evalúan reglas sobre la vela abierta: su volumen y cierre todavía están incompletos.</div></div>';
 }
 function renderPlan() {
-  var el = $('#cPlan'), tf = S.set.tf, T = V.TFMAP[tf], p = planFor(tf);
-  var head = '<div class="card-head"><div class="card-title">Plan operativo · ' + T.label + ' (' + esc(mkLabel()) + ')</div><span class="card-sub">stop ' + fnum(S.set.slAtr, 1) + ' ATR · obj ' + fnum(S.set.rr, 1) + 'R</span></div>';
+  var el = $('#cPlan'), tf = S.set.tf, T = V.TFMAP[tf], p = planFor(tf), pol = (p && p.pol) || { slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars };
+  var head = '<div class="card-head"><div class="card-title">Plan operativo · ' + T.label + ' (' + esc(mkLabel()) + ')</div><span class="card-sub">stop ' + fnum(pol.slAtr, 1) + ' ATR · obj ' + fnum(pol.rr, 1) + 'R' + (p && p.book ? ' · salida validada' : '') + '</span></div>';
   if (!p) { el.innerHTML = head + '<div class="empty">' + (S.loading ? 'Cargando…' : 'Sin datos de ' + T.label + '.') + '</div>'; return; }
   if (p.none) { el.innerHTML = head + '<div class="plan-msg">La última vela cerrada de ' + T.label + ' no tiene una regla direccional (' + esc(p.main.rule.code + ' · ' + p.main.rule.name) + '). Sin plan.</div>'; return; }
   var r = p.rule, ev = p.ev, warn = [];
-  var evx = ev && ev.n ? '<div class="vstat" style="padding:0 12px 8px">' + esc('Evidencia (' + evLine(ev, r.bias, p.h) + ')') + '</div>' : '';
+  var be0 = p.bev, evx = p.book && be0 ? '<div class="vstat" style="padding:0 12px 8px">' + esc('Universo (' + be0.nSym + ' pares): fuera de muestra ' + fR(be0.E) + '/op (t ' + fnum(be0.te && be0.te.t, 1) + ', n ' + (be0.te ? be0.te.n : 0) + ') · entrenamiento ' + fR(be0.tr && be0.tr.mean) + ' (t ' + fnum(be0.tr && be0.tr.t, 1) + ', n ' + (be0.tr ? be0.tr.n : 0) + ') · acierto ' + fshare(be0.hit)) + '</div>'
+    : ev && ev.n ? '<div class="vstat" style="padding:0 12px 8px">' + esc('Evidencia del par (' + evLine(ev, r.bias, p.h) + ')') + '</div>' : '';
   var ruleHead = '<div class="pad" style="padding-bottom:6px"><div class="vrow-h"><span class="code">' + r.code + '</span><b style="font-size:13px">' + esc(r.name) + '</b>' + biasChip(r) + labChip(p.label, r.bias, ev && ev.n) + '</div></div>';
   if (p.sellSpot) {
     el.innerHTML = head + ruleHead + evx +
@@ -3170,11 +4003,13 @@ function renderPlan() {
       '<div class="pad row-btns" style="padding-top:0"><button type="button" class="pbtn sm" id="planCopy">Copiar</button><button type="button" class="pbtn sm" id="planToFut">Ver en Futuros</button></div>';
     return;
   }
-  if (p.label !== 'respaldo' && !S.demo) {
+  if (p.label === 'candidata' && !S.demo) warn.push('<b>Candidata del laboratorio:</b> pasó el entrenamiento en el universo pero todavía no la validación fuera de muestra. Solo para Paper (validación hacia adelante), no para capital real.');
+  else if (p.label !== 'respaldo' && p.label !== 'universo' && !S.demo) {
     warn.push(p.label === 'prometedora'
-      ? 'Señal <b>prometedora</b> (p < 0,05, neto positivo y estable en ambas mitades), pero aún no supera el umbral global BH. Operar con tamaño reducido o esperar confirmación.'
+      ? 'Señal <b>prometedora</b> del par (FDR 25 %, neto positivo y estable), sin validar en el universo. Solo Paper o tamaño mínimo.'
       : 'Esta regla no tiene respaldo en ' + esc(S.set.sym) + ' ' + T.label + ' (' + esc(labText(p.label)) + '): tomalo solo como descripción de la vela.');
-  }
+  } else if (p.label === 'respaldo' && gateMode() === 'book' && !S.demo) warn.push('Respaldo <b>solo en este par</b>: el laboratorio del universo no la validó. Con ~300 pruebas por par, una de cada pocas puede ser azar.');
+  if (isNum(p.costR) && p.costR > 0.25 && !S.demo) warn.push('Los costos se comen <b>' + fnum(p.costR, 2) + ' R</b> por operación (stop de ' + fpct(p.rPct) + ' contra ' + fnum(p.cost * 100, 2) + ' % de costos ida y vuelta). Con esa carga casi ninguna regla gana: preferí temporalidades más altas.');
   var pHtfId = V.htfFor(tf, S.set.regimeHtf), pHtfReg = V.regimeOf(S.an[pHtfId] || S.an[tf]);
   if (S.set.hardRegime && pHtfReg.ready && !V.regimeAllows(p.side, pHtfReg.dir, p.rule.cat, S.set.strictLateral)) warn.push('<b>Bloqueado por Filtro Duro de Régimen (' + esc(pHtfId.toUpperCase()) + ' ' + esc(pHtfReg.label) + '):</b> esta señal va en contra de la tendencia EMA50/EMA200 superior.');
   if (isNum(p.drift) && p.drift > 0.5) warn.push('El precio ya avanzó ' + fsig(p.drift, 2) + ' ATR a favor desde la apertura de la vela actual. Entrar tarde empeora la relación riesgo/beneficio.');
@@ -3184,12 +4019,12 @@ function renderPlan() {
   el.innerHTML = head + ruleHead + evx +
     '<div class="levels">' +
     tile('Entrada (ref.)', fpx(p.ref), isLong ? 'COMPRA (Long)' : 'VENTA (Short)', isLong ? 'c-bull' : 'c-bear') +
-    tile('Stop Loss', fpx(p.sl), fpct((p.sl - p.ref) / p.ref) + ' · ' + fnum(S.set.slAtr, 1) + ' ATR', 'c-bear') +
+    tile('Stop Loss', fpx(p.sl), fpct((p.sl - p.ref) / p.ref) + ' · ' + fnum(pol.slAtr, 1) + ' ATR', 'c-bear') +
     tile('1R (parcial)', fpx(p.tp1), fpct((p.tp1 - p.ref) / p.ref), 'c-bull') +
-    tile('Objetivo ' + fnum(S.set.rr, 1) + 'R', fpx(p.tp), fpct((p.tp - p.ref) / p.ref), 'c-bull') +
+    tile('Objetivo ' + fnum(pol.rr, 1) + 'R', fpx(p.tp), fpct((p.tp - p.ref) / p.ref), 'c-bull') +
     tile('Vence', ftime(p.expiry, 'clock'), p.maxBars + ' velas de ' + T.label) +
-    tile('Costos ida y vuelta', fnum(p.cost * 100, 2) + ' %', mkLabel() + ' + deslizamiento') +
-    '<div class="tile wide"><div class="t">Acierto necesario para empatar (stop/objetivo)</div><div class="lv-v">' + fshare(p.be) + '</div><div class="s">Acierto neto histórico en h=' + (p.h || S.set.h || 6) + ' velas: ' + hist + '</div></div>' +
+    tile('Costos ida y vuelta', fnum(p.cost * 100, 2) + ' %', isNum(p.costR) ? '= ' + fnum(p.costR, 2) + ' R por operación' : mkLabel() + ' + deslizamiento', p.costR > 0.25 ? 'c-bear' : '') +
+    '<div class="tile wide"><div class="t">Acierto necesario para empatar (stop/objetivo)</div><div class="lv-v">' + fshare(p.be) + '</div><div class="s">' + (p.book && be0 ? 'Acierto histórico en el universo: ' + fshare(be0.hit) + ' · ' + be0.nSym + ' pares' : 'Acierto neto histórico en h=' + (p.h || S.set.h || 6) + ' velas: ' + hist) + '</div></div>' +
     '</div>' +
     (warn.length ? '<div class="warnbox">' + warn.join('<br>') + '</div>' : '') +
     '<div class="pad row-btns" style="padding-top:0"><button type="button" class="pbtn sm" id="planCopy">Copiar plan</button><button type="button" class="abtn sm" id="planPaper"' + (S.demo ? ' disabled' : '') + '>⚡ Ejecutar en Paper</button><button type="button" class="pbtn sm" id="planSave"' + (S.demo ? ' disabled' : '') + '>Diario real</button><button type="button" class="pbtn sm" id="planRisk">Calcular tamaño</button></div>';
@@ -3213,6 +4048,7 @@ function renderMtf() {
     }
     var x = r.x, rule = r.rule, an = S.an[t.id], others = r.items.filter(function (it) { return it.rule.id !== rule.id && it.rule.id !== 40; });
     var lab = rule.id === 40 ? labChip('sin señal') : labChip(S.demo ? 'demo' : r.label, rule.bias, r.ev && r.ev.n);
+    var bks = bookHitsFor(t.id); if (bks.length) lab += labChip(bks[0].ev.label === 'validada' ? 'universo' : 'candidata', bks[0].rule.bias) + '<span class="code" style="margin-left:4px">' + esc(bks[0].rule.code) + '</span>';
     var hTag = (r.ev && r.ev.n && r.h) ? '<span>h=' + r.h + 'v · neto ' + fpct(r.ev.net) + '</span>' : '';
     html += '<div class="mtf-row' + sel + '" data-tf="' + t.id + '" role="button" tabindex="0"><span class="tfc">' + t.label + '</span><span class="rn"><b class="code">' + rule.code + '</b>' + esc(rule.name) + '</span>' + lab +
       '<div class="sub"><span class="' + (rule.bias > 0 ? 'c-bull' : rule.bias < 0 ? 'c-bear' : '') + '">' + esc(rule.tag) + '</span>' + hTag + '<span>Δ ' + fpct(x.dP) + '</span><span>RVOL ' + fx(x.rvol) + '</span><span>compras ' + fshare(x.share) + '</span><span>cerró ' + ftime(an.c[an.n - 1].T + 1, 'clock') + '</span></div>' +
@@ -3426,7 +4262,7 @@ function renderBt() {
       tile('Factor beneficio', isFinite(R.pf) ? fnum(R.pf, 2) : (R.pf === Infinity ? '∞' : '—'), 'ganancias / pérdidas') +
       tile('Retorno neto', fpct(R.ret), 'medio/op ' + fpct(R.meanNet), R.ret >= 0 ? 'c-bull' : 'c-bear') +
       tile('Máx. caída', fpct(R.mdd), 'drawdown máximo', 'c-bear') +
-      tile('Exposición / Sharpe', fshare(R.exposure), 'Sharpe ' + (isNum(R.sharpe) ? fnum(R.sharpe, 2) : '—') + (S.set.hardRegime ? ' · Filtro HTF' : '')) +
+      tile('Exposición / t', fshare(R.exposure), 't de la media/op ' + (isNum(R.sharpe) ? fnum(R.sharpe, 2) : '—') + (S.set.hardRegime ? ' · Filtro HTF' : '')) +
       tile('Comprar y mantener', fpct(R.buyHold), 'mismo tramo', R.buyHold >= 0 ? 'c-bull' : 'c-bear') +
       tile('Contra azar', isNum(R.pRandom) ? 'p ' + fnum(R.pRandom, 3) : '—', isNum(R.randomMean) ? 'azar: ' + fpct(R.randomMean) + '/op' : 'pocas operaciones') +
       '</div><div class="eq-wrap"><canvas id="eq" aria-label="Curva de capital"></canvas></div>' +
@@ -3984,7 +4820,7 @@ function openSheet() { $('#sheetTitle').textContent = 'Ajustes'; renderSheet(); 
 function closeSheet() { $('#sheet').hidden = true; document.body.style.overflow = ''; }
 function setSetting(key, val) {
   var num = ['hist', 'h', 'Kfine', 'refresh', 'fontScale'].indexOf(key) >= 0;
-  var bool = ['hardRegime', 'strictLateral'].indexOf(key) >= 0;
+  var bool = ['hardRegime', 'strictLateral', 'paperCand', 'vigil'].indexOf(key) >= 0;
   S.set[key] = num ? +val : (bool ? (val === true || val === 'true') : val); validate(S.set); saveSettings();
   switch (key) {
     case 'market': loadCatalog(mk()); S.scan.rows = []; S.riskBuilt = false; scheduleGitHubSync(); loadAll(); break;
@@ -4188,7 +5024,7 @@ function bind() {
     if (e.target.closest('#tgTest')) {
       S.set.tgOn = true; S.set.tgToken = $('#tgToken').value.trim(); S.set.tgChat = $('#tgChat').value.trim();
       saveSettings(); renderAlerts();
-      sendTelegram('✅ Conexión exitosa con VSA & Orderflow v3.0 (' + S.set.sym + ' · ' + mkLabel() + '). Tus alertas llegarán aquí.', false);
+      sendTelegram('✅ Conexión exitosa con VSA & Orderflow v6.0 (' + S.set.sym + ' · ' + mkLabel() + '). Tus alertas llegarán aquí.', false);
       return;
     }
     if (e.target.closest('#tgExport')) {
@@ -4289,7 +5125,7 @@ function bind() {
   $('#cMtf').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { var r = e.target.closest('[data-tf]'); if (r) { e.preventDefault(); selectTf(r.getAttribute('data-tf')); } } });
   $('#cPlan').addEventListener('click', function (e) {
     if (e.target.closest('#planCopy')) { var p = planFor(S.set.tf); if (p && !p.none) copyText(planText(p), 'Plan copiado'); }
-    if (e.target.closest('#planPaper')) { var pp = planFor(S.set.tf); if (pp && !pp.none && !pp.sellSpot) openPaperTrade({ sym: S.set.sym, market: mk(), tf: pp.tf, rule: pp.rule.code, ruleName: pp.rule.name, side: pp.side, entry: pp.ref, sl: pp.sl, tp: pp.tp, expiry: pp.expiry, auto: false }); }
+    if (e.target.closest('#planPaper')) { var pp = planFor(S.set.tf); if (pp && !pp.none && !pp.sellSpot) openPaperTrade({ sym: S.set.sym, market: mk(), tf: pp.tf, rule: pp.rule.code, ruleName: pp.rule.name, side: pp.side, entry: pp.ref, sl: pp.sl, tp: pp.tp, expiry: pp.expiry, auto: false, src: pp.book ? (pp.label === 'universo' ? 'universo' : 'candidata') : 'manual' }); }
     if (e.target.closest('#planSave')) saveToJournal();
     if (e.target.closest('#planToFut')) setSetting('market', 'futures');
     if (e.target.closest('#planRisk')) { showTab('scan'); setTimeout(function () { if (fillRiskFromPlan(false)) { updateRisk(); var el = $('#cRisk'); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); } }, 60); }
@@ -4305,6 +5141,40 @@ function bind() {
   $('#rFilters').addEventListener('click', function (e) { var b = e.target.closest('[data-f]'); if (!b) return; S.set.rfilter = b.getAttribute('data-f'); saveSettings(); render('rules'); });
   $('#cBt').addEventListener('click', function (e) { var b = e.target.closest('[data-bt]'); if (!b) return; S.set.btMode = b.getAttribute('data-bt'); saveSettings(); render('rules'); });
   $('#scanGo').addEventListener('click', runScan);
+  // v6 · Oportunidades y Laboratorio
+  $('#cLab').addEventListener('click', function (e) {
+    if (e.target.closest('#labRun')) { unlockAudio(); runLab(); return; }
+    if (e.target.closest('#labCsv')) { labCsv(); return; }
+    if (e.target.closest('#labSend')) { if (S.set.ghOn && S.set.ghRepo && S.set.ghToken) syncToGitHub(false); else exportServerConfig(); return; }
+    var lb = e.target.closest('[data-lab]');
+    if (lb) { var k = lb.getAttribute('data-lab'), v = lb.getAttribute('data-val'); S.set.lab[k] = (k === 'n' || k === 'hist') ? +v : v; validate(S.set); saveSettings(); render('opps'); return; }
+    var lf = e.target.closest('[data-lf]'); if (lf) { S.set.lab.lfilter = lf.getAttribute('data-lf'); saveSettings(); render('opps'); return; }
+    var sg = e.target.closest('[data-setg]'); if (sg) { setSetting(sg.getAttribute('data-setg'), sg.getAttribute('data-val')); return; }
+  });
+  $('#cLab').addEventListener('change', function (e) {
+    var id = e.target && e.target.id; if (!id) return;
+    if (id === 'labQv') S.set.lab.minQv = parseNum(e.target.value);
+    else if (id === 'labSp') S.set.lab.maxSpread = parseNum(e.target.value);
+    else if (id === 'labEx') S.set.lab.excl = e.target.value;
+    else return;
+    validate(S.set); saveSettings(); render('opps');
+  });
+  $('#cOpps').addEventListener('click', function (e) {
+    if (e.target.closest('#oppRefresh')) { refreshOpps(null, false).then(function (ok) { if (ok) toast('Oportunidades actualizadas: ' + S.opps.list.length + ' señal(es) del libro'); }); return; }
+    if (e.target.closest('#oppVigil')) {
+      unlockAudio(); S.set.vigil = !S.set.vigil; saveSettings(); if (S.set.vigil) seedVigil(); render('opps');
+      toast(S.set.vigil ? 'Vigilancia ON: revisa el universo en cada cierre de vela (mantené la app abierta o el backend activo)' : 'Vigilancia OFF', 4200); return;
+    }
+    var ob = e.target.closest('[data-opp]'); if (!ob) return;
+    var key = ob.getAttribute('data-key'), o = (S.opps.list || []).filter(function (x) { return x.key === key; })[0]; if (!o) return;
+    var act = ob.getAttribute('data-opp');
+    if (act === 'paper') { oppPaper(o, false); return; }
+    if (act === 'open') { if (S.book && S.book.market !== mk()) setSetting('market', S.book.market); pickSymbol(o.sym); selectTf(o.tf); showTab('radar'); return; }
+    if (act === 'risk') {
+      showTab('scan');
+      setTimeout(function () { if (!$('#rkE')) return; $('#rkE').value = plain(o.px); $('#rkS').value = plain(o.sl); $('#rkT').value = plain(o.tp); updateRisk(); var el = $('#cRisk'); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 80);
+    }
+  });
 
   $('#btnFavCur').addEventListener('click', function () { toggleFav(S.set.sym); });
   $('#favBar').addEventListener('click', function (e) {
@@ -4454,13 +5324,18 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 }
 
 function boot() {
-  applyTheme(); applyFont(); loadPaper(); fillSymbols(); loadJournal(); loadAlerts(); bind();
+  applyTheme(); applyFont(); loadPaper(); loadBook(); fillSymbols(); loadJournal(); loadAlerts(); bind();
+  loadSeen();
+  if (S.book) { S.opps.list = buildOpps(S.book.states || []); S.opps.at = S.book.statesAt || S.book.at; seedVigil(true); }
+  if (bookUsable()) showTab('opps');
   loadAll(); loadCatalog(mk());
   setInterval(tick, 1000);
+  setInterval(function () { try { vigilTick(); } catch (e) { if (window.console) console.warn(e); } }, 20000);
   setTimeout(function () { trackJournal(false); }, 9000);
   setInterval(function () { if (!document.hidden) trackJournal(false); }, 300000);
 }
-window.VSAUI = { S: S, render: render, loadDemo: loadDemo, planFor: planFor, planText: planText, journalCsv: journalCsv };
+window.VSAUI = { S: S, render: render, loadDemo: loadDemo, planFor: planFor, planText: planText, journalCsv: journalCsv,
+  runLab: runLab, refreshOpps: refreshOpps, buildOpps: buildOpps, vigilTick: vigilTick, openPaperTrade: openPaperTrade, paperEquity: paperEquity, reconcileOne: reconcileOne, buildServerConfig: buildServerConfig };
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
