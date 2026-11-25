@@ -12,8 +12,8 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="description" content="Terminal VSA & Orderflow v6.0 Edge Lab: 64 reglas, Laboratorio de Ventaja con evidencia agrupada en el universo líquido, validación fuera de muestra, oportunidades validadas con vigilancia y Paper Trading conciliado.">
-<title>VSA & Orderflow v6.0 · Edge Lab</title>
+<meta name="description" content="Terminal VSA & Orderflow v7.0 Alpha Suite: 70 reglas, Trailing Stop ATR y Breakeven 1R, Laboratorio de Ventaja OOS, Simulación Monte Carlo, Amplitud Global y Paper Trading conciliado.">
+<title>VSA & Orderflow v7.0 · Alpha Suite</title>
 <style>
 :root {
   --bg: #070b14; --card: #0f172a; --card2: #162036; --input: #0a101d;
@@ -481,6 +481,15 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
 @media (max-width: 559px) { .lab-cfg, .lab-sum { grid-template-columns: 1fr 1fr; } .funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 390px) { .tabs button { font-size: .62rem; } }
 
+
+/* v7.0 Alpha & Portfolio Suite · Amplitud Global, Monte Carlo y Capa Plan */
+.breadth-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--input); font-size: .78rem; color: var(--tx2); }
+.breadth-bar b { color: var(--tx); }
+.mc-box { border-top: 1px solid var(--line); padding: 10px 12px; background: var(--card2); }
+.mc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 7px; }
+@media (min-width: 560px) { .mc-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.sw-plan { background: linear-gradient(90deg, var(--bear) 0 40%, var(--acc2) 40% 60%, var(--bull) 60%); }
+
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
@@ -490,8 +499,8 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
     <div class="brand">
       <svg class="logo" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="10" width="3" height="10" rx="1"></rect><rect x="10.5" y="4" width="3" height="16" rx="1"></rect><rect x="18" y="13" width="3" height="7" rx="1"></rect></svg>
       <div class="brand-txt">
-        <div class="brand-t">VSA &amp; Orderflow <span class="chip acc" style="vertical-align:1px">v6.0</span> <span class="chip pur" style="vertical-align:1px">Edge Lab</span></div>
-        <div class="brand-s">64 reglas · Laboratorio de Ventaja · Oportunidades validadas · Paper conciliado</div>
+        <div class="brand-t">VSA &amp; Orderflow <span class="chip acc" style="vertical-align:1px">v7.0</span> <span class="chip pur" style="vertical-align:1px">Alpha Suite</span></div>
+        <div class="brand-s">70 reglas · Edge Lab · Trailing/BE 1R · Monte Carlo · Breadth</div>
       </div>
     </div>
     <div class="top-act">
@@ -569,7 +578,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
     <button type="button" role="tab" data-tab="opps" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v10M9.5 9.5c0-1.2 1.1-2 2.5-2s2.5.8 2.5 2-1.1 1.7-2.5 2-2.5.8-2.5 2 1.1 2 2.5 2 2.5-.8 2.5-2"></path></svg><span>Oportunidades</span></button>
     <button type="button" role="tab" data-tab="radar" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle><path d="M12 12 19 5"></path></svg><span>Radar y evidencia</span></button>
     <button type="button" role="tab" data-tab="chart" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"></path><path d="m7 15 4-4 3 3 6-7"></path></svg><span>Gráfico y flujo</span></button>
-    <button type="button" role="tab" data-tab="rules" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"></path><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"></path></svg><span>64 reglas y Paper</span></button>
+    <button type="button" role="tab" data-tab="rules" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"></path><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"></path></svg><span>70 reglas y Paper</span></button>
     <button type="button" role="tab" data-tab="scan" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg><span>Escáner y riesgo</span></button>
   </nav>
 
@@ -628,6 +637,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
           <button type="button" data-layer="levels"><i class="sw sw-poc"></i>POC/VAH/VAL</button>
           <button type="button" data-layer="prof"><i class="sw sw-prof"></i>Perfil</button>
           <button type="button" data-layer="sig"><i class="sw sw-sig"></i>Señales</button>
+          <button type="button" data-layer="plan"><i class="sw sw-plan"></i>Plan SL/TP</button>
         </div>
         <div id="chHud" class="hud"></div>
         <div id="cvWrap" class="cv-wrap">
@@ -651,7 +661,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
       <div class="card" id="cBt"></div>
       <div class="card">
         <div class="card-head">
-          <div class="card-title">64 reglas · <span id="rTf">—</span></div>
+          <div class="card-title">70 reglas · <span id="rTf">—</span></div>
           <span id="rSum" class="card-sub">—</span>
         </div>
         <div class="filters" id="rFilters">
@@ -661,6 +671,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
           <button type="button" data-f="ALL">Todas</button>
           <button type="button" data-f="BUY">Compra</button>
           <button type="button" data-f="SELL">Venta</button>
+          <button type="button" data-f="BREAKOUT">🚀 Breakout</button>
           <button type="button" data-f="SQUEEZE">⚡ Squeeze / Short</button>
           <button type="button" data-f="ADAPTIVE">Adaptativas</button>
           <button type="button" data-f="REGIME">Régimen/Squeeze</button>
@@ -762,7 +773,7 @@ details.method summary { padding: 12px; font-weight: 800; font-size: 13px; curso
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* VSA & Orderflow · Edge Lab · build 2026-11-22.v6.0 */
+/* VSA & Orderflow · Alpha & Portfolio Suite · build 2026-11-25.v7.0 */
 /* ============================================================================
    VSA & ORDERFLOW · NÚCLEO CUANTITATIVO (v3.0)
    Corre igual en el navegador y en Node.js (pruebas). No toca el DOM ni la red.
@@ -1253,7 +1264,7 @@ var RULES = [
     v: function (x) { return ['RVOL ' + fx(x.rvol), 'Rango/ATR ' + fnum(x.spreadAtr)]; },
     d: 'Volumen y rango muy chicos. Hipótesis: después viene un movimiento más grande (sin dirección).' },
   { id: 40, code: 'V40', cat: 'NEUTRAL', name: 'Equilibrio / sin anomalía', bias: 0, tag: 'ESPERAR', pts: 0,
-    f: { esc: 'Ninguna de las otras 63 reglas se cumple' },
+    f: { esc: 'Ninguna de las otras 69 reglas se cumple' },
     t: function () { return false; },
     v: function (x) { return ['RVOL ' + fx(x.rvol), 'CLV ' + fsig(x.clv), 'Compras ' + fshare(x.share)]; },
     d: 'Oferta y demanda sin desequilibrio medible en esta vela.' },
@@ -1380,7 +1391,38 @@ var RULES = [
     f: { esc: 'Expansión bajista (RVOL > 2, cuerpo < −1 ATR) hace 2–10 velas · máximos posteriores bajo la mitad de su cuerpo · RVOL < 0,70 · Rango/ATR < 0,80 · Compras ≤ 52 %' },
     t: function (x) { return isNum(x.expDnAgo) && x.expDnAgo >= 2 && !(x.expUpAgo < x.expDnAgo) && x.maxHiDn < x.expDnMid && x.c < x.expDnMid && x.rvol < 0.70 && x.spreadAtr < 0.80 && x.share <= 0.52; },
     v: function (x) { return ['Expansión hace ' + x.expDnAgo + ' velas', 'Máx. posterior ' + fpx(x.maxHiDn) + ' < mitad ' + fpx(x.expDnMid), 'RVOL ' + fx(x.rvol), 'Compras ' + fshare(x.share)]; },
-    d: 'Tras una vela de expansión bajista con volumen, los rebotes no recuperan la mitad de esa vela y el volumen se seca sin compras agresivas. Hipótesis: la demanda no aparece y la baja continúa.' }
+    d: 'Tras una vela de expansión bajista con volumen, los rebotes no recuperan la mitad de esa vela y el volumen se seca sin compras agresivas. Hipótesis: la demanda no aparece y la baja continúa.' },
+  // ─── NUEVAS REGLAS v7.0 (Alpha Suite): BREAKOUT DONCHIAN, CAPITULACIÓN Z-SCORE Y COMPRESIÓN NR7 ───
+  { id: 65, code: 'V65', cat: 'BREAKOUT', name: 'Ruptura Donchian alcista (20v) con volumen y flujo', bias: 1, tag: 'BREAKOUT', pts: 2.25,
+    f: { esc: 'Cierre > Máx(20) · RVOL > 1,35 · CLV > +0,35 · Compras > 53 %' },
+    t: function (x) { return x.c > x.hi20 && x.rvol > 1.35 && x.clv > 0.35 && x.share > 0.53; },
+    v: function (x) { return ['Cierre vs Máx20 ' + fpct(x.c / x.hi20 - 1), 'RVOL ' + fx(x.rvol), 'CLV ' + fsig(x.clv), 'Compras ' + fshare(x.share)]; },
+    d: 'Ruptura de canal de 20 velas con expansión de volumen y flujo comprador real. Diseñada para capturar tendencias y colas gordas en 4H/1D.' },
+  { id: 66, code: 'V66', cat: 'BREAKOUT', name: 'Quiebre Donchian bajista (20v) con volumen y flujo', bias: -1, tag: 'BREAKDOWN', pts: -2.25,
+    f: { esc: 'Cierre < Mín(20) · RVOL > 1,35 · CLV < −0,35 · Compras < 47 %' },
+    t: function (x) { return x.c < x.lo20 && x.rvol > 1.35 && x.clv < -0.35 && x.share < 0.47; },
+    v: function (x) { return ['Cierre vs Mín20 ' + fpct(x.c / x.lo20 - 1), 'RVOL ' + fx(x.rvol), 'CLV ' + fsig(x.clv), 'Compras ' + fshare(x.share)]; },
+    d: 'Pérdida de soporte de 20 velas con expansión de volumen y presión vendedora. Hipótesis: continuación bajista tendencial.' },
+  { id: 67, code: 'V67', cat: 'ADAPTIVE', name: 'Capitulación Z-Score extremo (Z-ret < −2,4) + rechazo', bias: 1, tag: 'COMPRA', pts: 1.9,
+    f: { esc: 'Retorno z(50) < −2,4 · Mecha inf. > 32 % · RVOL > 1,6' },
+    t: function (x) { return isNum(x.retZ) && x.retZ < -2.4 && x.loW > 0.32 && x.rvol > 1.6; },
+    v: function (x) { return ['Retorno ' + fz(x.retZ), 'Mecha inf. ' + fshare(x.loW), 'RVOL ' + fx(x.rvol)]; },
+    d: 'Caída estadísticamente extrema (más de 2,4 desvíos) rechazada con mecha inferior y volumen alto. Hipótesis: sobrerreacción y rebote.' },
+  { id: 68, code: 'V68', cat: 'ADAPTIVE', name: 'Euforia parabólica Z-Score extremo (Z-ret > +2,4) + rechazo', bias: -1, tag: 'VENTA', pts: -1.9,
+    f: { esc: 'Retorno z(50) > +2,4 · Mecha sup. > 32 % · RVOL > 1,6' },
+    t: function (x) { return isNum(x.retZ) && x.retZ > 2.4 && x.upW > 0.32 && x.rvol > 1.6; },
+    v: function (x) { return ['Retorno ' + fz(x.retZ), 'Mecha sup. ' + fshare(x.upW), 'RVOL ' + fx(x.rvol)]; },
+    d: 'Subida parabólica extrema (> +2,4 σ) con rechazo superior y alto volumen. Hipótesis: agotamiento y reversión.' },
+  { id: 69, code: 'V69', cat: 'REGIME', name: 'Expansión alcista tras compresión NR7', bias: 1, tag: 'COMPRA FUERTE', pts: 2.0,
+    f: { esc: 'Vela previa NR7 (menor rango en 7 velas) · Cierre > Máx previo · RVOL > 1,25 · CLV > +0,30' },
+    t: function (x) { return x.nr7Prev && x.c > x.h1 && x.rvol > 1.25 && x.clv > 0.30; },
+    v: function (x) { return ['NR7 previa ✓', 'Cierre vs Máx prev ' + fpct(x.c / x.h1 - 1), 'RVOL ' + fx(x.rvol), 'CLV ' + fsig(x.clv)]; },
+    d: 'La vela anterior alcanzó la máxima compresión de 7 períodos (NR7) y la actual expande al alza con volumen.' },
+  { id: 70, code: 'V70', cat: 'REGIME', name: 'Expansión bajista tras compresión NR7', bias: -1, tag: 'VENTA FUERTE', pts: -2.0,
+    f: { esc: 'Vela previa NR7 (menor rango en 7 velas) · Cierre < Mín previo · RVOL > 1,25 · CLV < −0,30' },
+    t: function (x) { return x.nr7Prev && x.c < x.l1 && x.rvol > 1.25 && x.clv < -0.30; },
+    v: function (x) { return ['NR7 previa ✓', 'Cierre vs Mín prev ' + fpct(x.c / x.l1 - 1), 'RVOL ' + fx(x.rvol), 'CLV ' + fsig(x.clv)]; },
+    d: 'Tras máxima compresión de rango (NR7), el precio quiebra a la baja con expansión de volumen.' }
 ];
 var RMAP = {}; RULES.forEach(function (r) { RMAP[r.id] = r; });
 function formula(r, mode) { return (mode === 'orig' && r.f.orig) ? r.f.orig : r.f.esc; }
@@ -1398,7 +1440,8 @@ function analyze(c, opts) {
   var atr = atrSeries(c, 14), atrSma50 = smaSeries(atr, 50), rsi = rsiSeries(cl, 14);
   var atrPct = atr.map(function (a, idx) { return isNum(a) && cl[idx] > 0 ? a / cl[idx] : NaN; });
   var vw = vwapSeries(c, tf.anchor), fl = flowSeries(c), rv = rvolSeries(c, tf.ms, opts.rvol === 'sma' ? 'sma' : 'seas');
-  var dr10 = new Array(n).fill(NaN), ob10 = new Array(n).fill(NaN), sv = 0, sd = 0, i, j;
+  var dr10 = new Array(n).fill(NaN), ob10 = new Array(n).fill(NaN), ret1 = new Array(n).fill(NaN), sv = 0, sd = 0, i, j;
+  for (i = 1; i < n; i++) if (c[i - 1].c > 0) ret1[i] = (c[i].c - c[i - 1].c) / c[i - 1].c;
   for (i = 0; i < n; i++) {
     sv += c[i].v; sd += fl.d[i]; if (i >= 10) { sv -= c[i - 10].v; sd -= fl.d[i - 10]; }
     if (i >= 9 && sv > 0) dr10[i] = sd / sv;
@@ -1427,6 +1470,9 @@ function analyze(c, opts) {
     }
     if (isNum(expUpAgo)) for (j = i - expUpAgo + 1; j <= i; j++) if (c[j].l < minLoUp) minLoUp = c[j].l;
     if (isNum(expDnAgo)) for (j = i - expDnAgo + 1; j <= i; j++) if (c[j].h > maxHiDn) maxHiDn = c[j].h;
+    var rng1 = k1.h - k1.l, nr7Prev = rng1 > 0;
+    for (j = i - 7; j < i - 1; j++) { if (j < 0 || (c[j].h - c[j].l) <= rng1) { nr7Prev = false; break; } }
+    var retZ = zPrev(ret1, i, 50, 20);
     var pf = profileAt(c, i, 60, 32);
     var volRank = pctRankPrev(atrPct, i, 100, 30);
     var volComp = isNum(atr[i]) && isNum(atrSma50[i]) && atrSma50[i] > 0 ? atr[i] / atrSma50[i] : 1.0;
@@ -1441,7 +1487,7 @@ function analyze(c, opts) {
       clv: rng > 0 ? ((k.c - k.l) - (k.h - k.c)) / rng : 0,
       upW: rng > 0 ? (k.h - Math.max(k.o, k.c)) / rng : 0, loW: rng > 0 ? (Math.min(k.o, k.c) - k.l) / rng : 0,
       green: k.c > k.o, red: k.c < k.o, green1: k1.c > k1.o, red1: k1.c < k1.o, green2: k2.c > k2.o, red2: k2.c < k2.o,
-      o1: k1.o, c1: k1.c, c3: k3.c, v1: k1.v, v2: k2.v,
+      o1: k1.o, h1: k1.h, l1: k1.l, c1: k1.c, c3: k3.c, v1: k1.v, v2: k2.v, retZ: retZ, nr7Prev: nr7Prev,
       e9: e9[i], e21: e21[i], e50: e50[i], e200: e200[i], rsi: rsi[i],
       atrRatioPrev: isNum(atr[i - 1]) && isNum(atrSma50[i - 1]) && atrSma50[i - 1] > 0 ? atr[i - 1] / atrSma50[i - 1] : NaN,
       volRank: volRank, volComp: ab.vc, rsiLow: ab.rsiLow, rsiHigh: ab.rsiHigh, zTrig: ab.zTrig, trendReg: trendReg,
@@ -1637,31 +1683,45 @@ function backtest(an, o) {
     }
     if (!picked) { i++; continue; }
     var mb = (allowMeta && allowMeta[picked.id] && allowMeta[picked.id].h) ? Math.max(maxBars, allowMeta[picked.id].h) : maxBars;
-    var t = simTrade(c, an.atr, i, picked.bias, to, slAtr, rr, mb, cost);
+    var t = simTrade(c, an.atr, i, picked.bias, to, slAtr, rr, mb, cost, { be1r: o.be1r, trailAtr: o.trailAtr });
     if (!t) { i++; continue; }
     t.rule = picked.code; t.ruleName = picked.name; trades.push(t); i = t.exitIdx + 1;
   }
   return summarize(trades, c, from, to, o, an);
 }
 
-function simTrade(c, atr, i, side, to, slAtr, rr, maxBars, cost) {
+function simTrade(c, atr, i, side, to, slAtr, rr, maxBars, cost, ex) {
   var e = i + 1; if (e >= to) return null;
   var entry = c[e].o, a = atr[i]; if (!(a > 0) || !(entry > 0)) return null;
-  var risk = Math.max(slAtr * a, entry * 0.0035), sl = side > 0 ? entry - risk : entry + risk, tp = side > 0 ? entry + rr * risk : entry - rr * risk;
+  var risk = Math.max(slAtr * a, entry * 0.0035), initSl = side > 0 ? entry - risk : entry + risk, sl = initSl;
+  var tp = side > 0 ? entry + rr * risk : entry - rr * risk;
+  var be1r = !!(ex && ex.be1r), trailAtr = (ex && isNum(ex.trailAtr) && ex.trailAtr > 0) ? ex.trailAtr : 0;
+  var tp1 = entry + side * risk, bePx = entry + side * entry * Math.max(0, cost || 0), movedBe = false, maxFav = entry;
   var exit = NaN, why = '', j, last = Math.min(to - 1, e + maxBars - 1);
   for (j = e; j <= last; j++) {
     var b = c[j];
     if (j > e) {
-      if (side > 0 ? b.o <= sl : b.o >= sl) { exit = b.o; why = 'stop'; break; }
+      if (side > 0 ? b.o <= sl : b.o >= sl) { exit = b.o; why = movedBe && sl !== initSl ? 'trail/BE' : 'stop'; break; }
       if (side > 0 ? b.o >= tp : b.o <= tp) { exit = b.o; why = 'objetivo'; break; }
     }
     var hitSl = side > 0 ? b.l <= sl : b.h >= sl, hitTp = side > 0 ? b.h >= tp : b.l <= tp;
-    if (hitSl) { exit = sl; why = 'stop'; break; }
+    if (hitSl) { exit = sl; why = movedBe && sl !== initSl ? 'trail/BE' : 'stop'; break; }
     if (hitTp) { exit = tp; why = 'objetivo'; break; }
+    // Causal: recién al cierre de la vela j se actualiza el stop para la vela j+1
+    if (side > 0 ? b.h > maxFav : b.l < maxFav) maxFav = side > 0 ? b.h : b.l;
+    if (be1r && !movedBe && (side > 0 ? b.h >= tp1 : b.l <= tp1)) {
+      movedBe = true;
+      if (side > 0 ? bePx > sl : bePx < sl) sl = bePx;
+    }
+    if (trailAtr > 0) {
+      var aj = isNum(atr[j]) && atr[j] > 0 ? atr[j] : a;
+      var trSl = maxFav - side * trailAtr * aj;
+      if (side > 0 ? trSl > sl : trSl < sl) { sl = trSl; movedBe = true; }
+    }
   }
   if (!why) { j = last; exit = c[j].c; why = 'tiempo'; }
   var gross = side * (exit - entry) / entry;
-  return { sigIdx: i, entryIdx: e, exitIdx: j, side: side, entry: entry, exit: exit, sl: sl, tp: tp, why: why, gross: gross, net: gross - cost, t: c[e].t, bars: j - e + 1 };
+  return { sigIdx: i, entryIdx: e, exitIdx: j, side: side, entry: entry, exit: exit, sl: initSl, tp: tp, why: why, gross: gross, net: gross - cost, t: c[e].t, bars: j - e + 1 };
 }
 
 function summarize(trades, c, from, to, o, an) {
@@ -1685,7 +1745,7 @@ function summarize(trades, c, from, to, o, an) {
       var acc = 0, cnt = 0, guard = 0;
       while (cnt < trades.length && guard < trades.length * 20) {
         guard++;
-        var tr = simTrade(c, an.atr, from + Math.floor(rng() * span), trades[cnt].side, to, slA, rrA, mbA, cA);
+        var tr = simTrade(c, an.atr, from + Math.floor(rng() * span), trades[cnt].side, to, slA, rrA, mbA, cA, { be1r: o.be1r, trailAtr: o.trailAtr });
         if (!tr) continue; acc += tr.net; cnt++;
       }
       if (cnt) { sum += acc / cnt; if (acc / cnt >= m0 - 1e-12) ge++; }
@@ -1711,7 +1771,7 @@ function walkForward(an, o) {
   var hs = isNum(hMode) && hMode > 0 ? [hMode] : HORIZONS;
   var ev = evidence(an, { hs: hs, cost: o.cost, K0: 150, Kfine: o.Kfine || 1200, end: split, seed: 'wf', minN: o.minN || 12 });
   var sel = selectAllowed(an, ev, hMode, o.allowShort);
-  var res = sel.names.length ? backtest(an, { from: split, to: an.n, cost: o.cost, slAtr: o.slAtr, rr: o.rr, maxBars: o.maxBars, minPts: 0, allowShort: o.allowShort, hardRegime: o.hardRegime, allow: sel.allow, allowMeta: sel.meta, K: o.K })
+  var res = sel.names.length ? backtest(an, { from: split, to: an.n, cost: o.cost, slAtr: o.slAtr, rr: o.rr, maxBars: o.maxBars, minPts: 0, allowShort: o.allowShort, hardRegime: o.hardRegime, be1r: o.be1r, trailAtr: o.trailAtr, allow: sel.allow, allowMeta: sel.meta, K: o.K })
                              : summarize([], an.c, split, an.n, o, an);
   res.split = split; res.rulesUsed = sel.names; res.trainFrom = an.start; res.hMode = hMode;
   return res;
@@ -1729,7 +1789,7 @@ function walkForwardRolling(an, o) {
     var ev = evidence(an, { hs: hs, cost: o.cost, K0: 120, Kfine: 1000, end: trEnd, seed: 'wfr' + f, minN: o.minN || 12 });
     var sel = selectAllowed(an, ev, hMode, o.allowShort);
     sel.names.forEach(function (nm) { usedSet[nm] = true; });
-    var bt = sel.names.length ? backtest(an, { from: trEnd, to: teEnd, cost: o.cost, slAtr: o.slAtr, rr: o.rr, maxBars: o.maxBars, minPts: 0, allowShort: o.allowShort, hardRegime: o.hardRegime, allow: sel.allow, allowMeta: sel.meta, K: 0 }) : { trades: [] };
+    var bt = sel.names.length ? backtest(an, { from: trEnd, to: teEnd, cost: o.cost, slAtr: o.slAtr, rr: o.rr, maxBars: o.maxBars, minPts: 0, allowShort: o.allowShort, hardRegime: o.hardRegime, be1r: o.be1r, trailAtr: o.trailAtr, allow: sel.allow, allowMeta: sel.meta, K: 0 }) : { trades: [] };
     allTrades = allTrades.concat(bt.trades);
     folds.push({ from: trEnd, to: teEnd, n: bt.trades.length, rules: sel.names.length });
   }
@@ -1800,7 +1860,13 @@ var SCEN = [
   { id: 'V61', name: 'Absorción pasiva en mínimo (v6)' },
   { id: 'V62', name: 'Distribución pasiva en máximo (v6)' },
   { id: 'V63', name: 'Sequía de volumen tras expansión alcista (v6)' },
-  { id: 'V64', name: 'Sequía de volumen tras expansión bajista (v6)' }
+  { id: 'V64', name: 'Sequía de volumen tras expansión bajista (v6)' },
+  { id: 'V65', name: 'Ruptura Donchian alcista 20v (v7)' },
+  { id: 'V66', name: 'Quiebre Donchian bajista 20v (v7)' },
+  { id: 'V67', name: 'Capitulación Z-Score extremo (v7)' },
+  { id: 'V68', name: 'Euforia Z-Score extremo (v7)' },
+  { id: 'V69', name: 'Expansión alcista NR7 (v7)' },
+  { id: 'V70', name: 'Expansión bajista NR7 (v7)' }
 ];
 function baseSeries(seed, n, tfMs, p0) {
   var rnd = mulberry32(seed), c = [], p = p0 || 100, t0 = Math.floor(Date.UTC(2026, 0, 5) / tfMs) * tfMs, sig = 0.004 * Math.sqrt(Math.max(1, tfMs / 36e5));
@@ -1921,6 +1987,36 @@ function scenario(code, tfId, seed, endT) {
       }
       o = c[L - 1].c; set(o, Math.min(midD - 0.15 * a, o + 0.2 * a), o - 0.2 * a, o - 0.08 * a, avgV * 0.45, 0.48); break;
     }
+    case 'V65': {
+      var hi20d = -Infinity; for (q = L - 20; q < L; q++) hi20d = Math.max(hi20d, c[q].h);
+      o = c[L - 1].c; var c65 = Math.max(hi20d + 0.35 * a, o + 0.8 * a);
+      set(o, c65 + 0.05 * a, o - 0.05 * a, c65, avgV * 2.1, 0.64); break;
+    }
+    case 'V66': {
+      var lo20d = Infinity; for (q = L - 20; q < L; q++) lo20d = Math.min(lo20d, c[q].l);
+      o = c[L - 1].c; var c66 = Math.min(lo20d - 0.35 * a, o - 0.8 * a);
+      set(o, o + 0.05 * a, c66 - 0.05 * a, c66, avgV * 2.1, 0.36); break;
+    }
+    case 'V67': {
+      o = c[L - 1].c; var c67 = o * 0.965, l67 = c67 - 0.025 * o;
+      set(o, o + 0.002 * o, l67, c67, avgV * 2.4, 0.48); break;
+    }
+    case 'V68': {
+      o = c[L - 1].c; var c68 = o * 1.035, h68 = c68 + 0.025 * o;
+      set(o, h68, o - 0.002 * o, c68, avgV * 2.4, 0.52); break;
+    }
+    case 'V69': {
+      var kPrev = c[L - 1], mP = kPrev.c;
+      kPrev.o = mP; kPrev.c = mP * 1.0001; kPrev.h = mP * 1.0003; kPrev.l = mP * 0.9997;
+      o = kPrev.c; var c69 = o + 0.9 * a;
+      set(o, c69 + 0.05 * a, o - 0.05 * a, c69, avgV * 1.8, 0.60); break;
+    }
+    case 'V70': {
+      var kPrev2 = c[L - 1], mP2 = kPrev2.c;
+      kPrev2.o = mP2; kPrev2.c = mP2 * 0.9999; kPrev2.h = mP2 * 1.0003; kPrev2.l = mP2 * 0.9997;
+      o = kPrev2.c; var c70 = o - 0.9 * a;
+      set(o, o + 0.05 * a, c70 - 0.05 * a, c70, avgV * 1.8, 0.40); break;
+    }
   }
   var nk = { t: k.t + tf.ms, T: k.t + 2 * tf.ms - 1, o: k.c, h: k.c * 1.001, l: k.c * 0.999, c: k.c * 1.0005, v: avgV * 0.2, q: avgV * 0.2 * k.c, n: 100, tb: avgV * 0.1, tq: avgV * 0.1 * k.c, open: true };
   if (isNum(endT)) {
@@ -1942,6 +2038,32 @@ function scenario(code, tfId, seed, endT) {
    · BH global (q=10 %) sobre todas las reglas×TF en entrenamiento (70 % inicial, con purga en el corte);
    · validación fuera de muestra pre-registrada en el 30 % más reciente: media > 0, t ≥ 1,28 y exceso vs azar > 0.
    ═══════════════════════════════════════════════════════════════════════════ */
+
+// ─── v7.0: Simulación Monte Carlo (bootstrap sobre retornos en R) ───
+function monteCarlo(rList, riskFrac, runs, seed) {
+  var xs = (rList || []).filter(isNum), n = xs.length;
+  if (n < 5) return null;
+  runs = runs || 1000; riskFrac = isNum(riskFrac) && riskFrac > 0 ? riskFrac : 0.01;
+  var rng = mulberry32(hashStr('mc|' + (seed || '') + '|' + n + '|' + runs));
+  var rets = new Array(runs), mdds = new Array(runs), dd20 = 0;
+  for (var k = 0; k < runs; k++) {
+    var eq = 1, pk = 1, mdd = 0;
+    for (var i = 0; i < n; i++) {
+      var r = xs[Math.floor(rng() * n)];
+      eq *= Math.max(0.01, 1 + r * riskFrac);
+      if (eq > pk) pk = eq;
+      var dd = eq / pk - 1;
+      if (dd < mdd) mdd = dd;
+    }
+    rets[k] = eq - 1; mdds[k] = mdd;
+    if (mdd <= -0.20) dd20++;
+  }
+  rets.sort(function (a, b) { return a - b; });
+  mdds.sort(function (a, b) { return a - b; });
+  var q = function (arr, p) { return arr[Math.max(0, Math.min(arr.length - 1, Math.floor(p * (arr.length - 1))))]; };
+  return { n: n, runs: runs, p5: q(rets, 0.05), p50: q(rets, 0.50), p95: q(rets, 0.95), mddP50: q(mdds, 0.50), mddP95: q(mdds, 0.05), probDd20: dd20 / runs };
+}
+
 var LAB_REV = { PROFILE: 1, ADAPTIVE: 1 };
 function htfRegimeSeries(ltf, htf) {
   var n = ltf.length, dir = new Int8Array(n), ready = new Uint8Array(n);
@@ -1967,9 +2089,9 @@ function tradeSeries(an, o) {
   var c = an.c, n = an.n, last = n - 1 - o.maxBars, s = an.start;
   var RL = new Float64Array(n).fill(NaN), RS = new Float64Array(n).fill(NaN), XL = new Int32Array(n), XS = new Int32Array(n), BL = new Int32Array(n), BS = new Int32Array(n), cR = 0, cN = 0;
   for (var i = s; i <= last; i++) {
-    var tl = simTrade(c, an.atr, i, 1, n, o.slAtr, o.rr, o.maxBars, o.cost);
+    var tl = simTrade(c, an.atr, i, 1, n, o.slAtr, o.rr, o.maxBars, o.cost, { be1r: o.be1r, trailAtr: o.trailAtr });
     if (tl) { var rp = Math.abs(tl.entry - tl.sl) / tl.entry; RL[i] = tl.net / rp; XL[i] = tl.exitIdx; BL[i] = tl.bars; cR += o.cost / rp; cN++; }
-    var ts = simTrade(c, an.atr, i, -1, n, o.slAtr, o.rr, o.maxBars, o.cost);
+    var ts = simTrade(c, an.atr, i, -1, n, o.slAtr, o.rr, o.maxBars, o.cost, { be1r: o.be1r, trailAtr: o.trailAtr });
     if (ts) { RS[i] = ts.net / (Math.abs(ts.entry - ts.sl) / ts.entry); XS[i] = ts.exitIdx; BS[i] = ts.bars; }
   }
   return { from: s, last: last, RL: RL, RS: RS, XL: XL, XS: XS, BL: BL, BS: BS, costR: cN ? cR / cN : NaN };
@@ -1988,7 +2110,7 @@ function labPool(o) {
 // Agrega un par×TF al universo. costSide = comisión + deslizamiento (incluye medio spread real) por lado.
 function labAdd(P, sym, tf, an, reg, costSide) {
   var T = P.tf[tf], o = P.o; if (!T || !an || an.n < an.start + o.maxBars + 30) return null;
-  var oo = { slAtr: o.slAtr, rr: o.rr, maxBars: o.maxBars, cost: 2 * costSide, hard: o.hard, strictLat: o.strictLat };
+  var oo = { slAtr: o.slAtr, rr: o.rr, maxBars: o.maxBars, be1r: !!o.be1r, trailAtr: o.trailAtr || 0, cost: 2 * costSide, hard: o.hard, strictLat: o.strictLat };
   var ts = tradeSeries(an, oo), c = an.c, i, per;
   // línea base de entrada al azar (mismo filtro de régimen, misma salida), por lado × grupo × período
   var base = {}; ['L1', 'L0', 'S1', 'S0'].forEach(function (k) { base[k] = [[0, 0], [0, 0], [0, 0]]; });
@@ -2110,7 +2232,7 @@ function labSignalsAt(book, tf, fired, regNow, o) {
   return hits.sort(function (a, b) { return (b.ev.LB || -9) - (a.ev.LB || -9); });
 }
 
-root.VSA = { v: 6, TF: TF, normSf: normSf, tSf: tSf, tInvSf: tInvSf, htfRegimeSeries: htfRegimeSeries, labAllowed: labAllowed, tradeSeries: tradeSeries, labPool: labPool, labAdd: labAdd, labFinalize: labFinalize, labSignalsAt: labSignalsAt, clusterStat: clusterStat, hurstRS: hurstRS, htfFor: htfFor, regimeOf: regimeOf, regimeAllows: regimeAllows, adaptiveBounds: adaptiveBounds, TFMAP: TFMAP, ANCHOR_TXT: ANCHOR_TXT, HORIZONS: HORIZONS, RULES: RULES, RMAP: RMAP, START: START, START_SHORT: START_SHORT, startFor: startFor, SCEN: SCEN, ruleItems: ruleItems,
+root.VSA = { v: 7, monteCarlo: monteCarlo, TF: TF, normSf: normSf, tSf: tSf, tInvSf: tInvSf, htfRegimeSeries: htfRegimeSeries, labAllowed: labAllowed, tradeSeries: tradeSeries, labPool: labPool, labAdd: labAdd, labFinalize: labFinalize, labSignalsAt: labSignalsAt, clusterStat: clusterStat, hurstRS: hurstRS, htfFor: htfFor, regimeOf: regimeOf, regimeAllows: regimeAllows, adaptiveBounds: adaptiveBounds, TFMAP: TFMAP, ANCHOR_TXT: ANCHOR_TXT, HORIZONS: HORIZONS, RULES: RULES, RMAP: RMAP, START: START, START_SHORT: START_SHORT, startFor: startFor, SCEN: SCEN, ruleItems: ruleItems,
   isNum: isNum, mean: mean, sdev: sdev, median: median, wilson: wilson, bhMark: bhMark, mulberry32: mulberry32, hashStr: hashStr,
   emaSeries: emaSeries, smaSeries: smaSeries, atrSeries: atrSeries, rsiSeries: rsiSeries, vwapSeries: vwapSeries, anchorKey: anchorKey, flowSeries: flowSeries,
   rvolSeries: rvolSeries, zPrev: zPrev, slopeNorm: slopeNorm, profileAt: profileAt,
@@ -2440,11 +2562,11 @@ var SCAN_TF_MAP = { all4: ['15m', '1h', '4h', '1d'], intra: ['15m', '1h'], swing
 var DEF = {
   v: 6.0, market: 'spot', hardRegime: true, regimeHtf: 'auto', strictLateral: false, sym: 'BTCUSDT', tf: '1h', thr: 'esc', rvol: 'seas', hist: 3000, h: 0, // h=0 -> Auto multi-horizonte
   feeSpot: 0.10, feeFut: 0.04, slip: 0.02, Kfine: 4000, fontScale: 1.15, refresh: 15, sound: true, sigAlert: 'BOTH', sigAlertOn: true, tgOn: false, tgToken: '', tgChat: '', ghOn: false, ghRepo: '', ghToken: '', ghBranch: 'main', theme: 'dark',
-  slAtr: 1.3, rr: 2, maxBars: 12,
+  slAtr: 1.3, rr: 2, maxBars: 12, be1r: true, trailAtr: 0,
   scanList: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'ADAUSDT', 'DOGEUSDT', 'AVAXUSDT', 'LINKUSDT', 'SUIUSDT', 'NEARUSDT', 'ARBUSDT', 'DOTUSDT', 'INJUSDT', 'TONUSDT', 'OPUSDT'],
   scanTf: 'all4', scanFilter: 'ALL',
   custom: [], favs: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT'], risk: { cap: 1000, pct: 1, lev: 1 },
-  layers: { emas: true, vwap: true, levels: true, prof: true, sig: true }, rfilter: 'ACTIVE', btMode: 'C',
+  layers: { emas: true, vwap: true, levels: true, prof: true, sig: true, plan: true }, rfilter: 'ACTIVE', btMode: 'C',
   // v6: Laboratorio de Ventaja, filtro de validación y vigilancia del universo
   lab: { n: 30, tf: 'macro', hist: 3000, exit: 'plan', minQv: 5, maxSpread: 15, excl: 'PAXG,XAUT', lfilter: 'TOP' },
   gate: 'auto', vigil: false, paperCand: true
@@ -2462,6 +2584,7 @@ function validate(o) {
   o.fontScale = Math.round(clampNum(o.fontScale, 0.85, 1.50, 1.15) * 20) / 20;
   if ([0, 15, 30, 60].indexOf(+o.refresh) < 0) o.refresh = 15; o.refresh = +o.refresh;
   o.slAtr = clampNum(o.slAtr, 0.3, 5, 1.3); o.rr = clampNum(o.rr, 0.5, 6, 2); o.maxBars = Math.round(clampNum(o.maxBars, 2, 100, 12));
+  o.be1r = o.be1r !== false; o.trailAtr = clampNum(o.trailAtr, 0, 5, 0);
   o.sound = !!o.sound;
   o.sigAlertOn = o.sigAlertOn !== false;
   if (['BOTH', 'BUY', 'SELL'].indexOf(o.sigAlert) < 0) o.sigAlert = 'BOTH';
@@ -2485,18 +2608,18 @@ function validate(o) {
   if (!o.risk || typeof o.risk !== 'object') o.risk = JSON.parse(JSON.stringify(DEF.risk));
   o.risk = { cap: clampNum(o.risk.cap, 1, 1e9, 1000), pct: clampNum(o.risk.pct, 0.01, 100, 1), lev: clampNum(o.risk.lev, 1, 20, 1) };
   if (!o.layers || typeof o.layers !== 'object') o.layers = JSON.parse(JSON.stringify(DEF.layers));
-  ['emas', 'vwap', 'levels', 'prof', 'sig'].forEach(function (k) { if (typeof o.layers[k] !== 'boolean') o.layers[k] = true; });
+  ['emas', 'vwap', 'levels', 'prof', 'sig', 'plan'].forEach(function (k) { if (typeof o.layers[k] !== 'boolean') o.layers[k] = true; });
   o.hardRegime = o.hardRegime !== false;
   if (['auto', '4h', '1d', '1w'].indexOf(o.regimeHtf) < 0) o.regimeHtf = 'auto';
   o.strictLateral = !!o.strictLateral;
-  if (['ACTIVE', 'SUPPORT', 'PROM', 'ALL', 'BUY', 'SELL', 'SQUEEZE', 'ADAPTIVE', 'REGIME', 'CONFLUENCE', 'LOWVOL', 'HIGHVOL', 'WYCKOFF', 'PROFILE', 'FLOW'].indexOf(o.rfilter) < 0) o.rfilter = 'ACTIVE';
+  if (['ACTIVE', 'SUPPORT', 'PROM', 'ALL', 'BUY', 'SELL', 'BREAKOUT', 'SQUEEZE', 'ADAPTIVE', 'REGIME', 'CONFLUENCE', 'LOWVOL', 'HIGHVOL', 'WYCKOFF', 'PROFILE', 'FLOW'].indexOf(o.rfilter) < 0) o.rfilter = 'ACTIVE';
   if (['A', 'B', 'C'].indexOf(o.btMode) < 0) o.btMode = 'C';
   if (!o.lab || typeof o.lab !== 'object') o.lab = JSON.parse(JSON.stringify(DEF.lab));
   o.lab = {
     n: [15, 30, 50].indexOf(+o.lab.n) >= 0 ? +o.lab.n : 30,
     tf: SCAN_TF_MAP[o.lab.tf] ? o.lab.tf : 'macro',
     hist: [1500, 3000].indexOf(+o.lab.hist) >= 0 ? +o.lab.hist : 3000,
-    exit: ['plan', 'swing', 'trend'].indexOf(o.lab.exit) >= 0 ? o.lab.exit : 'plan',
+    exit: ['plan', 'swing', 'trend', 'trail'].indexOf(o.lab.exit) >= 0 ? o.lab.exit : 'plan',
     minQv: clampNum(o.lab.minQv, 0.5, 1000, 5), maxSpread: clampNum(o.lab.maxSpread, 1, 200, 15),
     excl: typeof o.lab.excl === 'string' ? o.lab.excl.toUpperCase().replace(/[^A-Z0-9,]/g, '').slice(0, 300) : 'PAXG,XAUT',
     lfilter: ['TOP', 'VAL', 'CAND', 'REF', 'NEG', 'ALL'].indexOf(o.lab.lfilter) >= 0 ? o.lab.lfilter : 'TOP'
@@ -2948,6 +3071,7 @@ function reconcileOne(pos, depth) {
       if (L ? k.o <= pos.sl : k.o >= pos.sl) { closePaperPos(pos, 'STOP', k.o, k.t); done = true; break; }          // gap a través del stop
       if (L ? k.o >= pos.tp : k.o <= pos.tp) { closePaperPos(pos, 'OBJETIVO', k.o, k.t); done = true; break; }
       var hitSl = L ? k.l <= pos.sl : k.h >= pos.sl, hitTp = L ? k.h >= pos.tp : k.l <= pos.tp;
+      if (!hitSl && !hitTp && S.set.be1r && !pos.movedBe) { var tp1p = pos.entry + pos.side * pos.risk; if (L ? k.h >= tp1p : k.l <= tp1p) { pos.movedBe = true; pos.sl = pos.entry + pos.side * pos.entry * 2 * (pos.costSide || 0); } }
       if (hitSl) { closePaperPos(pos, 'STOP', pos.sl, k.t); done = true; break; }                                        // ambos en la misma vela: cuenta el stop
       if (hitTp) { closePaperPos(pos, 'OBJETIVO', pos.tp, k.t); done = true; break; }
       if (closed && pos.maxT && k.T + 1 >= pos.maxT) { closePaperPos(pos, 'TIEMPO', k.c, k.T + 1); done = true; break; }
@@ -3030,7 +3154,20 @@ function renderPaper() {
         return '<tr><td><b>' + esc(g.k) + '</b></td><td class="r">' + g.n + '</td><td class="r">' + fshare(g.w / g.n) + '</td><td class="r">' + (isNum(er) ? fsig(er, 2) + 'R' : '—') + (isNum(tg) ? '<div class="card-sub">t ' + fnum(tg, 1) + '</div>' : '') + '</td><td class="r ' + (g.usd >= 0 ? 'c-bull' : 'c-bear') + '">' + (g.usd >= 0 ? '+' : '−') + fnum(Math.abs(g.usd), 2) + '</td><td class="r">' + st + '</td></tr>';
       }).join('') + '</tbody></table>';
   };
-  var auditHtml = '<div class="audit-box"><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap">' +
+
+  // v7.0: Exposición neta direccional y Simulación Monte Carlo (1.000 trayectorias)
+  var longN = 0, shortN = 0, longUsd = 0, shortUsd = 0;
+  P.open.forEach(function (p) { if (p.side > 0) { longN++; longUsd += p.notional || 0; } else { shortN++; shortUsd += p.notional || 0; } });
+  var expAlert = (longN >= 3 && shortN === 0) || (shortN >= 3 && longN === 0)
+    ? '<div class="warnbox" style="margin-top:8px"><b>Concentración direccional alta:</b> tenés ' + Math.max(longN, shortN) + ' posiciones en la misma dirección (' + fnum(Math.max(longUsd, shortUsd), 0) + ' USDT). En cripto la correlación con BTC hace que esto actúe como una sola apuesta apalancada.</div>' : '';
+  var mcP = V.monteCarlo(rArr, P.riskPct / 100, 1000, 'paper');
+  var mcPaperHtml = mcP ? '<div class="mc-box"><div class="kick">🎲 Monte Carlo Paper (' + mcP.runs + ' trayectorias · ' + mcP.n + ' trades)</div><div class="mc-grid">' +
+    tile('Retorno P50', fpct(mcP.p50), 'mediana esperada', mcP.p50 >= 0 ? 'c-bull' : 'c-bear') +
+    tile('Escenario P5', fpct(mcP.p5), 'peor 5 % realista', mcP.p5 >= 0 ? 'c-bull' : 'c-bear') +
+    tile('Máx. DD P95', fpct(mcP.mddP95), 'peor caída 95 %', 'c-bear') +
+    tile('Prob. DD > 20 %', fshare(mcP.probDd20), 'riesgo de caída fuerte', mcP.probDd20 <= 0.05 ? 'c-bull' : 'c-bear') +
+    '</div></div>' : '';
+  var auditHtml = expAlert + mcPaperHtml + '<div class="audit-box"><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap">' +
     '<span class="kick">📊 Auditoría en vivo (pre-capital real)</span>' +
     '<span class="chip ' + (passAll ? 'solid-bull' : 'warn') + '">' + (passAll ? 'LISTA PARA ESCALAR' : 'EN INCUBACIÓN (' + rArr.length + '/30 trades)') + '</span></div>' +
     '<div class="audit-checks">' + chk(cN, 'N ≥ 30 (' + rArr.length + ')') + chk(cExp, 'Exp > 0 al 95 % (t ' + (isNum(tR) ? fnum(tR, 2) : '—') + ')') + chk(cPf, 'PF ≥ 1,20') + chk(cDd, 'MDD flotante < 15 %') + '</div>' +
@@ -3088,11 +3225,11 @@ function openPaperConfig() {
 // v6.0 · LABORATORIO DE VENTAJA Y OPORTUNIDADES VALIDADAS (interfaz)
 // ═══════════════════════════════════════════════════════════════════════════
 var BKEY = 'vsa_edge_book_v6', RKEY = 'vsa_lab_runs_v6';
-var LAB_EXIT = { swing: { slAtr: 2, rr: 1.5, maxBars: 24 }, trend: { slAtr: 1, rr: 3, maxBars: 24 } };
+var LAB_EXIT = { swing: { slAtr: 2, rr: 1.5, maxBars: 24, be1r: false, trailAtr: 0 }, trend: { slAtr: 1, rr: 3, maxBars: 24, be1r: true, trailAtr: 0 }, trail: { slAtr: 1.5, rr: 4, maxBars: 36, be1r: true, trailAtr: 2.0 } };
 var LAB_STABLE_RE = /^(USDC|FDUSD|TUSD|BUSD|DAI|USDP|USDE|USD1|RLUSD|XUSD|EUR|AEUR|EURI|BFUSD|U|RWUSD|PYUSD|USDS)$/;
 function yieldUI() { return new Promise(function (r) { setTimeout(r, 0); }); }
-function labExit() { var e = LAB_EXIT[S.set.lab.exit]; return e ? { slAtr: e.slAtr, rr: e.rr, maxBars: e.maxBars, name: S.set.lab.exit } : { slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars, name: 'plan' }; }
-function labExitLabel(o) { return 'stop ' + fnum(o.slAtr, 1) + ' ATR · obj ' + fnum(o.rr, 1) + 'R · ' + o.maxBars + ' velas'; }
+function labExit() { var e = LAB_EXIT[S.set.lab.exit]; return e ? { slAtr: e.slAtr, rr: e.rr, maxBars: e.maxBars, be1r: !!e.be1r, trailAtr: e.trailAtr || 0, name: S.set.lab.exit } : { slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars, be1r: !!S.set.be1r, trailAtr: S.set.trailAtr || 0, name: 'plan' }; }
+function labExitLabel(o) { return 'stop ' + fnum(o.slAtr, 1) + ' ATR · obj ' + fnum(o.rr, 1) + 'R · ' + o.maxBars + 'v' + (o.be1r ? ' · BE 1R' : '') + (o.trailAtr > 0 ? ' · Trail ' + fnum(o.trailAtr, 1) + ' ATR' : ''); }
 function labCfg() {
   var L = S.set.lab, ex = labExit(), tfs = (SCAN_TF_MAP[L.tf] || ['4h', '1d']).slice().sort(function (a, b) { return V.TFMAP[a].ms - V.TFMAP[b].ms; });
   var cfg = { market: mk(), tfs: tfs, hist: L.hist, n: L.n, minQv: L.minQv, maxSpread: L.maxSpread, excl: L.excl, exit: ex, hard: !!S.set.hardRegime, strictLat: !!S.set.strictLateral,
@@ -3212,7 +3349,7 @@ function labSymbol(P, cand, cfg, m, needHtf, states, g) {
 function compactBook(full, cfg, k) {
   var st = function (x) { return x ? { n: x.n, mean: x.mean, se: x.se, t: x.t, G: x.G, df: x.df } : null; };
   return { v: 6, at: full.at, market: cfg.market, cfg: cfg, k: k, alphaOos: full.alphaOos,
-    o: { tfs: cfg.tfs, hist: cfg.hist, slAtr: cfg.exit.slAtr, rr: cfg.exit.rr, maxBars: cfg.exit.maxBars, hard: cfg.hard, strictLat: cfg.strictLat, regimeHtf: cfg.regimeHtf },
+    o: { tfs: cfg.tfs, hist: cfg.hist, slAtr: cfg.exit.slAtr, rr: cfg.exit.rr, maxBars: cfg.exit.maxBars, be1r: !!cfg.exit.be1r, trailAtr: cfg.exit.trailAtr || 0, hard: cfg.hard, strictLat: cfg.strictLat, regimeHtf: cfg.regimeHtf },
     nTests: full.nTests, nBh: full.nBh, nVal: full.nVal, syms: full.syms, tfInfo: full.tfInfo,
     results: full.results.map(function (r) {
       return { tf: r.tf, id: r.id, code: r.code, name: r.name, bias: r.bias, cat: r.cat, label: r.label, n: r.n, tr: st(r.tr), te: st(r.te),
@@ -3231,7 +3368,7 @@ function runLab() {
     if (g !== S.lab.gen) return null;
     if (!u.cands.length) throw D.NetError('bad', 'ningún par cumple los filtros de liquidez y spread');
     S.lab.why = u.why; S.lab.stage = 'Descargando y analizando los pares más líquidos (' + cfg.tfs.join(' + ').toUpperCase() + ')…'; render('opps');
-    P = V.labPool({ tfs: cfg.tfs, now: D.now(), hist: cfg.hist, slAtr: cfg.exit.slAtr, rr: cfg.exit.rr, maxBars: cfg.exit.maxBars, hard: cfg.hard, strictLat: cfg.strictLat, oosAlpha: 0.10 / k });
+    P = V.labPool({ tfs: cfg.tfs, now: D.now(), hist: cfg.hist, slAtr: cfg.exit.slAtr, rr: cfg.exit.rr, maxBars: cfg.exit.maxBars, be1r: cfg.exit.be1r, trailAtr: cfg.exit.trailAtr, hard: cfg.hard, strictLat: cfg.strictLat, oosAlpha: 0.10 / k });
     return labRunCands(u.cands, cfg.n, 3, function (cd) { return labSymbol(P, cd, cfg, m, needHtf, states, g); });
   }).then(function (acc) {
     if (g !== S.lab.gen || !P) return;
@@ -3375,7 +3512,7 @@ function renderOpps() {
           '<div class="scan-row-acts"><button type="button" class="pbtn sm" data-opp="paper" data-key="' + esc(o.key) + '">⚡ Paper</button><button type="button" class="pbtn sm" data-opp="open" data-key="' + esc(o.key) + '">Abrir en Radar</button><button type="button" class="pbtn sm" data-opp="risk" data-key="' + esc(o.key) + '">Calcular tamaño</button></div>') + '</div>';
   };
   var sec = function (t, arr, empty) { return '<div class="card-head" style="border-top:1px solid var(--line);padding:8px 12px"><span class="kick">' + t + ' (' + arr.length + ')</span></div>' + (arr.length ? arr.map(row).join('') : '<div class="empty" style="padding:12px">' + empty + '</div>'); };
-  el.innerHTML = head + info +
+  el.innerHTML = head + marketBreadthHtml() + info +
     sec('✅ Validadas fuera de muestra · operables', val, b.nVal ? 'Ninguna ventaja validada disparó en la última vela cerrada. Con la vigilancia encendida, te avisa apenas dispare una.' : 'El laboratorio no encontró ventajas que sobrevivan fuera de muestra con esta configuración. No operar también protege el capital.') +
     (exits.length ? sec('🚪 Salidas validadas (Spot)', exits, '') : '') +
     sec('🧪 Candidatas · solo Paper (validación hacia adelante)', cand, 'Sin candidatas activas en la última vela cerrada.');
@@ -3395,7 +3532,7 @@ function renderLab() {
   html += '<div class="pad" style="padding-bottom:0">' +
     '<div class="set-g" style="padding-top:0"><div class="t">Universo</div><div class="d">Pares USDT más líquidos de Binance ' + esc(mkLabel()) + ', sin estables, oro tokenizado ni listados con menos de 1 año.</div><div class="opts">' + o('n', 15, '15 pares') + o('n', 30, '30 pares') + o('n', 50, '50 pares') + '</div></div>' +
     '<div class="set-g"><div class="t">Temporalidades</div><div class="d">Medido en 26 pares líquidos de Spot (nov 2026): los costos se comen ≈0,38 R por operación en 15m, 0,21 R en 1H, 0,09 R en 4H y 0,03 R en 1D.</div><div class="opts">' + tfOpts.map(function (x) { return o('tf', x[0], x[1]); }).join('') + '</div></div>' +
-    '<div class="set-g"><div class="t">Salida a validar (la misma que se opera)</div><div class="d">Plan actual: ' + esc(labExitLabel({ slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars })) + '. Cada salida distinta cuenta como otra configuración.</div><div class="opts">' + o('exit', 'plan', 'Plan actual') + o('exit', 'swing', 'Swing · 2 ATR · 1,5R · 24v') + o('exit', 'trend', 'Tendencia · 1 ATR · 3R · 24v') + '</div></div>' +
+    '<div class="set-g"><div class="t">Salida a validar (la misma que se opera)</div><div class="d">Plan actual: ' + esc(labExitLabel({ slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars })) + '. Cada salida distinta cuenta como otra configuración.</div><div class="opts">' + o('exit', 'plan', 'Plan actual') + o('exit', 'swing', 'Swing · 2 ATR · 1,5R · 24v') + o('exit', 'trend', 'Tendencia · 1 ATR · 3R · BE') + o('exit', 'trail', 'Trailing · 1,5 ATR · 4R · Trail 2') + '</div></div>' +
     '<div class="set-g"><div class="t">Historia y filtros</div><div class="opts" style="margin-bottom:7px">' + o('hist', 1500, '1.500 velas (rápido)') + o('hist', 3000, '3.000 velas') + '</div>' +
     '<div class="set-in"><div><label class="lbl" for="labQv">Vol. mín. 24 h (M USDT)</label><input id="labQv" type="text" inputmode="decimal" value="' + esc(String(L.minQv)) + '"></div><div><label class="lbl" for="labSp">Spread máx. (bps)</label><input id="labSp" type="text" inputmode="decimal" value="' + esc(String(L.maxSpread)) + '"></div><div><label class="lbl" for="labEx">Excluir (bases)</label><input id="labEx" type="text" autocapitalize="characters" value="' + esc(L.excl) + '"></div></div></div>' +
     '<div class="set-g"><div class="t">Qué filtra el libro</div><div class="opts">' + og('gate', 'auto', 'Alertas: libro si está vigente') + og('gate', 'book', 'Solo libro') + og('gate', 'pair', 'Evidencia por par (clásico)') + '</div>' +
@@ -3899,6 +4036,21 @@ function renderMicro() {
     tile('Long/Short Global', mc && isNum(mc.lsRatio) ? fnum(mc.lsRatio, 2) : 'N/D', mc && isNum(mc.longAcc) ? fshare(mc.longAcc) + ' cuentas Long' : '—') +
     '</div>' + obHtml + sqBoxHtml;
 }
+
+// ─── v7.0: Termómetro de Amplitud Global del Mercado (Risk-On / Risk-Off) ───
+function marketBreadthHtml() {
+  var list = (S.catalog[mk()] || []).filter(function (x) { return x.qv >= 5e6 && isNum(x.chg); });
+  if (list.length < 10) return '';
+  var up = list.filter(function (x) { return x.chg > 0; }).length, pctUp = up / list.length;
+  var med = V.median(list.map(function (x) { return x.chg; }));
+  var hot = list.filter(function (x) { return x.chg >= 0.05; }).length, cold = list.filter(function (x) { return x.chg <= -0.05; }).length;
+  var mode = pctUp >= 0.62 && med > 0.01 ? ['RISK-ON', 'bull'] : (pctUp <= 0.38 && med < -0.01 ? ['RISK-OFF', 'bear'] : ['NEUTRAL', 'mut']);
+  return '<div class="breadth-bar"><span class="chip ' + mode[1] + '">' + mode[0] + '</span>' +
+    '<span>Amplitud (' + list.length + ' criptos): <b>' + fshare(pctUp) + '</b> subiendo</span>' +
+    '<span>Mediana 24h: <b class="' + (med >= 0 ? 'c-bull' : 'c-bear') + '">' + fpct(med) + '</b></span>' +
+    '<span>≥+5%: <b class="c-bull">' + hot + '</b> · ≤−5%: <b class="c-bear">' + cold + '</b></span></div>';
+}
+
 function renderRadar() { renderVerdict(); renderMicro(); renderForming(); renderPlan(); renderMtf(); }
 function renderVerdict() {
   var el = $('#cVerdict'), vd = currentVerdict();
@@ -3959,7 +4111,7 @@ function renderVerdict() {
     '<div class="qp-pill"><div class="k">Triggers Adaptativos (' + T.label + ')</div><div class="val c-cyan">' + (xs ? 'RSI ' + fnum(xs.rsiLow, 0) + '/' + fnum(xs.rsiHigh, 0) : '—') + '</div><div class="sub">' + (xs ? 'Comp. ' + fnum(xs.volComp, 2) + 'x · H=' + (isNum(hurstV) ? fnum(hurstV, 2) : '—') + ' (' + hurstLbl + ')' : '—') + '</div></div>' +
     '<div class="qp-pill" data-go="paper" style="cursor:pointer"><div class="k">Paper Trading (aislado)</div><div class="val ' + (pPnl >= 0 ? 'c-bull' : 'c-bear') + '">' + (pPnl >= 0 ? '+' : '−') + fnum(Math.abs(pPnl), 2) + ' USDT</div><div class="sub">' + S.paper.open.length + ' abiertas · ' + (S.paper.autoExec ? 'Auto ON' : 'Manual') + '</div></div>' +
     '</div>';
-  el.innerHTML = '<div class="verdict ' + cls + '"><div class="kick">Veredicto · ' + esc(mkLabel()) + ' · ' + esc(hLabel(S.set.h)) + ' · Filtro HTF ' + (S.set.hardRegime ? 'ACTIVO' : 'OFF') + ' · ' + (useBook ? 'libro del universo ✓' : 'evidencia por par') + '</div>' +
+  el.innerHTML = marketBreadthHtml() + '<div class="verdict ' + cls + '"><div class="kick">Veredicto · ' + esc(mkLabel()) + ' · ' + esc(hLabel(S.set.h)) + ' · Filtro HTF ' + (S.set.hardRegime ? 'ACTIVO' : 'OFF') + ' · ' + (useBook ? 'libro del universo ✓' : 'evidencia por par') + '</div>' +
     '<div class="vhead ' + cls + '">' + esc(head) + '</div><div class="vsub">' + esc(bookSub + sub) + '</div>' + bookHtml + qpStrip + (list ? '<div class="vlist">' + list + '</div>' : '') + pend + desc + '</div>' +
     '<div class="note">Tocá cualquier tarjeta del veredicto para pasar a esa temporalidad. En <b>Futuros USDT-M</b> las ventas con respaldo arman plan en corto con comisiones de futuros (' + fnum(S.set.feeFut, 2) + ' % por lado); en <b>Spot</b> sirven para no comprar o tomar ganancias.</div>';
 }
@@ -4199,6 +4351,21 @@ function drawChart() {
       else { var Yd = yOf(c[i].h) - 8; ctx.fillStyle = C.warn; ctx.beginPath(); ctx.moveTo(X2, Yd - 3); ctx.lineTo(X2 + 3, Yd); ctx.lineTo(X2, Yd + 3); ctx.lineTo(X2 - 3, Yd); ctx.closePath(); ctx.fill(); }
     }
   }
+  if (lay.plan && !S.demo) {
+    var pl = planFor(tf);
+    if (pl && !pl.none && !pl.sellSpot && isNum(pl.ref) && isNum(pl.sl) && isNum(pl.tp)) {
+      var yE = clamp(yOf(pl.ref), yP0, yP0 + hP), yS = clamp(yOf(pl.sl), yP0, yP0 + hP), yT = clamp(yOf(pl.tp), yP0, yP0 + hP);
+      ctx.globalAlpha = 0.09;
+      ctx.fillStyle = C.bear; ctx.fillRect(x0, Math.min(yE, yS), x1 - x0, Math.abs(yS - yE));
+      ctx.fillStyle = C.bull; ctx.fillRect(x0, Math.min(yE, yT), x1 - x0, Math.abs(yT - yE));
+      ctx.globalAlpha = 1;
+      [[pl.ref, C.acc, [4, 3], 'ENT ' + fpx(pl.ref)], [pl.sl, C.bear2, [5, 3], 'SL ' + fpx(pl.sl)], [pl.tp1, C.cyan, [2, 3], '1R/BE'], [pl.tp, C.bull2, [5, 3], 'OBJ ' + fpx(pl.tp)]].forEach(function (L2) {
+        var Yp = Math.round(yOf(L2[0])) + 0.5; if (Yp < yP0 || Yp > yP0 + hP) return;
+        ctx.strokeStyle = L2[1]; ctx.lineWidth = 1.2; ctx.setLineDash(L2[2]); ctx.beginPath(); ctx.moveTo(x0, Yp); ctx.lineTo(x1, Yp); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = L2[1]; ctx.textAlign = 'left'; ctx.fillText(L2[3], x0 + 4, Yp - 7);
+      });
+    }
+  }
   var lastK = K(end - 1), Yl = yOf(lastK.c);
   if (Yl >= yP0 && Yl <= yP0 + hP) { ctx.fillStyle = lastK.c >= lastK.o ? C.bull : C.bear; ctx.fillRect(x1 + 1, Yl - 8, axisW - 2, 16); ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; ctx.fillText(fpx(lastK.c), x1 + 5, Yl); }
   var mv = 0; for (i = start; i < end; i++) if (K(i).v > mv) mv = K(i).v;
@@ -4228,9 +4395,9 @@ function drawChart() {
 // ─── pestaña 3: 52 reglas y pruebas ───
 function getBt(tf) {
   var an = S.an[tf]; if (!an || S.demo) return null;
-  var key = an.key + '|' + costRT().toFixed(6) + '|' + S.set.slAtr + '|' + S.set.rr + '|' + S.set.maxBars + '|' + S.set.h + '|' + allowShort() + '|' + S.set.hardRegime;
+  var key = an.key + '|' + costRT().toFixed(6) + '|' + S.set.slAtr + '|' + S.set.rr + '|' + S.set.maxBars + '|' + S.set.h + '|' + allowShort() + '|' + S.set.hardRegime + '|' + S.set.be1r + '|' + S.set.trailAtr;
   var b = S.bt[tf]; if (b && b.key === key) return b;
-  var opt = { cost: costRT(), slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars, allowShort: allowShort(), hardRegime: S.set.hardRegime, K: 200 };
+  var opt = { cost: costRT(), slAtr: S.set.slAtr, rr: S.set.rr, maxBars: S.set.maxBars, be1r: S.set.be1r, trailAtr: S.set.trailAtr, allowShort: allowShort(), hardRegime: S.set.hardRegime, K: 200 };
   var A = V.backtest(an, Object.assign({ minPts: 1.65 }, opt));
   var B = V.walkForward(an, Object.assign({ hMode: S.set.h, split: 0.6, Kfine: Math.min(1500, S.set.Kfine) }, opt));
   var C = V.walkForwardRolling(an, Object.assign({ hMode: S.set.h }, opt));
@@ -4265,7 +4432,17 @@ function renderBt() {
       tile('Exposición / t', fshare(R.exposure), 't de la media/op ' + (isNum(R.sharpe) ? fnum(R.sharpe, 2) : '—') + (S.set.hardRegime ? ' · Filtro HTF' : '')) +
       tile('Comprar y mantener', fpct(R.buyHold), 'mismo tramo', R.buyHold >= 0 ? 'c-bull' : 'c-bear') +
       tile('Contra azar', isNum(R.pRandom) ? 'p ' + fnum(R.pRandom, 3) : '—', isNum(R.randomMean) ? 'azar: ' + fpct(R.randomMean) + '/op' : 'pocas operaciones') +
-      '</div><div class="eq-wrap"><canvas id="eq" aria-label="Curva de capital"></canvas></div>' +
+      '</div>' + (function () {
+        var rts = R.trades.map(function (t) { var rp = Math.abs(t.entry - t.sl) / t.entry; return rp > 0 ? t.net / rp : NaN; });
+        var mc = V.monteCarlo(rts, (S.set.risk.pct || 1) / 100, 1000, S.sym + tf + mode);
+        if (!mc) return '';
+        return '<div class="mc-box"><div class="kick">🎲 Monte Carlo Walk-Forward (' + mc.runs + ' simulaciones al ' + fnum(S.set.risk.pct || 1, 1) + ' % riesgo/op)</div><div class="mc-grid">' +
+          tile('Mediana P50', fpct(mc.p50), 'P95: ' + fpct(mc.p95), mc.p50 >= 0 ? 'c-bull' : 'c-bear') +
+          tile('Peor 5 % (P5)', fpct(mc.p5), 'cola bajista', mc.p5 >= 0 ? 'c-bull' : 'c-bear') +
+          tile('MDD P95', fpct(mc.mddP95), 'mediana ' + fpct(mc.mddP50), 'c-bear') +
+          tile('Prob. DD > 20 %', fshare(mc.probDd20), mc.probDd20 <= 0.05 ? 'riesgo controlado' : 'bajar riesgo %', mc.probDd20 <= 0.05 ? 'c-bull' : 'c-bear') +
+          '</div></div>';
+      })() + '<div class="eq-wrap"><canvas id="eq" aria-label="Curva de capital"></canvas></div>' +
       '<div class="cv-legend"><span><i style="background:var(--acc2)"></i>estrategia (neto de costos)</span><span><i style="background:var(--tx3)"></i>comprar y mantener</span></div>' +
       R.trades.slice(-15).reverse().map(function (t) {
         return '<div class="trow"><span class="a">' + ftime(t.t, tf) + ' · ' + (t.side > 0 ? 'compra' : 'corto') + ' · <span class="code">' + esc(t.rule) + '</span> ' + esc(t.ruleName) + '</span><span class="b ' + (t.net >= 0 ? 'c-bull' : 'c-bear') + '">' + fpct(t.net) + '</span>' +
@@ -4808,26 +4985,27 @@ function renderSheet() {
     g('Volumen relativo (RVOL)', 'Franja horaria compara contra la misma hora de los 20 días previos (de 15m a 4H).', '<div class="opts">' + opt('rvol', 'seas', 'Franja horaria') + opt('rvol', 'sma', 'Media 20 velas') + '</div>') +
     g('Historia por temporalidad', 'Más velas = mayor potencia estadística para detectar reglas raras de alta precisión.', '<div class="opts">' + [500, 1000, 2000, 3000].map(function (v) { return opt('hist', v, fnum(v, 0)); }).join('') + '</div>') +
     g('Costos por lado (%)', 'Ida y vuelta actual (' + esc(mkLabel()) + '): <b>' + rt + ' %</b>.', '<div class="opts" style="margin-bottom:7px"><button type="button" data-fee="spot:0.1">Spot 0,10 %</button><button type="button" data-fee="spot:0.075">Spot BNB 0,075 %</button><button type="button" data-fee="fut:0.04">Futuros Taker 0,04 %</button><button type="button" data-fee="fut:0.02">Futuros Maker 0,02 %</button></div><div class="set-in">' + nin('feeSpot', 'Comisión Spot') + nin('feeFut', 'Comisión Futuros') + nin('slip', 'Deslizamiento') + '</div>') +
-    g('Plan y backtest', 'Parámetros compartidos por el plan operativo, el backtest walk-forward y el diario.', '<div class="set-in">' + nin('slAtr', 'Stop (ATR)') + nin('rr', 'Objetivo (R)') + nin('maxBars', 'Velas mín. venc.') + '</div>') +
+    g('Plan, salidas y backtest', 'Parámetros compartidos por el plan operativo, el backtest walk-forward y el Paper Trading. Breakeven en 1R y Trailing Stop ATR protegen ganancias en tendencias.', '<div class="set-in">' + nin('slAtr', 'Stop (ATR)') + nin('rr', 'Objetivo (R)') + nin('maxBars', 'Velas mín. venc.') + '</div><div class="opts" style="margin-top:7px">' + opt('be1r', 'true', '✓ Breakeven en 1R') + opt('be1r', 'false', 'Sin BE 1R') + opt('trailAtr', 0, 'Sin Trailing') + opt('trailAtr', 1.5, 'Trail 1,5 ATR') + opt('trailAtr', 2, 'Trail 2,0 ATR') + '</div>') +
     g('Permutaciones finas (Etapa 2)', 'Resolución exacta de p-valores para candidatas que pasan la etapa 1 (p ≤ 0,08).', '<div class="opts">' + [1000, 2000, 4000].map(function (v) { return opt('Kfine', v, fnum(v, 0)); }).join('') + '</div>') +
     g('Actualización', 'Frecuencia de refresco de la vela en formación y ticker.', '<div class="opts">' + opt('refresh', 15, '15 s') + opt('refresh', 30, '30 s') + opt('refresh', 60, '60 s') + opt('refresh', 0, 'Manual') + '</div>') +
     g('Tamaño de texto y números', 'Ajustá la escala general de la interfaz para lectura cómoda en celular (' + Math.round(s.fontScale * 100) + ' %). También podés usar A− / A+ arriba.', '<div class="opts"><button type="button" data-fstep="-0.10">A− Reducir</button>' + opt('fontScale', 1, '100 %') + opt('fontScale', 1.15, '115 % (base)') + opt('fontScale', 1.3, '130 %') + '<button type="button" data-fstep="0.10">A+ Agrandar</button></div>') +
     g('Tema', '', '<div class="opts">' + opt('theme', 'dark', 'Oscuro') + opt('theme', 'light', 'Claro') + opt('theme', 'auto', 'Automático') + '</div>') +
     g('Demostración con datos inventados', 'Velas sintéticas para inspeccionar visualmente cada regla. Nunca se activa sola.', '<div class="set-in" style="grid-template-columns:1fr auto"><div class="sel-wrap"><select id="demoSel">' + V.SCEN.map(function (x) { return '<option value="' + x.id + '"' + (S.demo && S.demo.code === x.id ? ' selected' : '') + '>' + x.id + ' · ' + esc(x.name) + '</option>'; }).join('') + '</select></div><button type="button" class="pbtn" id="demoGo">Ver</button></div>') +
+    g('Respaldo completo (Web ↔ PWA ↔ App Android)', 'Exportá o restaurá en un archivo JSON tus favoritas, alertas, diario, Paper Trading, ajustes y Libro de Ventajas.', '<div class="opts"><button type="button" id="bkExport" class="on">⬇ Exportar Backup JSON</button><button type="button" id="bkImport">⬆ Restaurar Backup</button><input id="bkFile" type="file" accept="application/json,.json" hidden></div>') +
     g('Conexión', 'Servidor: ' + esc(D.Net.lastHost ? D.Net.lastHost.replace('https://', '') : '—') + ' · reloj: ' + fnum(D.Net.offset / 1000, 1) + ' s · pedidos: ' + D.Net.reqs, '<div class="opts"><button type="button" id="resetSet">Restablecer ajustes</button></div>');
 }
 function openSheet() { $('#sheetTitle').textContent = 'Ajustes'; renderSheet(); $('#sheet').hidden = false; $('#sheetBody').scrollTop = 0; document.body.style.overflow = 'hidden'; }
 function closeSheet() { $('#sheet').hidden = true; document.body.style.overflow = ''; }
 function setSetting(key, val) {
-  var num = ['hist', 'h', 'Kfine', 'refresh', 'fontScale'].indexOf(key) >= 0;
-  var bool = ['hardRegime', 'strictLateral', 'paperCand', 'vigil'].indexOf(key) >= 0;
+  var num = ['hist', 'h', 'Kfine', 'refresh', 'fontScale', 'trailAtr'].indexOf(key) >= 0;
+  var bool = ['hardRegime', 'strictLateral', 'paperCand', 'vigil', 'be1r'].indexOf(key) >= 0;
   S.set[key] = num ? +val : (bool ? (val === true || val === 'true') : val); validate(S.set); saveSettings();
   switch (key) {
     case 'market': loadCatalog(mk()); S.scan.rows = []; S.riskBuilt = false; scheduleGitHubSync(); loadAll(); break;
     case 'hist': S.scan.rows = []; S.riskBuilt = false; loadAll(); break;
     case 'thr': case 'rvol': if (S.demo) loadDemo(S.demo.code); else reanalyzeAll(); break;
     case 'Kfine': case 'feeSpot': case 'feeFut': case 'slip': S.bt = {}; queueEvidence(); break;
-    case 'slAtr': case 'rr': case 'maxBars': case 'h': case 'hardRegime': case 'regimeHtf': case 'strictLateral': S.bt = {}; scheduleGitHubSync(); break;
+    case 'slAtr': case 'rr': case 'maxBars': case 'be1r': case 'trailAtr': case 'h': case 'hardRegime': case 'regimeHtf': case 'strictLateral': S.bt = {}; scheduleGitHubSync(); break;
     case 'theme': applyTheme(); break;
     case 'fontScale': applyFont(); break;
   }
@@ -5112,9 +5290,37 @@ function bind() {
     var b = t.closest('[data-set]'); if (b) { setSetting(b.getAttribute('data-set'), b.getAttribute('data-val')); return; }
     var fb = t.closest('[data-fee]'); if (fb) { var p = fb.getAttribute('data-fee').split(':'); setSetting(p[0] === 'fut' ? 'feeFut' : 'feeSpot', +p[1]); return; }
     if (t.closest('#demoGo')) { loadDemo($('#demoSel').value); return; }
+        if (t.closest('#bkExport')) {
+      var bk = { v: 7, at: Date.now(), settings: S.set, alerts: S.alerts, journal: S.journal, paper: S.paper, book: S.book };
+      var js = JSON.stringify(bk, null, 2);
+      try {
+        var bl = new Blob([js], { type: 'application/json;charset=utf-8' }), a = document.createElement('a');
+        a.href = URL.createObjectURL(bl); a.download = 'vsa_backup_v7_' + new Date().toISOString().slice(0, 10) + '.json';
+        document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+        toast('Backup completo descargado ✓', 3000);
+      } catch (err) { copyText(js, 'Backup copiado al portapapeles'); }
+      return;
+    }
+    if (t.closest('#bkImport')) { var fi = $('#bkFile'); if (fi) fi.click(); return; }
     if (t.closest('#resetSet')) { S.set = validate(JSON.parse(JSON.stringify(DEF))); saveSettings(); applyTheme(); applyFont(); fillSymbols(); closeSheet(); S.riskBuilt = false; loadAll(); toast('Ajustes restablecidos'); }
   });
   $('#sheet').addEventListener('change', function (e) {
+    if (e.target && e.target.id === 'bkFile') {
+      var fl = e.target.files && e.target.files[0]; if (!fl) return;
+      var rd = new FileReader();
+      rd.onload = function () {
+        try {
+          var bk = JSON.parse(String(rd.result || ''));
+          if (bk.settings) { S.set = validate(Object.assign(JSON.parse(JSON.stringify(DEF)), bk.settings)); saveSettings(); }
+          if (Array.isArray(bk.alerts)) { S.alerts = bk.alerts; saveAlerts(); }
+          if (Array.isArray(bk.journal)) { S.journal = bk.journal; saveJournal(); }
+          if (bk.paper && bk.paper.cap0) { S.paper = bk.paper; savePaper(); }
+          if (bk.book && bk.book.v === 6) { S.book = bk.book; saveBook(); S.opps.list = buildOpps(S.book.states || []); }
+          applyTheme(); applyFont(); fillSymbols(); closeSheet(); render('all'); toast('Backup restaurado correctamente ✓', 3200);
+        } catch (err) { toast('El archivo JSON no es un backup válido'); }
+      };
+      rd.readAsText(fl); return;
+    }
     var k = e.target.getAttribute && e.target.getAttribute('data-num'); if (!k) return;
     var v = parseNum(e.target.value); if (!isNum(v)) { e.target.value = S.set[k]; return; }
     setSetting(k, v);
