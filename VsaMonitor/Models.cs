@@ -5,17 +5,10 @@ namespace VsaMonitor;
 public sealed class AppConfig
 {
     [JsonPropertyName("version")]
-    public string Version { get; set; } = "6.0";
+    public string Version { get; set; } = "10.1";
 
     [JsonPropertyName("market")]
     public string Market { get; set; } = "spot";
-
-    // v6: umbrales y RVOL con los que la web calculó las reglas (el backend replica "esc" + "seas"/"sma")
-    [JsonPropertyName("thr")]
-    public string Thr { get; set; } = "esc";
-
-    [JsonPropertyName("rvol")]
-    public string Rvol { get; set; } = "seas";
 
     [JsonPropertyName("favorites")]
     public List<string> Favorites { get; set; } = new() { "BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT" };
@@ -62,7 +55,6 @@ public sealed class AppConfig
     [JsonPropertyName("priceAlerts")]
     public List<PriceAlert> PriceAlerts { get; set; } = new();
 
-    // v6: libro de ventajas validadas en el universo (lo genera el Laboratorio de la web)
     [JsonPropertyName("edgeBook")]
     public EdgeBookConfig? EdgeBook { get; set; }
 }
@@ -79,28 +71,28 @@ public sealed class EdgeBookConfig
     public List<string> Timeframes { get; set; } = new();
 
     [JsonPropertyName("slAtr")]
-    public double SlAtr { get; set; } = 1.3;
+    public double SlAtr { get; set; } = 1.5;
 
     [JsonPropertyName("rr")]
     public double Rr { get; set; } = 2.0;
 
     [JsonPropertyName("maxBars")]
-    public int MaxBars { get; set; } = 12;
+    public int MaxBars { get; set; } = 24;
+
+    [JsonPropertyName("be1r")]
+    public bool Be1r { get; set; } = true;
+
+    [JsonPropertyName("trailAtr")]
+    public double TrailAtr { get; set; } = 0.0;
 
     [JsonPropertyName("hardRegime")]
     public bool HardRegime { get; set; } = true;
 
     [JsonPropertyName("strictLateral")]
-    public bool StrictLateral { get; set; }
+    public bool StrictLateral { get; set; } = false;
 
     [JsonPropertyName("regimeHtf")]
     public string RegimeHtf { get; set; } = "auto";
-
-    [JsonPropertyName("thr")]
-    public string Thr { get; set; } = "esc";
-
-    [JsonPropertyName("rvol")]
-    public string Rvol { get; set; } = "seas";
 
     [JsonPropertyName("symbols")]
     public List<string> Symbols { get; set; } = new();
@@ -109,10 +101,10 @@ public sealed class EdgeBookConfig
     public bool PaperCandidates { get; set; } = true;
 
     [JsonPropertyName("edges")]
-    public List<EdgeEntry> Edges { get; set; } = new();
+    public List<EdgeBookEntry> Edges { get; set; } = new();
 }
 
-public sealed class EdgeEntry
+public sealed class EdgeBookEntry
 {
     [JsonPropertyName("tf")]
     public string Tf { get; set; } = string.Empty;
@@ -124,7 +116,7 @@ public sealed class EdgeEntry
     public int Bias { get; set; }
 
     [JsonPropertyName("label")]
-    public string Label { get; set; } = string.Empty;
+    public string Label { get; set; } = "validada";
 
     [JsonPropertyName("e")]
     public double? E { get; set; }
@@ -167,6 +159,21 @@ public sealed class PaperConfig
 
     [JsonPropertyName("maxOpenPositions")]
     public int MaxOpenPositions { get; set; } = 5;
+
+    [JsonPropertyName("be1r")]
+    public bool Be1r { get; set; } = true;
+
+    [JsonPropertyName("trailAtr")]
+    public double TrailAtr { get; set; } = 1.5;
+
+    [JsonPropertyName("slAtr")]
+    public double SlAtr { get; set; } = 1.3;
+
+    [JsonPropertyName("rr")]
+    public double Rr { get; set; } = 2.0;
+
+    [JsonPropertyName("maxBars")]
+    public int MaxBars { get; set; } = 24;
 }
 
 public sealed class PriceAlert
@@ -288,12 +295,23 @@ public sealed class PaperPosition
     [JsonPropertyName("unrealizedUsd")]
     public double UnrealizedUsd { get; set; }
 
-    // v6: última vela de 1m ya conciliada (para detectar stops/objetivos tocados entre corridas) y origen de la señal
-    [JsonPropertyName("chk")]
-    public long Chk { get; set; }
+    [JsonPropertyName("atr")]
+    public double Atr { get; set; }
 
-    [JsonPropertyName("src")]
-    public string Src { get; set; } = "par";
+    [JsonPropertyName("be1r")]
+    public bool Be1r { get; set; }
+
+    [JsonPropertyName("trailAtr")]
+    public double TrailAtr { get; set; }
+
+    [JsonPropertyName("beArmed")]
+    public bool BeArmed { get; set; }
+
+    [JsonPropertyName("peakPrice")]
+    public double PeakPrice { get; set; }
+
+    [JsonPropertyName("edgeLabel")]
+    public string EdgeLabel { get; set; } = "bh";
 }
 
 public sealed class PaperClosedTrade
@@ -339,18 +357,6 @@ public sealed class PaperClosedTrade
 
     [JsonPropertyName("rMultiple")]
     public double RMultiple { get; set; }
-
-    [JsonPropertyName("src")]
-    public string Src { get; set; } = "par";
-}
-
-public sealed class EquityPoint
-{
-    [JsonPropertyName("t")]
-    public long T { get; set; }
-
-    [JsonPropertyName("eq")]
-    public double Eq { get; set; }
 }
 
 public sealed class PaperState
@@ -366,10 +372,6 @@ public sealed class PaperState
 
     [JsonPropertyName("closed")]
     public List<PaperClosedTrade> Closed { get; set; } = new();
-
-    // v6: curva marcada a mercado (una muestra por corrida) para medir el drawdown flotante real
-    [JsonPropertyName("curve")]
-    public List<EquityPoint> Curve { get; set; } = new();
 
     public double TotalEquity => Cash + Open.Sum(p => p.UnrealizedUsd);
 }
@@ -392,7 +394,8 @@ public sealed record SignalHit(
     double Atr,
     double Hurst,
     AdaptiveBounds Adaptive,
-    RegimeResult HtfRegime
+    RegimeResult HtfRegime,
+    string EdgeLabel = "bh",
+    double? EdgeExpectancyR = null,
+    double? EdgeLowerBoundR = null
 );
-
-public sealed record BookHit(string Code, string Name, string Category, int Bias, EdgeEntry Edge);
