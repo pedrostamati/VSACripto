@@ -63,6 +63,13 @@
     {
       "sym": "ETHUSDT",
       "market": "spot",
+      "dir": "down",
+      "target": 1670,
+      "repeat": true
+    },
+    {
+      "sym": "ETHUSDT",
+      "market": "spot",
       "dir": "up",
       "target": 1790,
       "repeat": false
