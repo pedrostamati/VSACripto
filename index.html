@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>VSA &amp; Orderflow v11.0 · Institutional Pro Suite</title>
-  <meta name="description" content="Terminal cuantitativa VSA &amp; Orderflow v11.0: 70 reglas, Edge Lab OOS con Brier Score, Anticipo calibrado, Ranking Cross-Sectional, Paper Trading y alertas 24/7.">
+  <title>VSA &amp; Orderflow v11.1 · Institutional Pro Suite</title>
+  <meta name="description" content="Terminal cuantitativa VSA &amp; Orderflow v11.1: 70 reglas, Edge Lab OOS con Brier Score, Anticipo calibrado, Ranking Cross-Sectional, Paper Trading y alertas 24/7.">
   <meta name="theme-color" content="#090d16">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -609,7 +609,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 
 
-/* === v11.0 Unified Alpha Suite additions === */
+/* === v11.1 Unified Alpha Suite additions === */
 .cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
 .cs-kpi{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .cs-kpi .k{font-size:11px;color:var(--tx3);display:block;margin-bottom:2px}
@@ -626,7 +626,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 @media (max-width:640px){.ant-bins{grid-template-columns:repeat(2,1fr)}}
 
 
-/* === v11.0 Institutional Pro Suite === */
+/* === v11.1 Institutional Pro Suite === */
 .sw-liq{background:#f59e0b}
 .pro-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line)}
 .pro-tabs button{background:var(--bg2);color:var(--tx2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer}
@@ -2318,7 +2318,7 @@ function labAdd(P, sym, tf, an, reg, costSide) {
       acc.t.push(c[i + 1].t); acc.R.push(R[i]); acc.ex.push(R[i] - bm); acc.per.push(per); acc.sym.push(symIdx); acc.bars.push(B[i]);
     }
   });
-  // v11.0: Validación causal fuera de muestra (OOS) de Anticipo (horizonte h=6 velas, sin solape)
+  // v11.1: Validación causal fuera de muestra (OOS) de Anticipo (horizonte h=6 velas, sin solape)
   if (!T.ant) T.ant = { n: 0, ySum: 0, brier: 0, edgeN: 0, edgeHit: 0, edgeR: 0, edgeRn: 0, bins: [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]] };
   var antH = 6;
   for (i = Math.max(45, ts.from); i <= Math.min(ts.last, an.n - 1 - antH); i += antH) {
@@ -2782,8 +2782,14 @@ function qs(params) {
   var a = []; for (var k in params) if (params[k] !== undefined && params[k] !== null) a.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]));
   return a.length ? '?' + a.join('&') : '';
 }
+function fetchJson(url, ms) {
+  return fetchTimeout(url, ms || 9000).then(function (r) {
+    if (!r || !r.ok) throw new Error('HTTP ' + (r ? r.status : 'net'));
+    return r.json();
+  });
+}
 function fetchTimeout(url, ms) {
-  // v11.0: conexión directa a Binance (compatible con fanatics.com.ar/cripto/, PWA y APK Android file://)
+  // v11.1: conexión directa a Binance (compatible con fanatics.com.ar/cripto/, PWA y APK Android file://)
   var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null, timer = null;
   var p = fetch(url, { signal: ctrl ? ctrl.signal : undefined, cache: 'no-store', credentials: 'omit' });
   var t = new Promise(function (_, rej) { timer = setTimeout(function () { if (ctrl) ctrl.abort(); rej(NetError('timeout', 'sin respuesta en ' + Math.round(ms / 1000) + ' s')); }, ms); });
@@ -4009,8 +4015,26 @@ function onNewOpp(o) {
 }
 
 // ============================================================================
-// v11.0: Ranking Cross-Sectional (Momentum Relativo vs BTC + Funding Carry + Inv-Vol)
+// v11.1: Ranking Cross-Sectional (Momentum Relativo vs BTC + Funding Carry + Inv-Vol)
 // ============================================================================
+function fetchJson(url, ms) {
+  var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timer = null;
+  var p = fetch(url, { signal: ctrl ? ctrl.signal : undefined, cache: 'no-store', credentials: 'omit' }).then(function (r) {
+    if (!r || !r.ok) throw new Error('HTTP ' + (r ? r.status : 'net'));
+    return r.json();
+  });
+  var t = new Promise(function (_, rej) {
+    timer = setTimeout(function () {
+      if (ctrl) { try { ctrl.abort(); } catch (_) {} }
+      rej(new Error('timeout'));
+    }, ms || 8000);
+  });
+  return Promise.race([p, t]).then(
+    function (res) { clearTimeout(timer); return res; },
+    function (err) { clearTimeout(timer); throw err; }
+  );
+}
 S.cross = S.cross || { busy: false, at: 0, mode: 'long', rows: [], err: '' };
 
 function computeCrossSectionalRows(tickers, fundingMap) {
@@ -4129,7 +4153,7 @@ function renderCrossSectional() {
 
 
 // ============================================================================
-// v11.0 INSTITUTIONAL PRO SUITE (100% APIs públicas gratis + riesgo portafolio + footprint)
+// v11.1 INSTITUTIONAL PRO SUITE (100% APIs públicas gratis + riesgo portafolio + footprint)
 // ============================================================================
 S.pro = S.pro || {
   tab: 'macro',
@@ -4152,7 +4176,7 @@ S.pro = S.pro || {
   fpLastRender: 0
 };
 
-// Load persisted v11.0 risk guards & execution journal
+// Load persisted v11.1 risk guards & execution journal
 (function initV11Storage() {
   try {
     var rs = JSON.parse(localStorage.getItem('vsa_v11_risk') || 'null');
@@ -4334,21 +4358,33 @@ function computeMultiExchange(spotKl, perpKl, cbPx, krPx, bybitFr, binFr) {
 function refreshMacroPro() {
   if (S.pro.busy) return;
   S.pro.busy = true;
+  S.pro.err = '';
   renderMacroPro();
   var sym = S.set.sym || 'BTCUSDT';
   var base = sym.replace(/USDT$|USDC$|FDUSD$/, '') || 'BTC';
   var optCur = base === 'ETH' ? 'ETH' : 'BTC';
   var krPair = base === 'BTC' ? 'XBTUSD' : (base + 'USD');
+  var doneFlag = false;
+  var guardTimer = setTimeout(function () {
+    if (!doneFlag) { doneFlag = true; S.pro.busy = false; S.pro.err = 'Tiempo de espera agotado en alguna API pública.'; renderMacroPro(); }
+  }, 11000);
+  var safeGet = function (u, ms) {
+    try { return fetchJson(u, ms).catch(function () { return null; }); }
+    catch (_) { return Promise.resolve(null); }
+  };
   Promise.all([
-    fetchJson('https://api.alternative.me/fng/?limit=2', 8000).catch(function () { return null; }),
-    fetchJson('https://api.binance.com/api/v3/klines?symbol=' + sym + '&interval=1h&limit=30', 9000).catch(function () { return null; }),
-    fetchJson('https://fapi.binance.com/fapi/v1/klines?symbol=' + sym + '&interval=1h&limit=30', 9000).catch(function () { return null; }),
-    fetchJson('https://api.exchange.coinbase.com/products/' + base + '-USD/ticker', 8000).catch(function () { return null; }),
-    fetchJson('https://api.kraken.com/0/public/Ticker?pair=' + krPair, 8000).catch(function () { return null; }),
-    fetchJson('https://api.bybit.com/v5/market/tickers?category=linear&symbol=' + sym, 8000).catch(function () { return null; }),
-    fetchJson('https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=' + optCur + '&kind=option', 10000).catch(function () { return null; }),
-    fetchJson('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=65', 9000).catch(function () { return null; })
+    safeGet('https://api.alternative.me/fng/?limit=2', 6500),
+    safeGet('https://api.binance.com/api/v3/klines?symbol=' + sym + '&interval=1h&limit=30', 7500),
+    safeGet('https://fapi.binance.com/fapi/v1/klines?symbol=' + sym + '&interval=1h&limit=30', 7500),
+    safeGet('https://api.exchange.coinbase.com/products/' + base + '-USD/ticker', 6500),
+    safeGet('https://api.kraken.com/0/public/Ticker?pair=' + krPair, 6500),
+    safeGet('https://api.bybit.com/v5/market/tickers?category=linear&symbol=' + sym, 6500),
+    safeGet('https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=' + optCur + '&kind=option', 8000),
+    safeGet('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=65', 7500)
   ]).then(function (r) {
+    clearTimeout(guardTimer);
+    if (doneFlag) return;
+    doneFlag = true;
     if (r[0] && r[0].data && r[0].data.length) {
       S.pro.fng = {
         val: +r[0].data[0].value,
@@ -4381,8 +4417,11 @@ function refreshMacroPro() {
     S.pro.busy = false;
     renderMacroPro();
     if (typeof renderPortRisk === 'function') renderPortRisk();
-  }).catch(function () {
+  }).catch(function (e) {
+    clearTimeout(guardTimer);
+    doneFlag = true;
     S.pro.busy = false;
+    S.pro.err = (e && e.message) ? e.message : 'Error al consultar APIs públicas';
     renderMacroPro();
   });
 }
@@ -4726,7 +4765,7 @@ function renderJournal() {
   };
 }
 
-// Exponer utilidades puras v11.0 en VSA para pruebas automatizadas
+// Exponer utilidades puras v11.1 en VSA para pruebas automatizadas
 if (typeof V !== 'undefined') {
   V.getMacroEvents = getMacroEvents;
   V.estimateLiquidationClusters = estimateLiquidationClusters;
@@ -6038,7 +6077,7 @@ function drawChart() {
       });
     }
   }
-  // v11.0 Anti-collision right-edge pill stack (evita solapamientos entre Plan, Perfil y P50)
+  // v11.1 Anti-collision right-edge pill stack (evita solapamientos entre Plan, Perfil y P50)
   if (window._vsaChartTags && window._vsaChartTags.length) {
     var tags = window._vsaChartTags.slice().sort(function (a, b) { return a.y - b.y; });
     var minGap = 15, topLim = yP0 + 9, botLim = yP0 + hP - 9;
@@ -7491,7 +7530,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 
-// v11.0 PWA Service Worker (solo HTTPS, nunca en file:// ni sandbox)
+// v11.1 PWA Service Worker (solo HTTPS, nunca en file:// ni sandbox)
 try {
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     navigator.serviceWorker.register('./sw.js').catch(function () {});
