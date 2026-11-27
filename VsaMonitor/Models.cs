@@ -5,7 +5,7 @@ namespace VsaMonitor;
 public sealed class AppConfig
 {
     [JsonPropertyName("version")]
-    public string Version { get; set; } = "11.0";
+    public string Version { get; set; } = "11.1";
 
     [JsonPropertyName("market")]
     public string Market { get; set; } = "spot";
