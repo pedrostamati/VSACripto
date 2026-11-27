@@ -1,5 +1,5 @@
 {
-  "version": "10.1",
+  "version": "11.0",
   "market": "futures",
   "favorites": [
     "BTCUSDT",
@@ -44,7 +44,10 @@
     "trailAtr": 1.5,
     "slAtr": 1.5,
     "rr": 2.0,
-    "maxBars": 24
+    "maxBars": 24,
+    "maxDailyLossPct": 3.0,
+    "maxWeeklyLossPct": 7.0,
+    "macroGuard": false
   },
   "priceAlerts": [],
   "edgeBook": null

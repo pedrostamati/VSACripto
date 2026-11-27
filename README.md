@@ -1,16 +1,18 @@
-# VSA & Orderflow v10.1 · Unified Alpha Suite
+# VSA & Orderflow v11.0 · Institutional Pro Suite
 
-Terminal cuantitativa autocontenida (Web, PWA, Android APK y Backend 24/7 en C# .NET 8) diseñada para análisis de flujo de órdenes, VSA, validación estadística fuera de muestra y monitoreo en vivo sobre Binance Spot y Futuros.
+Terminal cuantitativa autocontenida (Web, PWA, Android APK y Backend 24/7 en C# .NET 8) integrada con **APIs públicas y gratuitas** (sin API keys).
 
-## Novedades de v10.1
-1. **Unificación en un único `index.html` autocontenido**: integra el diseño visual, Command Deck en vivo (`aggTrade` + `miniTicker` + `Cmd+K`), Anticipo calibrado y las 70 reglas en un solo archivo listo para `fanatics.com.ar/cripto/`, GitHub Pages, PWA y el compilador automático de APK (`build_android_apk.yml`).
-2. **Conexión directa a Binance**: elimina el proxy `/api/binance` que dependía de Vercel/Node y rompía el funcionamiento en hosting estático y WebView Android (`file://`).
-3. **Etiquetas anti-colisión en el gráfico Canvas**: apilamiento dinámico en el eje derecho para `ENT`, `SL`, `1R/BE`, `OBJ`, `VAH`, `POC`, `VAL` y `P50`, eliminando superposiciones con velas o entre niveles.
-4. **Validación OOS de «Anticipo» (Brier Score & Skill)** dentro del Laboratorio de Ventaja: mide si el pronóstico probabilístico (`h=6` velas) supera la climatología base fuera de muestra, mostrando Brier Score, Brier Skill Score (BSS), acierto en sesgo fuerte (`≥58%` / `≤42%`) y tabla de calibración en 5 bloques.
-5. **Ranking Cross-Sectional en vivo** (pestaña *Oportunidades / Edge*): ranquea los 60 pares USDT más líquidos por Fuerza Relativa vs BTC, Funding Carry (Futuros) e Inversa de Volatilidad con apertura directa en Radar.
-6. **Paridad total del Backend C# .NET 8 (`VsaMonitor/`)**: suma las 10 reglas faltantes (`V61`–`V70`), gestión dinámica de **Breakeven 1R + Trailing Stop ATR** en Paper Trading y soporte nativo de `edgeBook` desde `config.json`.
+## Novedades de v11.0
+1. **Radar Institucional Pro (4 vistas con APIs públicas gratis):**
+   - **Macro & Sentimiento:** calendario de eventos de alto impacto (FOMC 2026–2027, CPI y NFP) con bloqueo preventivo opcional (±4h) y *Crypto Fear & Greed Index* (`alternative.me`).
+   - **Multi-Exchange (Spot vs. Perps):** *Coinbase Premium (%)*, *Kraken Spread*, *Funding Bybit* y divergencia de **CVD Spot vs. Futuros (30h)** para distinguir demanda real de rallies frágiles por apalancamiento.
+   - **Opciones Deribit en vivo:** *Put/Call OI Ratio*, *Max Pain* del vencimiento líder, *ATM IV (%)* y *Skew 25D*.
+   - **Mapa de Liquidaciones Estimadas (10x–100x):** imanes superior/inferior y capa opcional **Liquidaciones est.** directo en el gráfico Canvas.
+2. **Footprint Intravela en Vivo (`aggTrade`):** tabla de delta por nivel de precio en tiempo real desde WebSocket de Binance con *Live POC* e *Imbalances ≥ 3:1*.
+3. **Control de Portafolio, Correlación BTC & Kill Switch:** correlación (`ρ`) y beta (`β`) vs. BTC, exposición neta beta-ponderada, riesgo sugerido por *Vol-Targeting* y **Kill Switch diario/semanal** que frena nuevas entradas Paper automáticamente.
+4. **Diario de Ejecución & Orden Binance Lista:** botón para copiar orden *Limit Post-Only + OCO* lista para pegar, más registro y atribución de slippage (bps) y adherencia al plan (Real vs. Sistema).
+5. **Backend C# .NET 8 (`VsaMonitor/` v11.0):** suma Kill Switch diario/semanal, Macro Guard FOMC y *Coinbase Premium* en cada alerta de Telegram.
 
-## Instalación rápida
-- **Web (`fanatics.com.ar/cripto/`)**: subí `index.html`, `sw.js`, `manifest.json`, `icon-192.png` e `icon-512.png`.
-- **GitHub + APK Android**: subí los archivos a tu repositorio `pedrostamati/VSACripto`. El workflow `.github/workflows/build_android_apk.yml` detecta automáticamente la versión `10.1` desde `<title>` y genera el APK firmado estable (`APK_KEY_PASS`).
-- **Backend 24/7 Telegram**: actualizá la carpeta `VsaMonitor/` y `.github/workflows/vsa_monitor.yml`. Desde el Laboratorio de Ventaja web podés tocar **Enviar al backend** para sincronizar tu `edgeBook` directo a `config.json`.
+## Despliegue
+- **Servidor web (`fanatics.com.ar/cripto/`):** subí `index.html`, `sw.js`, `manifest.json`, `icon-192.png` e `icon-512.png`.
+- **GitHub (`pedrostamati/VSACripto`):** subí todo el contenido respetando carpetas (`VsaMonitor/` y `.github/workflows/`), sin pisar tu `config.json` si ya tenés alertas guardadas. El APK `v11.0` se compila solo en **Actions**.

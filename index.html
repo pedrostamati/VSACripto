@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>VSA &amp; Orderflow v10.1 · Unified Alpha Suite</title>
-  <meta name="description" content="Terminal cuantitativa VSA &amp; Orderflow v10.1: 70 reglas, Edge Lab OOS con Brier Score, Anticipo calibrado, Ranking Cross-Sectional, Paper Trading y alertas 24/7.">
+  <title>VSA &amp; Orderflow v11.0 · Institutional Pro Suite</title>
+  <meta name="description" content="Terminal cuantitativa VSA &amp; Orderflow v11.0: 70 reglas, Edge Lab OOS con Brier Score, Anticipo calibrado, Ranking Cross-Sectional, Paper Trading y alertas 24/7.">
   <meta name="theme-color" content="#090d16">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -609,7 +609,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 
 
-/* === v10.1 Unified Alpha Suite additions === */
+/* === v11.0 Unified Alpha Suite additions === */
 .cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
 .cs-kpi{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .cs-kpi .k{font-size:11px;color:var(--tx3);display:block;margin-bottom:2px}
@@ -624,6 +624,26 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .ant-bin{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:11px;text-align:center}
 .ant-bin b{display:block;font-size:12px;margin:2px 0}
 @media (max-width:640px){.ant-bins{grid-template-columns:repeat(2,1fr)}}
+
+
+/* === v11.0 Institutional Pro Suite === */
+.sw-liq{background:#f59e0b}
+.pro-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.pro-tabs button{background:var(--bg2);color:var(--tx2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer}
+.pro-tabs button.on{background:rgba(56,189,248,.16);color:#38bdf8;border-color:#38bdf8}
+.pro-body{padding:10px 12px}
+.fp-tbl{width:100%;border-collapse:collapse;font-size:11.5px;font-variant-numeric:tabular-nums}
+.fp-tbl th,.fp-tbl td{padding:4px 8px;border-bottom:1px solid var(--line)}
+.fp-tbl tr.fp-poc td{background:rgba(245,158,11,.14);font-weight:700}
+.fp-imb-b{color:#10b981;font-weight:700}
+.fp-imb-s{color:#ef4444;font-weight:700}
+.fp-bar{height:6px;border-radius:3px;display:inline-block;vertical-align:middle}
+.ks-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);font-size:12px}
+.ks-row input[type="number"]{width:64px;padding:4px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg2);color:var(--tx1)}
+.j-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:rgba(15,23,42,.35)}
+.j-form input,.j-form select{width:100%;padding:6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--bg2);color:var(--tx1);font-size:12px}
+.macro-banner{padding:8px 12px;border-radius:8px;margin-bottom:8px;font-size:12px;border:1px solid var(--line);background:var(--bg2)}
+.macro-banner.hot{border-color:#f59e0b;background:rgba(245,158,11,.12)}
 
   </style>
 </head>
@@ -741,6 +761,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
       <div class="card" id="cAnticipo"></div>
       <div class="card" id="cVerdict"></div>
       <div class="card" id="cMicro"></div>
+      <div class="card" id="cMacroPro"></div>
       <div class="card" id="cForming"></div>
       <div class="card" id="cPlan"></div>
       <div class="card" id="cMtf"></div>
@@ -773,6 +794,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
           <button type="button" data-layer="emas"><i class="sw sw-ema"></i>EMA 9/21/50/200</button>
           <button type="button" data-layer="vwap"><i class="sw sw-vwap"></i>VWAP ±1σ/2σ</button>
           <button type="button" data-layer="levels"><i class="sw sw-poc"></i>POC/VAH/VAL</button>
+          <button type="button" data-layer="liq"><i class="sw sw-liq"></i>Liquidaciones est.</button>
           <button type="button" data-layer="prof"><i class="sw sw-prof"></i>Perfil</button>
           <button type="button" data-layer="sig"><i class="sw sw-sig"></i>Señales</button>
           <button type="button" data-layer="plan"><i class="sw sw-plan"></i>Plan SL/TP</button>
@@ -792,11 +814,14 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
         <div class="cv-legend" id="chLegend"></div>
         <div class="vpfoot" id="chFoot"></div>
       </div>
+      <div class="card" id="cFootprint"></div>
     </section>
 
     <!-- 3 · 56 REGLAS, BACKTEST Y PAPER TRADING -->
     <section id="v-rules" class="view" role="tabpanel">
       <div class="card" id="cPaper"></div>
+      <div class="card" id="cPortRisk"></div>
+      <div class="card" id="cJournal"></div>
       <div class="card" id="cBt"></div>
       <div class="card">
         <div class="card-head">
@@ -2293,7 +2318,7 @@ function labAdd(P, sym, tf, an, reg, costSide) {
       acc.t.push(c[i + 1].t); acc.R.push(R[i]); acc.ex.push(R[i] - bm); acc.per.push(per); acc.sym.push(symIdx); acc.bars.push(B[i]);
     }
   });
-  // v10.1: Validación causal fuera de muestra (OOS) de Anticipo (horizonte h=6 velas, sin solape)
+  // v11.0: Validación causal fuera de muestra (OOS) de Anticipo (horizonte h=6 velas, sin solape)
   if (!T.ant) T.ant = { n: 0, ySum: 0, brier: 0, edgeN: 0, edgeHit: 0, edgeR: 0, edgeRn: 0, bins: [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]] };
   var antH = 6;
   for (i = Math.max(45, ts.from); i <= Math.min(ts.last, an.n - 1 - antH); i += antH) {
@@ -2758,7 +2783,7 @@ function qs(params) {
   return a.length ? '?' + a.join('&') : '';
 }
 function fetchTimeout(url, ms) {
-  // v10.1: conexión directa a Binance (compatible con fanatics.com.ar/cripto/, PWA y APK Android file://)
+  // v11.0: conexión directa a Binance (compatible con fanatics.com.ar/cripto/, PWA y APK Android file://)
   var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null, timer = null;
   var p = fetch(url, { signal: ctrl ? ctrl.signal : undefined, cache: 'no-store', credentials: 'omit' });
   var t = new Promise(function (_, rej) { timer = setTimeout(function () { if (ctrl) ctrl.abort(); rej(NetError('timeout', 'sin respuesta en ' + Math.round(ms / 1000) + ' s')); }, ms); });
@@ -3058,7 +3083,7 @@ var DEF = {
   scanList: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'ADAUSDT', 'DOGEUSDT', 'AVAXUSDT', 'LINKUSDT', 'SUIUSDT', 'NEARUSDT', 'ARBUSDT', 'DOTUSDT', 'INJUSDT', 'TONUSDT', 'OPUSDT'],
   scanTf: 'all4', scanFilter: 'ALL',
   custom: [], favs: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT'], risk: { cap: 1000, pct: 1, lev: 1 },
-  layers: { emas: true, vwap: true, levels: true, prof: true, sig: true, plan: true, fc: true }, rfilter: 'ACTIVE', btMode: 'C',
+  layers: { emas: true, vwap: true, levels: true, prof: true, sig: true, plan: true, fc: true, liq: false }, rfilter: 'ACTIVE', btMode: 'C',
   // v6: Laboratorio de Ventaja, filtro de validación y vigilancia del universo
   lab: { n: 30, tf: 'macro', hist: 3000, exit: 'plan', minQv: 5, maxSpread: 15, excl: 'PAXG,XAUT', lfilter: 'TOP' },
   gate: 'auto', vigil: false, paperCand: true
@@ -3482,6 +3507,13 @@ function paperEquity() {
   return S.paper.cash + unrl;
 }
 function openPaperTrade(opts) {
+  if (typeof checkRiskGuards === 'function') {
+    var guard = checkRiskGuards();
+    if (!guard.ok) {
+      if (typeof toast === 'function') toast('🛡️ Entrada Paper bloqueada: ' + guard.reason, 'bad');
+      return null;
+    }
+  }
   var P = S.paper;
   if (P.open.length >= P.maxOpen) { if (!opts.silent) toast('Paper: tope de ' + P.maxOpen + ' posiciones abiertas'); return false; }
   var dup = P.open.some(function (x) { return x.sym === opts.sym && x.tf === opts.tf && x.side === opts.side; });
@@ -3681,7 +3713,9 @@ function renderPaper() {
     (P.curve.length > 1 ? '<div class="eq-wrap" style="height:125px"><canvas id="paperEq" aria-label="Curva de capital Paper Trading"></canvas></div>' : '') +
     '<div class="card-head" style="border-top:1px solid var(--line);padding:8px 12px"><span class="kick">Posiciones abiertas (' + P.open.length + '/' + P.maxOpen + ')</span></div>' + openHtml +
     auditHtml + (closedHtml ? '<div class="card-head" style="border-top:1px solid var(--line);padding:8px 12px"><span class="kick">Últimas cerradas (Paper)</span></div>' + closedHtml : '');
-  if (P.curve.length > 1) drawPaperEq();
+  if (P.curve.length > 1)   drawPaperEq();
+  if (typeof renderPortRisk === 'function') renderPortRisk();
+  if (typeof renderJournal === 'function') renderJournal();
 }
 function drawPaperEq() {
   var cv = $('#paperEq'); if (!cv) return;
@@ -3975,7 +4009,7 @@ function onNewOpp(o) {
 }
 
 // ============================================================================
-// v10.1: Ranking Cross-Sectional (Momentum Relativo vs BTC + Funding Carry + Inv-Vol)
+// v11.0: Ranking Cross-Sectional (Momentum Relativo vs BTC + Funding Carry + Inv-Vol)
 // ============================================================================
 S.cross = S.cross || { busy: false, at: 0, mode: 'long', rows: [], err: '' };
 
@@ -4091,6 +4125,615 @@ function renderCrossSectional() {
   el.querySelectorAll('[data-csopen]').forEach(function (b) {
     b.onclick = function () { setSym(b.dataset.csopen); setTab('radar'); };
   });
+}
+
+
+// ============================================================================
+// v11.0 INSTITUTIONAL PRO SUITE (100% APIs públicas gratis + riesgo portafolio + footprint)
+// ============================================================================
+S.pro = S.pro || {
+  tab: 'macro',
+  busy: false,
+  at: 0,
+  fng: null,
+  multi: null,
+  deribit: null,
+  btcKlines: null,
+  macroGuard: false,
+  killDailyPct: 3.0,
+  killWeeklyPct: 7.0,
+  targetVolPct: 2.5,
+  fpSym: '',
+  fpStep: 0,
+  fpBuckets: {},
+  fpTrades: 0,
+  fpBuyVol: 0,
+  fpSellVol: 0,
+  fpLastRender: 0
+};
+
+// Load persisted v11.0 risk guards & execution journal
+(function initV11Storage() {
+  try {
+    var rs = JSON.parse(localStorage.getItem('vsa_v11_risk') || 'null');
+    if (rs && typeof rs === 'object') {
+      if (typeof rs.macroGuard === 'boolean') S.pro.macroGuard = rs.macroGuard;
+      if (isNum(rs.killDailyPct)) S.pro.killDailyPct = rs.killDailyPct;
+      if (isNum(rs.killWeeklyPct)) S.pro.killWeeklyPct = rs.killWeeklyPct;
+      if (isNum(rs.targetVolPct)) S.pro.targetVolPct = rs.targetVolPct;
+    }
+  } catch (_) {}
+  try {
+    S.journal = JSON.parse(localStorage.getItem('vsa_v11_journal') || '[]');
+    if (!Array.isArray(S.journal)) S.journal = [];
+  } catch (_) { S.journal = []; }
+})();
+
+function saveV11Risk() {
+  try {
+    localStorage.setItem('vsa_v11_risk', JSON.stringify({
+      macroGuard: !!S.pro.macroGuard,
+      killDailyPct: S.pro.killDailyPct,
+      killWeeklyPct: S.pro.killWeeklyPct,
+      targetVolPct: S.pro.targetVolPct
+    }));
+  } catch (_) {}
+}
+function saveV11Journal() {
+  try { localStorage.setItem('vsa_v11_journal', JSON.stringify(S.journal.slice(0, 200))); } catch (_) {}
+}
+
+// --- 1. CALENDARIO MACRO (FOMC 2026-2027 + CPI/NFP deterministas) ---
+var V11_FOMC_DATES = [
+  '2026-01-28T19:00:00Z','2026-03-18T18:00:00Z','2026-04-29T18:00:00Z','2026-06-17T18:00:00Z',
+  '2026-07-29T18:00:00Z','2026-09-16T18:00:00Z','2026-10-28T18:00:00Z','2026-12-09T19:00:00Z',
+  '2027-01-27T19:00:00Z','2027-03-17T18:00:00Z','2027-04-28T18:00:00Z','2027-06-09T18:00:00Z',
+  '2027-07-28T18:00:00Z','2027-09-15T18:00:00Z','2027-10-27T18:00:00Z','2027-12-08T19:00:00Z'
+];
+
+function getMacroEvents(nowMs) {
+  var now = nowMs || Date.now();
+  var d0 = new Date(now);
+  var evs = [];
+  V11_FOMC_DATES.forEach(function (iso) {
+    var t = Date.parse(iso);
+    if (isFinite(t)) evs.push({ kind: 'FOMC', label: 'Decisión Tasas Fed (FOMC)', t: t, impact: 'ALTO' });
+  });
+  // Generar próximos NFP (1er viernes de cada mes 13:30 UTC) y CPI estimado (día 12-14 hábil 13:30 UTC)
+  for (var mOff = -1; mOff <= 3; mOff++) {
+    var yr = d0.getUTCFullYear(), mo = d0.getUTCMonth() + mOff;
+    var first = new Date(Date.UTC(yr, mo, 1, 13, 30, 0));
+    var dow = first.getUTCDay();
+    var nfpDay = 1 + ((5 - dow + 7) % 7);
+    evs.push({ kind: 'NFP', label: 'Empleo EE.UU. (NFP)', t: Date.UTC(yr, mo, nfpDay, 13, 30, 0), impact: 'ALTO' });
+    var cpiDate = new Date(Date.UTC(yr, mo, 13, 13, 30, 0));
+    if (cpiDate.getUTCDay() === 0) cpiDate.setUTCDate(14);
+    else if (cpiDate.getUTCDay() === 6) cpiDate.setUTCDate(15);
+    evs.push({ kind: 'CPI', label: 'Inflación EE.UU. (CPI est.)', t: cpiDate.getTime(), impact: 'ALTO' });
+  }
+  evs.sort(function (a, b) { return a.t - b.t; });
+  var upcoming = evs.filter(function (e) { return e.t >= now - 4 * 3600e3; }).slice(0, 5);
+  var active = upcoming.filter(function (e) { return Math.abs(e.t - now) <= 4 * 3600e3; });
+  return { upcoming: upcoming, active: active, inWindow: active.length > 0 };
+}
+
+// --- 2. MAPA DE LIQUIDACIONES ESTIMADAS (Swings + Leverage 10x/25x/50x/100x) ---
+function estimateLiquidationClusters(an) {
+  if (!an || !an.c || an.c.length < 30) return null;
+  var c = an.c, n = c.length, px = c[n - 1].c;
+  if (!(px > 0)) return null;
+  var look = Math.min(n, 90);
+  var hi = -Infinity, lo = Infinity;
+  for (var i = n - look; i < n; i++) {
+    if (c[i].h > hi) hi = c[i].h;
+    if (c[i].l < lo) lo = c[i].l;
+  }
+  var levs = [100, 50, 25, 10], mmr = 0.005, clusters = [];
+  levs.forEach(function (lev) {
+    var shPx = hi * (1 + (1 / lev) - mmr);
+    var lgPx = lo * (1 - (1 / lev) + mmr);
+    if (shPx > px && (shPx - px) / px < 0.25) {
+      clusters.push({ side: 'short', lev: lev, px: shPx, distPct: (shPx / px - 1) * 100 });
+    }
+    if (lgPx < px && lgPx > 0 && (px - lgPx) / px < 0.25) {
+      clusters.push({ side: 'long', lev: lev, px: lgPx, distPct: (lgPx / px - 1) * 100 });
+    }
+  });
+  var shorts = clusters.filter(function (x) { return x.side === 'short'; }).sort(function (a, b) { return a.px - b.px; });
+  var longs = clusters.filter(function (x) { return x.side === 'long'; }).sort(function (a, b) { return b.px - a.px; });
+  return { px: px, swingHi: hi, swingLo: lo, clusters: clusters, nearestShort: shorts[0] || null, nearestLong: longs[0] || null };
+}
+
+// --- 3. OPCIONES DERIBIT (API pública gratis: PCR, Max Pain, ATM IV, Skew) ---
+function computeDeribitSummary(items, spotPx) {
+  if (!Array.isArray(items) || !items.length) return null;
+  var parsed = [];
+  items.forEach(function (it) {
+    if (!it || !it.instrument_name || !(it.open_interest > 0)) return;
+    var parts = it.instrument_name.split('-'); // e.g. BTC-28NOV26-90000-C
+    if (parts.length < 4) return;
+    var strike = parseFloat(parts[2]), cp = parts[3];
+    if (!(strike > 0) || (cp !== 'C' && cp !== 'P')) return;
+    parsed.push({
+      exp: parts[1], strike: strike, cp: cp, oi: +it.open_interest || 0,
+      iv: +it.mark_iv || 0, under: +it.underlying_price || spotPx || 0
+    });
+  });
+  if (!parsed.length) return null;
+  var refPx = spotPx > 0 ? spotPx : parsed[0].under;
+  var callOi = 0, putOi = 0, byExp = {}, atmIvSum = 0, atmN = 0, putOtmIv = 0, putOtmN = 0, callOtmIv = 0, callOtmN = 0;
+  parsed.forEach(function (p) {
+    if (p.cp === 'C') callOi += p.oi; else putOi += p.oi;
+    if (!byExp[p.exp]) byExp[p.exp] = { exp: p.exp, oi: 0, list: [] };
+    byExp[p.exp].oi += p.oi; byExp[p.exp].list.push(p);
+    if (refPx > 0 && p.iv > 0) {
+      var mny = p.strike / refPx;
+      if (mny >= 0.96 && mny <= 1.04) { atmIvSum += p.iv; atmN++; }
+      else if (p.cp === 'P' && mny >= 0.85 && mny < 0.95) { putOtmIv += p.iv; putOtmN++; }
+      else if (p.cp === 'C' && mny > 1.05 && mny <= 1.15) { callOtmIv += p.iv; callOtmN++; }
+    }
+  });
+  var topExp = Object.keys(byExp).map(function (k) { return byExp[k]; }).sort(function (a, b) { return b.oi - a.oi; })[0];
+  var maxPain = NaN;
+  if (topExp && topExp.list.length >= 4) {
+    var strikes = [];
+    var seen = {};
+    topExp.list.forEach(function (p) { if (!seen[p.strike]) { seen[p.strike] = 1; strikes.push(p.strike); } });
+    var bestLoss = Infinity;
+    strikes.forEach(function (st) {
+      var loss = 0;
+      topExp.list.forEach(function (p) {
+        if (p.cp === 'C' && st > p.strike) loss += (st - p.strike) * p.oi;
+        else if (p.cp === 'P' && st < p.strike) loss += (p.strike - st) * p.oi;
+      });
+      if (loss < bestLoss) { bestLoss = loss; maxPain = st; }
+    });
+  }
+  var pcr = callOi > 0 ? putOi / callOi : NaN;
+  var atmIv = atmN ? atmIvSum / atmN : NaN;
+  var skew = (putOtmN && callOtmN) ? (putOtmIv / putOtmN - callOtmIv / callOtmN) : NaN;
+  return {
+    totalOi: callOi + putOi, callOi: callOi, putOi: putOi, pcr: pcr,
+    atmIv: atmIv, skew: skew, maxPain: maxPain, topExp: topExp ? topExp.exp : '—', refPx: refPx
+  };
+}
+
+// --- 4. MULTI-EXCHANGE: COINBASE PREMIUM + KRAKEN + BYBIT + CVD SPOT VS PERPS ---
+function computeMultiExchange(spotKl, perpKl, cbPx, krPx, bybitFr, binFr) {
+  var sLast = spotKl && spotKl.length ? +spotKl[spotKl.length - 1][4] : NaN;
+  var pLast = perpKl && perpKl.length ? +perpKl[perpKl.length - 1][4] : NaN;
+  var cbPremPct = (isNum(cbPx) && isNum(sLast) && sLast > 0) ? (cbPx / sLast - 1) * 100 : NaN;
+  var krSpreadPct = (isNum(krPx) && isNum(sLast) && sLast > 0) ? (krPx / sLast - 1) * 100 : NaN;
+  var basisPct = (isNum(pLast) && isNum(sLast) && sLast > 0) ? (pLast / sLast - 1) * 100 : NaN;
+  function cvdDeltaPct(kl) {
+    if (!Array.isArray(kl) || kl.length < 5) return NaN;
+    var net = 0, tot = 0;
+    kl.forEach(function (k) {
+      var v = +k[5] || 0, tb = +k[9] || 0;
+      net += (2 * tb - v); tot += v;
+    });
+    return tot > 0 ? (net / tot) * 100 : 0;
+  }
+  var spotCvd = cvdDeltaPct(spotKl);
+  var perpCvd = cvdDeltaPct(perpKl);
+  var diag = 'Flujo equilibrado', cls = 'mut';
+  if (isNum(spotCvd) && isNum(perpCvd)) {
+    if (spotCvd > 3 && (!isNum(cbPremPct) || cbPremPct >= -0.02)) { diag = 'Demanda Spot Real (saludable)'; cls = 'bull'; }
+    else if (perpCvd > 5 && spotCvd <= 1) { diag = 'Rally solo por Apalancamiento (frágil)'; cls = 'warn'; }
+    else if (perpCvd < -3 && spotCvd > 2) { diag = 'Absorción Spot en caída (acumulación)'; cls = 'bull'; }
+    else if (spotCvd < -3 && perpCvd < -3) { diag = 'Distribución sincronizada Spot+Perps'; cls = 'bear'; }
+  }
+  return {
+    spotPx: sLast, perpPx: pLast, cbPx: cbPx, krPx: krPx,
+    cbPremPct: cbPremPct, krSpreadPct: krSpreadPct, basisPct: basisPct,
+    spotCvd: spotCvd, perpCvd: perpCvd, bybitFr: bybitFr, binFr: binFr,
+    diag: diag, cls: cls
+  };
+}
+
+function refreshMacroPro() {
+  if (S.pro.busy) return;
+  S.pro.busy = true;
+  renderMacroPro();
+  var sym = S.set.sym || 'BTCUSDT';
+  var base = sym.replace(/USDT$|USDC$|FDUSD$/, '') || 'BTC';
+  var optCur = base === 'ETH' ? 'ETH' : 'BTC';
+  var krPair = base === 'BTC' ? 'XBTUSD' : (base + 'USD');
+  Promise.all([
+    fetchJson('https://api.alternative.me/fng/?limit=2', 8000).catch(function () { return null; }),
+    fetchJson('https://api.binance.com/api/v3/klines?symbol=' + sym + '&interval=1h&limit=30', 9000).catch(function () { return null; }),
+    fetchJson('https://fapi.binance.com/fapi/v1/klines?symbol=' + sym + '&interval=1h&limit=30', 9000).catch(function () { return null; }),
+    fetchJson('https://api.exchange.coinbase.com/products/' + base + '-USD/ticker', 8000).catch(function () { return null; }),
+    fetchJson('https://api.kraken.com/0/public/Ticker?pair=' + krPair, 8000).catch(function () { return null; }),
+    fetchJson('https://api.bybit.com/v5/market/tickers?category=linear&symbol=' + sym, 8000).catch(function () { return null; }),
+    fetchJson('https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=' + optCur + '&kind=option', 10000).catch(function () { return null; }),
+    fetchJson('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=65', 9000).catch(function () { return null; })
+  ]).then(function (r) {
+    if (r[0] && r[0].data && r[0].data.length) {
+      S.pro.fng = {
+        val: +r[0].data[0].value,
+        cls: r[0].data[0].value_classification,
+        prev: r[0].data[1] ? +r[0].data[1].value : NaN
+      };
+    }
+    var cbPx = r[3] && r[3].price ? parseFloat(r[3].price) : NaN;
+    var krPx = NaN;
+    if (r[4] && r[4].result) {
+      var rk = Object.keys(r[4].result)[0];
+      if (rk && r[4].result[rk] && r[4].result[rk].c) krPx = parseFloat(r[4].result[rk].c[0]);
+    }
+    var byFr = NaN;
+    if (r[5] && r[5].result && r[5].result.list && r[5].result.list[0]) {
+      byFr = parseFloat(r[5].result.list[0].fundingRate);
+    }
+    var binFr = S.micro && isNum(S.micro.funding) ? S.micro.funding : NaN;
+    S.pro.multi = computeMultiExchange(r[1], r[2], cbPx, krPx, byFr, binFr);
+    S.pro.multi.sym = sym;
+    if (r[6] && r[6].result) {
+      var spotOpt = optCur === base && isNum(S.pro.multi.spotPx) ? S.pro.multi.spotPx : NaN;
+      S.pro.deribit = computeDeribitSummary(r[6].result, spotOpt);
+      if (S.pro.deribit) S.pro.deribit.cur = optCur;
+    }
+    if (Array.isArray(r[7]) && r[7].length > 20) {
+      S.pro.btcKlines = r[7].map(function (k) { return +k[4]; });
+    }
+    S.pro.at = Date.now();
+    S.pro.busy = false;
+    renderMacroPro();
+    if (typeof renderPortRisk === 'function') renderPortRisk();
+  }).catch(function () {
+    S.pro.busy = false;
+    renderMacroPro();
+  });
+}
+
+function renderMacroPro() {
+  var el = $('#cMacroPro'); if (!el) return;
+  var t = S.pro.tab || 'macro';
+  var tBtn = function (k, lbl) { return '<button type="button" data-prot="' + k + '" class="' + (t === k ? 'on' : '') + '">' + lbl + '</button>'; };
+  var head = '<div class="card-head"><div class="card-title">🏛️ Radar Institucional Pro · APIs Públicas Gratis</div>' +
+    '<div class="row-btns"><button type="button" class="pbtn sm acc" id="proRefresh"' + (S.pro.busy ? ' disabled' : '') + '>' + (S.pro.busy ? 'Cargando…' : (S.pro.at ? 'Actualizar Pro' : 'Cargar datos en vivo')) + '</button></div></div>' +
+    '<div class="pro-tabs">' + tBtn('macro', '📅 Macro & F&G') + tBtn('multi', '🌐 Multi-Exchange') + tBtn('opt', '📊 Opciones Deribit') + tBtn('liq', '🔥 Liquidaciones est.') + '</div>';
+
+  var body = '';
+  if (t === 'macro') {
+    var m = getMacroEvents(Date.now());
+    var fg = S.pro.fng;
+    var fgChip = fg ? '<span class="chip ' + (fg.val <= 25 ? 'bear' : fg.val >= 70 ? 'bull' : 'warn') + '">' + fg.val + '/100 · ' + esc(fg.cls) + (isNum(fg.prev) ? ' (' + fsig(fg.val - fg.prev, 0) + ')' : '') + '</span>' : '<span class="card-sub">Tocá "Cargar datos en vivo"</span>';
+    body = '<div class="pro-body">' +
+      '<div class="macro-banner' + (m.inWindow ? ' hot' : '') + '">' +
+      (m.inWindow ? '⚠️ <b>VENTANA MACRO ACTIVA (±4h):</b> ' + esc(m.active[0].label) + ' — volatilidad binaria alta.' : '✅ <b>Sin evento macro binario en las próximas 4 horas.</b>') +
+      '<div style="margin-top:6px"><label style="cursor:pointer"><input type="checkbox" id="proMacroGuard"' + (S.pro.macroGuard ? ' checked' : '') + ' style="width:auto;min-height:0;vertical-align:middle"> Bloquear nuevas entradas Paper durante ventana macro (±4h)</label></div></div>' +
+      '<div class="cs-grid" style="padding:0;border:0;margin-bottom:8px">' +
+      '<div class="cs-kpi"><span class="k">Crypto Fear &amp; Greed</span><span class="v" style="font-size:13px">' + fgChip + '</span></div>' +
+      '<div class="cs-kpi"><span class="k">Próximo evento alto impacto</span><span class="v" style="font-size:13px">' + (m.upcoming[0] ? esc(m.upcoming[0].kind) + ' · ' + Math.max(0, Math.round((m.upcoming[0].t - Date.now()) / 3600e3)) + ' h' : '—') + '</span></div>' +
+      '</div>' +
+      '<table class="cs-tbl"><thead><tr><th>Evento</th><th>Tipo</th><th class="r">Fecha UTC</th><th class="r">Faltan</th></tr></thead><tbody>' +
+      m.upcoming.map(function (ev) {
+        var hrs = Math.round((ev.t - Date.now()) / 3600e3);
+        var dStr = new Date(ev.t).toISOString().slice(0, 16).replace('T', ' ');
+        return '<tr><td><b>' + esc(ev.label) + '</b></td><td><span class="chip warn">' + esc(ev.kind) + '</span></td><td class="r">' + dStr + '</td><td class="r">' + (hrs >= 0 ? hrs + ' h' : 'en curso') + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  } else if (t === 'multi') {
+    var mx = S.pro.multi;
+    if (!mx) {
+      body = '<div class="empty">Tocá <b>Cargar datos en vivo</b> para consultar Coinbase, Kraken, Bybit y comparar el CVD de Binance Spot vs. Futuros (sin API keys).</div>';
+    } else {
+      body = '<div class="pro-body">' +
+        '<div style="margin-bottom:8px">Diagnóstico flujo (' + esc(mx.sym || S.set.sym) + '): <span class="chip ' + mx.cls + '">' + esc(mx.diag) + '</span></div>' +
+        '<div class="cs-grid" style="padding:0;border:0">' +
+        '<div class="cs-kpi"><span class="k">Coinbase Premium</span><span class="v ' + (mx.cbPremPct > 0 ? 'c-bull' : mx.cbPremPct < 0 ? 'c-bear' : '') + '">' + (isNum(mx.cbPremPct) ? fsig(mx.cbPremPct, 3) + ' %' : 'N/D') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">Basis Perp vs Spot</span><span class="v ' + (mx.basisPct > 0.05 ? 'c-warn' : '') + '">' + (isNum(mx.basisPct) ? fsig(mx.basisPct, 3) + ' %' : 'N/D') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">CVD Spot (30h)</span><span class="v ' + (mx.spotCvd > 0 ? 'c-bull' : 'c-bear') + '">' + (isNum(mx.spotCvd) ? fsig(mx.spotCvd, 1) + ' %' : '—') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">CVD Perps (30h)</span><span class="v ' + (mx.perpCvd > 0 ? 'c-bull' : 'c-bear') + '">' + (isNum(mx.perpCvd) ? fsig(mx.perpCvd, 1) + ' %' : '—') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">Kraken Spread</span><span class="v">' + (isNum(mx.krSpreadPct) ? fsig(mx.krSpreadPct, 3) + ' %' : 'N/D') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">Funding Bybit 8h</span><span class="v">' + (isNum(mx.bybitFr) ? fsig(mx.bybitFr * 100, 4) + ' %' : 'N/D') + '</span></div>' +
+        '</div></div>';
+    }
+  } else if (t === 'opt') {
+    var dr = S.pro.deribit;
+    if (!dr) {
+      body = '<div class="empty">Tocá <b>Cargar datos en vivo</b> para traer la cadena de opciones pública de <b>Deribit</b> (Put/Call OI, Max Pain, ATM IV y 25D Skew).</div>';
+    } else {
+      body = '<div class="pro-body">' +
+        '<div class="card-sub" style="margin-bottom:8px">Cadena pública Deribit · Subyacente <b>' + esc(dr.cur) + '</b> · Vencimiento líder: <b>' + esc(dr.topExp) + '</b></div>' +
+        '<div class="cs-grid" style="padding:0;border:0">' +
+        '<div class="cs-kpi"><span class="k">Put / Call OI Ratio</span><span class="v ' + (dr.pcr > 0.85 ? 'c-bear' : dr.pcr < 0.55 ? 'c-bull' : '') + '">' + (isNum(dr.pcr) ? fnum(dr.pcr, 2) : '—') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">Max Pain (' + esc(dr.topExp) + ')</span><span class="v">' + (isNum(dr.maxPain) ? fpx(dr.maxPain) : '—') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">ATM IV (Vol. Implícita)</span><span class="v">' + (isNum(dr.atmIv) ? fnum(dr.atmIv, 1) + ' %' : '—') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">Skew 25D (Put−Call IV)</span><span class="v ' + (dr.skew > 3 ? 'c-bear' : dr.skew < -2 ? 'c-bull' : '') + '">' + (isNum(dr.skew) ? fsig(dr.skew, 1) + ' pts' : '—') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">OI Total Opciones</span><span class="v">' + fvol(dr.totalOi) + ' ' + esc(dr.cur) + '</span></div>' +
+        '</div></div>';
+    }
+  } else {
+    var an = S.an && S.an[S.set.tf];
+    var lq = estimateLiquidationClusters(an);
+    if (!lq) {
+      body = '<div class="empty">Cargá un par para estimar las zonas de liquidación apalancada (10x–100x).</div>';
+    } else {
+      body = '<div class="pro-body">' +
+        '<div class="card-sub" style="margin-bottom:8px">Estimación estructural desde swings recientes (90 velas · MMR 0,5 %). Activá la capa <b>Liquidaciones est.</b> en Gráfico para ver las bandas en el Canvas.</div>' +
+        '<div class="cs-grid" style="padding:0;border:0;margin-bottom:8px">' +
+        '<div class="cs-kpi"><span class="k">Imán Short-Liq (arriba)</span><span class="v c-warn">' + (lq.nearestShort ? fpx(lq.nearestShort.px) + ' (+' + fnum(lq.nearestShort.distPct, 2) + '% · ' + lq.nearestShort.lev + 'x)' : '—') + '</span></div>' +
+        '<div class="cs-kpi"><span class="k">Imán Long-Liq (abajo)</span><span class="v" style="color:#a855f7">' + (lq.nearestLong ? fpx(lq.nearestLong.px) + ' (' + fnum(lq.nearestLong.distPct, 2) + '% · ' + lq.nearestLong.lev + 'x)' : '—') + '</span></div>' +
+        '</div><table class="cs-tbl"><thead><tr><th>Lado</th><th>Apalancamiento</th><th class="r">Precio est.</th><th class="r">Distancia</th></tr></thead><tbody>' +
+        lq.clusters.map(function (c) {
+          return '<tr><td><span class="chip ' + (c.side === 'short' ? 'warn' : 'acc') + '">' + (c.side === 'short' ? 'Cortos (arriba)' : 'Largos (abajo)') + '</span></td><td>' + c.lev + 'x</td><td class="r"><b>' + fpx(c.px) + '</b></td><td class="r">' + fsig(c.distPct, 2) + ' %</td></tr>';
+        }).join('') + '</tbody></table></div>';
+    }
+  }
+  el.innerHTML = head + body;
+  var rb = $('#proRefresh'); if (rb) rb.onclick = refreshMacroPro;
+  el.querySelectorAll('[data-prot]').forEach(function (b) { b.onclick = function () { S.pro.tab = b.dataset.prot; renderMacroPro(); }; });
+  var mg = $('#proMacroGuard'); if (mg) mg.onchange = function () { S.pro.macroGuard = !!mg.checked; saveV11Risk(); };
+}
+
+// --- 5. FOOTPRINT INTRAVELA EN VIVO (WebSocket aggTrade -> Delta por Precio) ---
+function footprintStepFor(px) {
+  if (px >= 50000) return 25;
+  if (px >= 10000) return 10;
+  if (px >= 1000) return 2;
+  if (px >= 100) return 0.25;
+  if (px >= 10) return 0.05;
+  if (px >= 1) return 0.005;
+  if (px >= 0.1) return 0.0005;
+  return 0.00005;
+}
+
+function pushFootprint(d) {
+  if (!d || !d.s) return;
+  var sym = d.s.toUpperCase();
+  if (sym !== (S.set.sym || '').toUpperCase()) return;
+  var px = parseFloat(d.p), qty = parseFloat(d.q);
+  if (!(px > 0) || !(qty > 0)) return;
+  if (S.pro.fpSym !== sym || !S.pro.fpStep) {
+    S.pro.fpSym = sym; S.pro.fpStep = footprintStepFor(px);
+    S.pro.fpBuckets = {}; S.pro.fpTrades = 0; S.pro.fpBuyVol = 0; S.pro.fpSellVol = 0;
+  }
+  var step = S.pro.fpStep;
+  var lvl = Math.round(px / step) * step;
+  var key = lvl.toFixed(6);
+  var b = S.pro.fpBuckets[key] || (S.pro.fpBuckets[key] = { px: lvl, buy: 0, sell: 0 });
+  if (d.m) { b.sell += qty; S.pro.fpSellVol += qty; } // buyer is maker -> taker SELL
+  else { b.buy += qty; S.pro.fpBuyVol += qty; }      // seller is maker -> taker BUY
+  S.pro.fpTrades++;
+  var now = Date.now();
+  if (now - S.pro.fpLastRender > 900) {
+    S.pro.fpLastRender = now;
+    if (typeof renderFootprint === 'function') renderFootprint();
+  }
+}
+
+function renderFootprint() {
+  var el = $('#cFootprint'); if (!el) return;
+  var sym = S.set.sym || 'BTCUSDT';
+  if (S.pro.fpSym && S.pro.fpSym !== sym) {
+    S.pro.fpSym = sym; S.pro.fpStep = 0; S.pro.fpBuckets = {}; S.pro.fpTrades = 0; S.pro.fpBuyVol = 0; S.pro.fpSellVol = 0;
+  }
+  var rows = Object.keys(S.pro.fpBuckets).map(function (k) { return S.pro.fpBuckets[k]; })
+    .sort(function (a, b) { return b.px - a.px; });
+  var maxTot = 0, pocKey = null;
+  rows.forEach(function (r) { var tot = r.buy + r.sell; if (tot > maxTot) { maxTot = tot; pocKey = r.px; } });
+  var topRows = rows.slice(0, 14);
+  var netDelta = S.pro.fpBuyVol - S.pro.fpSellVol;
+  el.innerHTML = '<div class="card-head"><div class="card-title">🧬 Footprint Intravela en Vivo · ' + esc(sym) + ' (aggTrade)</div>' +
+    '<div class="row-btns"><span class="chip ' + (netDelta >= 0 ? 'bull' : 'bear') + '">Δ ' + fsig(netDelta, 2) + '</span>' +
+    '<button type="button" class="pbtn sm" id="fpReset">Reiniciar</button></div></div>' +
+    (!topRows.length
+      ? '<div class="empty">Esperando ticks en vivo de Binance WebSocket (<code>aggTrade</code>) para construir el delta por nivel de precio…</div>'
+      : '<div class="note" style="border-top:0">' + S.pro.fpTrades + ' trades capturados · Paso de nivel: ' + fpx(S.pro.fpStep) + ' · Imbalances resaltados ≥ 3:1</div>' +
+        '<div class="lab-scroll"><table class="fp-tbl"><thead><tr><th>Nivel Precio</th><th class="r">Ventas Agresivas (Bid)</th><th class="r">Compras Agresivas (Ask)</th><th class="r">Delta</th><th class="r">Estado</th></tr></thead><tbody>' +
+        topRows.map(function (r) {
+          var del = r.buy - r.sell, isPoc = r.px === pocKey;
+          var imbB = r.buy > 0 && r.buy >= 3 * Math.max(1e-9, r.sell);
+          var imbS = r.sell > 0 && r.sell >= 3 * Math.max(1e-9, r.buy);
+          var st = isPoc ? '<span class="chip warn">POC VIVO</span>' : imbB ? '<span class="chip bull">IMB COMPRA</span>' : imbS ? '<span class="chip bear">IMB VENTA</span>' : '—';
+          return '<tr class="' + (isPoc ? 'fp-poc' : '') + '"><td>' + fpx(r.px) + '</td>' +
+            '<td class="r' + (imbS ? ' fp-imb-s' : '') + '">' + fvol(r.sell) + '</td>' +
+            '<td class="r' + (imbB ? ' fp-imb-b' : '') + '">' + fvol(r.buy) + '</td>' +
+            '<td class="r ' + (del >= 0 ? 'c-bull' : 'c-bear') + '">' + fsig(del, 2) + '</td>' +
+            '<td class="r">' + st + '</td></tr>';
+        }).join('') + '</tbody></table></div>');
+  var rb = $('#fpReset');
+  if (rb) rb.onclick = function () { S.pro.fpBuckets = {}; S.pro.fpTrades = 0; S.pro.fpBuyVol = 0; S.pro.fpSellVol = 0; renderFootprint(); };
+}
+
+// --- 6. CONTROL DE PORTAFOLIO (CORRELACIÓN/BETA BTC + VOL-TARGETING + KILL SWITCH) ---
+function computeCorrelationBeta(symCloses, btcCloses) {
+  if (!Array.isArray(symCloses) || !Array.isArray(btcCloses)) return { corr: NaN, beta: NaN, volAnn: NaN };
+  var m = Math.min(symCloses.length, btcCloses.length);
+  if (m < 15) return { corr: NaN, beta: NaN, volAnn: NaN };
+  var rs = [], rb = [], i;
+  for (i = 1; i < m; i++) {
+    var a0 = symCloses[symCloses.length - m + i - 1], a1 = symCloses[symCloses.length - m + i];
+    var b0 = btcCloses[btcCloses.length - m + i - 1], b1 = btcCloses[btcCloses.length - m + i];
+    if (a0 > 0 && a1 > 0 && b0 > 0 && b1 > 0) { rs.push(Math.log(a1 / a0)); rb.push(Math.log(b1 / b0)); }
+  }
+  var n = rs.length; if (n < 12) return { corr: NaN, beta: NaN, volAnn: NaN };
+  var ms = 0, mb = 0;
+  for (i = 0; i < n; i++) { ms += rs[i]; mb += rb[i]; }
+  ms /= n; mb /= n;
+  var cov = 0, vs = 0, vb = 0;
+  for (i = 0; i < n; i++) {
+    var ds = rs[i] - ms, db = rb[i] - mb;
+    cov += ds * db; vs += ds * ds; vb += db * db;
+  }
+  var corr = (vs > 0 && vb > 0) ? cov / Math.sqrt(vs * vb) : NaN;
+  var beta = vb > 0 ? cov / vb : NaN;
+  var sd = Math.sqrt(vs / Math.max(1, n - 1));
+  return { corr: corr, beta: beta, volDailyPct: sd * Math.sqrt(24) * 100 };
+}
+
+function getKillSwitchState() {
+  var P = S.paper; if (!P) return { dailyPct: 0, weeklyPct: 0, tripped: false, reason: '' };
+  var now = Date.now(), dayCut = now - 86400e3, wkCut = now - 7 * 86400e3;
+  var eq = typeof paperEquity === 'function' ? paperEquity() : (P.cap0 || 10000);
+  var dPnl = 0, wPnl = 0;
+  (P.closed || []).forEach(function (tr) {
+    var t = tr.tExit || tr.closedAt || 0;
+    var u = isNum(tr.netUsd) ? tr.netUsd : 0;
+    if (t >= dayCut) dPnl += u;
+    if (t >= wkCut) wPnl += u;
+  });
+  var base = Math.max(1, P.cap0 || eq);
+  var dPct = (dPnl / base) * 100, wPct = (wPnl / base) * 100;
+  var tripped = (dPct <= -Math.abs(S.pro.killDailyPct)) || (wPct <= -Math.abs(S.pro.killWeeklyPct));
+  var reason = dPct <= -Math.abs(S.pro.killDailyPct)
+    ? 'Kill Switch diario (' + fnum(dPct, 2) + '% ≤ -' + S.pro.killDailyPct + '%)'
+    : (wPct <= -Math.abs(S.pro.killWeeklyPct) ? 'Kill Switch semanal (' + fnum(wPct, 2) + '% ≤ -' + S.pro.killWeeklyPct + '%)' : '');
+  return { dailyPct: dPct, weeklyPct: wPct, tripped: tripped, reason: reason };
+}
+
+function checkRiskGuards() {
+  var ks = getKillSwitchState();
+  if (ks.tripped) return { ok: false, reason: ks.reason };
+  if (S.pro.macroGuard) {
+    var m = getMacroEvents(Date.now());
+    if (m.inWindow) return { ok: false, reason: 'Ventana macro activa (' + m.active[0].kind + ')' };
+  }
+  return { ok: true, reason: '' };
+}
+
+function renderPortRisk() {
+  var el = $('#cPortRisk'); if (!el) return;
+  var ks = getKillSwitchState();
+  var an = S.an && S.an[S.set.tf];
+  var symCloses = an && an.c ? an.c.slice(-65).map(function (k) { return k.c; }) : null;
+  var cb = (S.set.sym === 'BTCUSDT')
+    ? { corr: 1, beta: 1, volDailyPct: symCloses ? computeCorrelationBeta(symCloses, symCloses).volDailyPct : NaN }
+    : computeCorrelationBeta(symCloses, S.pro.btcKlines);
+  var P = S.paper || { open: [], cap0: 10000 };
+  var eq = typeof paperEquity === 'function' ? paperEquity() : (P.cap0 || 10000);
+  var netBetaExp = 0;
+  (P.open || []).forEach(function (pos) {
+    var notional = Math.abs((pos.qty || 0) * (pos.last || pos.entry || 0));
+    var bEst = pos.sym === 'BTCUSDT' ? 1.0 : (isNum(cb.beta) && pos.sym === S.set.sym ? cb.beta : 1.15);
+    netBetaExp += (pos.side || 1) * (notional / Math.max(1, eq)) * bEst;
+  });
+  var baseRisk = (S.set.risk && S.set.risk.pct) || 1.0;
+  var volAdjRisk = isNum(cb.volDailyPct) && cb.volDailyPct > 0
+    ? Math.max(0.25, Math.min(baseRisk * 1.25, baseRisk * (S.pro.targetVolPct / cb.volDailyPct)))
+    : baseRisk;
+  el.innerHTML = '<div class="card-head"><div class="card-title">🛡️ Portafolio, Correlación BTC &amp; Kill Switch</div>' +
+    '<div class="row-btns">' + (ks.tripped ? '<span class="chip bear">KILL SWITCH ACTIVO</span>' : '<span class="chip bull">Riesgo habilitado</span>') + '</div></div>' +
+    '<div class="cs-grid">' +
+    '<div class="cs-kpi"><span class="k">Correlación vs BTC</span><span class="v">' + (isNum(cb.corr) ? fnum(cb.corr, 2) : 'Cargar Pro') + '</span></div>' +
+    '<div class="cs-kpi"><span class="k">Beta vs BTC</span><span class="v">' + (isNum(cb.beta) ? fnum(cb.beta, 2) + 'x' : '—') + '</span></div>' +
+    '<div class="cs-kpi"><span class="k">Exposición Beta-BTC</span><span class="v ' + (Math.abs(netBetaExp) > 2.5 ? 'c-bear' : '') + '">' + fsig(netBetaExp, 2) + 'x eq</span></div>' +
+    '<div class="cs-kpi"><span class="k">Riesgo Vol-Targeting</span><span class="v c-bull">' + fnum(volAdjRisk, 2) + ' %</span></div>' +
+    '<div class="cs-kpi"><span class="k">PnL 24h / 7d</span><span class="v ' + (ks.dailyPct < 0 ? 'c-bear' : 'c-bull') + '">' + fsig(ks.dailyPct, 2) + '% / ' + fsig(ks.weeklyPct, 2) + '%</span></div>' +
+    '</div>' +
+    '<div class="ks-row">' +
+    '<label>Kill diario (%): <input type="number" id="ksDay" step="0.5" min="0.5" max="20" value="' + S.pro.killDailyPct + '"></label>' +
+    '<label>Kill semanal (%): <input type="number" id="ksWk" step="0.5" min="1" max="40" value="' + S.pro.killWeeklyPct + '"></label>' +
+    '<label>Vol. objetivo/día (%): <input type="number" id="ksVol" step="0.5" min="0.5" max="15" value="' + S.pro.targetVolPct + '"></label>' +
+    '</div>';
+  var kd = $('#ksDay'), kw = $('#ksWk'), kv = $('#ksVol');
+  if (kd) kd.onchange = function () { S.pro.killDailyPct = Math.max(0.5, +kd.value || 3); saveV11Risk(); renderPortRisk(); };
+  if (kw) kw.onchange = function () { S.pro.killWeeklyPct = Math.max(1, +kw.value || 7); saveV11Risk(); renderPortRisk(); };
+  if (kv) kv.onchange = function () { S.pro.targetVolPct = Math.max(0.5, +kv.value || 2.5); saveV11Risk(); renderPortRisk(); };
+}
+
+// --- 7. DIARIO DE EJECUCIÓN & COPIAR ORDEN BINANCE (REAL VS SISTEMA) ---
+function computeJournalAttribution(list) {
+  if (!Array.isArray(list) || !list.length) return { n: 0, avgSlipBps: 0, adherencePct: 0, totalRealR: 0, totalSysR: 0 };
+  var slipSum = 0, slipN = 0, adh = 0, realR = 0, sysR = 0;
+  list.forEach(function (j) {
+    if (isNum(j.refPx) && j.refPx > 0 && isNum(j.entryPx) && j.entryPx > 0) {
+      slipSum += (j.side || 1) * (j.entryPx / j.refPx - 1) * 10000;
+      slipN++;
+    }
+    if (j.followedPlan) adh++;
+    if (isNum(j.realR)) realR += j.realR;
+    if (isNum(j.sysR)) sysR += j.sysR;
+  });
+  return {
+    n: list.length,
+    avgSlipBps: slipN ? slipSum / slipN : 0,
+    adherencePct: (adh / list.length) * 100,
+    totalRealR: realR,
+    totalSysR: sysR
+  };
+}
+
+function renderJournal() {
+  var el = $('#cJournal'); if (!el) return;
+  var attr = computeJournalAttribution(S.journal);
+  var pl = typeof planFor === 'function' ? planFor(S.set.tf) : null;
+  var defPx = pl && isNum(pl.ref) ? pl.ref : (S.ticker && S.ticker.last ? S.ticker.last : 0);
+  var defSide = pl && pl.bias < 0 ? -1 : 1;
+  el.innerHTML = '<div class="card-head"><div class="card-title">📒 Diario de Ejecución &amp; Atribución (Real vs. Sistema)</div>' +
+    '<div class="row-btns"><button type="button" class="pbtn sm acc" id="jCopyOrder">📋 Copiar Orden Binance (Post-Only/OCO)</button></div></div>' +
+    '<div class="cs-grid">' +
+    '<div class="cs-kpi"><span class="k">Trades registrados</span><span class="v">' + attr.n + '</span></div>' +
+    '<div class="cs-kpi"><span class="k">Slippage medio entrada</span><span class="v ' + (attr.avgSlipBps > 8 ? 'c-bear' : 'c-bull') + '">' + fsig(attr.avgSlipBps, 1) + ' bps</span></div>' +
+    '<div class="cs-kpi"><span class="k">Adherencia al plan</span><span class="v ' + (attr.adherencePct >= 80 ? 'c-bull' : 'c-warn') + '">' + fnum(attr.adherencePct, 0) + ' %</span></div>' +
+    '<div class="cs-kpi"><span class="k">Acumulado Real vs Sistema</span><span class="v">' + fR(attr.totalRealR) + ' / ' + fR(attr.totalSysR) + '</span></div>' +
+    '</div>' +
+    '<div class="j-form">' +
+    '<input id="jSym" value="' + esc(S.set.sym || 'BTCUSDT') + '" placeholder="Par">' +
+    '<select id="jSide"><option value="1"' + (defSide > 0 ? ' selected' : '') + '>LONG</option><option value="-1"' + (defSide < 0 ? ' selected' : '') + '>SHORT</option></select>' +
+    '<input id="jRef" type="number" step="any" value="' + (defPx || '') + '" placeholder="Precio ref. señal">' +
+    '<input id="jEnt" type="number" step="any" value="' + (defPx || '') + '" placeholder="Tu entrada real">' +
+    '<input id="jRealR" type="number" step="0.1" placeholder="Tu R real (ej 1.5)">' +
+    '<input id="jSysR" type="number" step="0.1" placeholder="R sistema (ej 2.0)">' +
+    '<label style="display:flex;align-items:center;gap:4px;font-size:12px"><input id="jPlan" type="checkbox" checked style="width:auto"> Seguí SL/TP</label>' +
+    '<button type="button" class="abtn sm" id="jAdd">＋ Registrar</button>' +
+    '</div>' +
+    (S.journal.length
+      ? '<div class="lab-scroll"><table class="cs-tbl"><thead><tr><th>Par</th><th>Lado</th><th class="r">Ref / Real</th><th class="r">Slippage</th><th class="r">Real R</th><th class="r">Sist. R</th><th>Plan</th></tr></thead><tbody>' +
+        S.journal.slice(0, 12).map(function (j) {
+          var slp = (j.refPx > 0 && j.entryPx > 0) ? (j.side * (j.entryPx / j.refPx - 1) * 10000) : 0;
+          return '<tr><td><b>' + esc(j.sym) + '</b></td><td><span class="chip ' + (j.side > 0 ? 'bull' : 'bear') + '">' + (j.side > 0 ? 'LONG' : 'SHORT') + '</span></td>' +
+            '<td class="r">' + fpx(j.refPx) + ' / ' + fpx(j.entryPx) + '</td>' +
+            '<td class="r ' + (slp > 8 ? 'c-bear' : '') + '">' + fsig(slp, 1) + ' bps</td>' +
+            '<td class="r">' + fR(j.realR) + '</td><td class="r">' + fR(j.sysR) + '</td>' +
+            '<td>' + (j.followedPlan ? '✅' : '⚠️') + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="empty">Registrá tus trades reales para medir cuánto te cuesta el slippage o salir antes del objetivo frente al sistema.</div>');
+
+  var cBtn = $('#jCopyOrder');
+  if (cBtn) cBtn.onclick = function () {
+    var p2 = typeof planFor === 'function' ? planFor(S.set.tf) : null;
+    if (!p2 || p2.none || !isNum(p2.ref)) {
+      if (typeof toast === 'function') toast('No hay un plan activo en el par/temporalidad actual.', 'warn');
+      return;
+    }
+    var postOnly = p2.bias > 0 ? p2.ref * 0.9997 : p2.ref * 1.0003;
+    var txt = 'ORDEN BINANCE (Limit Post-Only + OCO)\nPar: ' + (S.set.sym || '') + ' (' + mkLabel() + ')\nLado: ' + (p2.bias > 0 ? 'BUY / LONG' : 'SELL / SHORT') +
+      '\nLimit Post-Only: ' + fpx(postOnly) + '\nStop Loss: ' + fpx(p2.sl) + '\nBreakeven 1R: ' + fpx(p2.tp1) + '\nTake Profit: ' + fpx(p2.tp);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { if (typeof toast === 'function') toast('📋 Orden Binance copiada al portapapeles', 'bull'); });
+    } else if (typeof toast === 'function') {
+      toast(txt, 'bull');
+    }
+  };
+  var aBtn = $('#jAdd');
+  if (aBtn) aBtn.onclick = function () {
+    var sym = ($('#jSym').value || S.set.sym || 'BTCUSDT').trim().toUpperCase();
+    var side = +$('#jSide').value || 1;
+    var refPx = parseFloat($('#jRef').value) || 0;
+    var entryPx = parseFloat($('#jEnt').value) || refPx;
+    var realR = parseFloat($('#jRealR').value);
+    var sysR = parseFloat($('#jSysR').value);
+    S.journal.unshift({
+      at: Date.now(), sym: sym, side: side, refPx: refPx, entryPx: entryPx,
+      realR: isFinite(realR) ? realR : 0, sysR: isFinite(sysR) ? sysR : 0,
+      followedPlan: !!$('#jPlan').checked
+    });
+    saveV11Journal();
+    renderJournal();
+  };
+}
+
+// Exponer utilidades puras v11.0 en VSA para pruebas automatizadas
+if (typeof V !== 'undefined') {
+  V.getMacroEvents = getMacroEvents;
+  V.estimateLiquidationClusters = estimateLiquidationClusters;
+  V.computeDeribitSummary = computeDeribitSummary;
+  V.computeMultiExchange = computeMultiExchange;
+  V.computeCorrelationBeta = computeCorrelationBeta;
+  V.computeJournalAttribution = computeJournalAttribution;
 }
 
 function renderOppsTab() { renderOpps(); renderCrossSectional(); renderLab(); }
@@ -4958,7 +5601,7 @@ function renderAnticipo() {
     '<div><div class="fc-h">Imanes más cercanos</div><div class="fc-h2">Arriba</div>' + magRows(upM, 'Sin imán cercano arriba.') + '<div class="fc-h2">Abajo</div>' + magRows(dnM, 'Sin imán cercano abajo.') + '</div></div>' +
     '<div class="note">El porcentaje ya pasó por la historia de este par: si un 60 % solo acertaba el 52 %, ahora dice 52 %. El centro del cono sigue siendo un sesgo chico (Kalman + flujo + régimen) y la banda es la volatilidad EWMA (λ 0,94), no un rango prometido. Techo práctico: cerca del 70 % cuando todo coincide. En el gráfico, capa «Pronóstico», con el precio al borde derecho. La alarma de montaje (bobina, spring, upthrust) se prende en Alertas y no reemplaza a una regla con respaldo.</div>';
 }
-function renderRadar() { renderAnticipo(); renderVerdict(); renderMicro(); renderForming(); renderPlan(); renderMtf(); }
+function renderRadar() { renderAnticipo(); renderVerdict(); renderMicro(); if (typeof renderMacroPro === 'function') renderMacroPro(); renderForming(); renderPlan(); renderMtf(); }
 function renderVerdict() {
   var el = $('#cVerdict'), vd = currentVerdict();
   var haveAn = V.TF.filter(function (t) { return S.an[t.id]; }).length, readyEv = V.TF.filter(function (t) { return S.an[t.id] && S.ev[t.id]; }).length;
@@ -5175,6 +5818,7 @@ function renderChart() {
   if (an) { var L = an.n - 1, r = V.RMAP[an.primary[L]]; $('#chRule').textContent = 'Última cerrada: ' + r.code + ' · ' + r.name; } else $('#chRule').textContent = '—';
   $('#chLegend').innerHTML = '<span><i style="background:var(--bull)"></i>compras agresivas</span><span><i style="background:var(--bear)"></i>ventas agresivas</span><span><i style="background:var(--cyan)"></i>CVD</span><span><i style="background:var(--acc2)"></i>cono 80/50 · línea = centro</span><span>▲▼ llenos: con respaldo · huecos: prometedora/fuerte</span><span>vela tenue: en formación</span>';
   drawChart(); renderHud();
+  if (typeof renderFootprint === 'function') renderFootprint();
 }
 function selIndex(an, st) {
   var t = S.ch.hoverT != null ? S.ch.hoverT : S.ch.selT; if (t == null) return -1;
@@ -5333,6 +5977,20 @@ function drawChart() {
     }
     ctx.restore();
   }
+  if (lay.liq && !S.demo && typeof estimateLiquidationClusters === 'function') {
+    var liqInfo = estimateLiquidationClusters(an);
+    if (liqInfo && liqInfo.clusters) {
+      ctx.save();
+      liqInfo.clusters.forEach(function (cl) {
+        var Yl2 = yOf(cl.px);
+        if (Yl2 < yP0 || Yl2 > yP0 + hP) return;
+        ctx.fillStyle = cl.side === 'short' ? 'rgba(245,158,11,0.16)' : 'rgba(168,85,247,0.16)';
+        ctx.fillRect(x0, Yl2 - 3, x1 - x0, 6);
+        window._vsaChartTags.push({ y: Yl2, text: (cl.side === 'short' ? 'LIQ-S ' : 'LIQ-L ') + cl.lev + 'x', col: cl.side === 'short' ? '#f59e0b' : '#a855f7', prio: 0 });
+      });
+      ctx.restore();
+    }
+  }
   for (i = start; i < end; i++) {
     var q = K(i), up = q.c >= q.o, X = xOf(i), col = up ? C.bull : C.bear;
     ctx.globalAlpha = i >= n ? 0.5 : 1; ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 1;
@@ -5380,7 +6038,7 @@ function drawChart() {
       });
     }
   }
-  // v10.1 Anti-collision right-edge pill stack (evita solapamientos entre Plan, Perfil y P50)
+  // v11.0 Anti-collision right-edge pill stack (evita solapamientos entre Plan, Perfil y P50)
   if (window._vsaChartTags && window._vsaChartTags.length) {
     var tags = window._vsaChartTags.slice().sort(function (a, b) { return a.y - b.y; });
     var minGap = 15, topLim = yP0 + 9, botLim = yP0 + hP - 9;
@@ -6636,7 +7294,7 @@ function openLive() {
     if (wsSock !== sock) return;
     var msg; try { msg = JSON.parse(ev.data); } catch (e) { return; }
     var d = msg.data || msg; if (!d) return;
-    if (d.e === 'aggTrade') { pushTape(d); return; }
+    if (d.e === 'aggTrade') { pushTape(d); if (typeof pushFootprint === 'function') pushFootprint(d); return; }
     if (d.s && d.c) applyMini(d);
   };
   sock.onclose = function () {
@@ -6833,7 +7491,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 
-// v10.1 PWA Service Worker (solo HTTPS, nunca en file:// ni sandbox)
+// v11.0 PWA Service Worker (solo HTTPS, nunca en file:// ni sandbox)
 try {
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     navigator.serviceWorker.register('./sw.js').catch(function () {});

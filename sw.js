@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vsa-orderflow-v10-1';
+const CACHE_NAME = 'vsa-orderflow-v11-0';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -17,7 +17,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
-  if (event.request.method !== 'GET' || url.includes('binance.com') || url.includes('telegram.org') || url.includes('github.com')) {
+  if (event.request.method !== 'GET' || url.includes('binance.com') || url.includes('telegram.org') || url.includes('github.com') || url.includes('deribit.com') || url.includes('coinbase.com') || url.includes('kraken.com') || url.includes('bybit.com') || url.includes('alternative.me')) {
     return;
   }
   event.respondWith(
