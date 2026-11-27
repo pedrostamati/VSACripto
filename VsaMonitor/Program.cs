@@ -53,7 +53,7 @@ public static class Program
             Cash = cfg.PaperTrading.InitialCapital
         });
 
-        Console.WriteLine($"[VSA & Orderflow v10.1 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts}");
+        Console.WriteLine($"[VSA & Orderflow v11.0 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts}");
 
         if (testNotify)
         {
@@ -102,7 +102,7 @@ public static class Program
 
         SaveJson(statePath, state);
         SaveJson(paperPath, paper);
-        Console.WriteLine($"[VSA & Orderflow v10.1 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
+        Console.WriteLine($"[VSA & Orderflow v11.0 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
         return 0;
     }
 
@@ -395,7 +395,7 @@ public static class Program
             {
                 if (!pos.Sym.Equals(sym, StringComparison.OrdinalIgnoreCase)) continue;
                 pos.LastPrice = px;
-                // v10.1: Gestión dinámica Breakeven 1R + Trailing Stop ATR (solo ajusta a favor, nunca afloja)
+                // v11.0: Gestión dinámica Breakeven 1R + Trailing Stop ATR (solo ajusta a favor, nunca afloja)
                 if (pos.PeakPrice <= 0) pos.PeakPrice = pos.Entry;
                 if (pos.Side > 0 && px > pos.PeakPrice) pos.PeakPrice = px;
                 else if (pos.Side < 0 && px < pos.PeakPrice) pos.PeakPrice = px;
@@ -534,6 +534,8 @@ public static class Program
                     string microLine = deriv.HasValue
                         ? $"\n🏛️ Derivados: Funding {deriv.Value.FundingRate * 100:+0.000;-0.000}% · OI 24h {deriv.Value.OiChange24hPct * 100:+0.0;-0.0}% · L/S {deriv.Value.LongShortRatio:0.00} ({deriv.Value.SqueezeStatus})"
                         : "";
+                    var cbPrem = await FetchCoinbasePremiumPctAsync(sym, px, ct);
+                    string cbLine = cbPrem.HasValue ? $"\n🌐 Coinbase Premium: {cbPrem.Value:+0.000;-0.000}%" : "";
                     string obLine = LiveBooks.TryGetValue(sym, out var ob)
                         ? $"\n📚 Libro Top 20: OBI {ob.Obi * 100:+0.0;-0.0}% · BidWall {QuantEngine.FormatPrice(ob.BidWallPrice)} · AskWall {QuantEngine.FormatPrice(ob.AskWallPrice)}"
                         : "";
@@ -557,9 +559,9 @@ public static class Program
                         $"Regla: {hit.Code} {hit.Name}\n" +
                         $"Régimen HTF ({htf.ToUpperInvariant()}): {hit.HtfRegime.Label} ({hit.HtfRegime.SpreadPct * 100:+0.00;-0.00}%) · Hurst: {(double.IsFinite(hit.Hurst) ? hit.Hurst.ToString("0.00", CultureInfo.InvariantCulture) : "—")}\n" +
                         $"{evLine}\n" +
-                        $"Ref: {QuantEngine.FormatPrice(px)} · SL: {QuantEngine.FormatPrice(sl)} · Obj {rrMult:0.0}R: {QuantEngine.FormatPrice(tp)}{microLine}{obLine}{paperNote}";
+                        $"Ref: {QuantEngine.FormatPrice(px)} · SL: {QuantEngine.FormatPrice(sl)} · Obj {rrMult:0.0}R: {QuantEngine.FormatPrice(tp)}{microLine}{cbLine}{obLine}{paperNote}";
 
-                    Console.WriteLine($"[SEÑAL CONFIRMADA v10.1] {sym} {tf} {hit.Code}");
+                    Console.WriteLine($"[SEÑAL CONFIRMADA v11.0] {sym} {tf} {hit.Code}");
                     await SendTelegramAsync(tgToken, tgChat, msg);
                 }
                 catch (Exception ex)
@@ -570,12 +572,67 @@ public static class Program
         }
     }
 
+
+    private static readonly DateTimeOffset[] FomcDatesUtc =
+    {
+        DateTimeOffset.Parse("2026-01-28T19:00:00Z"), DateTimeOffset.Parse("2026-03-18T18:00:00Z"),
+        DateTimeOffset.Parse("2026-04-29T18:00:00Z"), DateTimeOffset.Parse("2026-06-17T18:00:00Z"),
+        DateTimeOffset.Parse("2026-07-29T18:00:00Z"), DateTimeOffset.Parse("2026-09-16T18:00:00Z"),
+        DateTimeOffset.Parse("2026-10-28T18:00:00Z"), DateTimeOffset.Parse("2026-12-09T19:00:00Z"),
+        DateTimeOffset.Parse("2027-01-27T19:00:00Z"), DateTimeOffset.Parse("2027-03-17T18:00:00Z"),
+        DateTimeOffset.Parse("2027-04-28T18:00:00Z"), DateTimeOffset.Parse("2027-06-09T18:00:00Z"),
+        DateTimeOffset.Parse("2027-07-28T18:00:00Z"), DateTimeOffset.Parse("2027-09-15T18:00:00Z"),
+        DateTimeOffset.Parse("2027-10-27T18:00:00Z"), DateTimeOffset.Parse("2027-12-08T19:00:00Z")
+    };
+
+    private static bool IsInMacroWindowUtc(DateTimeOffset now)
+    {
+        foreach (var d in FomcDatesUtc)
+            if (Math.Abs((now - d).TotalHours) <= 4.0) return true;
+        return false;
+    }
+
+    private static bool IsKillSwitchTripped(PaperState paper, PaperConfig pcfg, long nowMs)
+    {
+        double baseCap = Math.Max(1.0, paper.InitialCapital);
+        long dayCut = nowMs - 86_400_000L;
+        long wkCut = nowMs - 7L * 86_400_000L;
+        double dPnl = paper.Closed.Where(c => c.ClosedAt >= dayCut).Sum(c => c.NetUsd);
+        double wPnl = paper.Closed.Where(c => c.ClosedAt >= wkCut).Sum(c => c.NetUsd);
+        return (dPnl / baseCap * 100.0 <= -Math.Abs(pcfg.MaxDailyLossPct)) ||
+               (wPnl / baseCap * 100.0 <= -Math.Abs(pcfg.MaxWeeklyLossPct));
+    }
+
+    private static async Task<double?> FetchCoinbasePremiumPctAsync(string sym, double binancePx, CancellationToken ct)
+    {
+        if (binancePx <= 0 || !sym.EndsWith("USDT", StringComparison.OrdinalIgnoreCase)) return null;
+        string baseAsset = sym[..^4].ToUpperInvariant();
+        try
+        {
+            using var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.exchange.coinbase.com/products/{baseAsset}-USD/ticker");
+            req.Headers.UserAgent.ParseAdd("VsaOrderflow/11.0");
+            using var resp = await Http.SendAsync(req, ct);
+            if (!resp.IsSuccessStatusCode) return null;
+            using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync(ct));
+            if (doc.RootElement.TryGetProperty("price", out var pe) &&
+                double.TryParse(pe.GetString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double cbPx) && cbPx > 0)
+            {
+                return (cbPx / binancePx - 1.0) * 100.0;
+            }
+        }
+        catch { }
+        return null;
+    }
+
     private static bool TryOpenPaperPosition(
         PaperState paper, PaperConfig pcfg, string sym, string market, string tf,
         string ruleCode, int side, double entry, double sl, double tp, double risk, double atr, bool be1r, double trailAtr, string edgeLabel, double costSide, int maxBars)
     {
         lock (paper)
         {
+            long chkMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            if (IsKillSwitchTripped(paper, pcfg, chkMs)) return false;
+            if (pcfg.MacroGuard && IsInMacroWindowUtc(DateTimeOffset.UtcNow)) return false;
             if (paper.Open.Count >= pcfg.MaxOpenPositions) return false;
             if (paper.Open.Any(p => p.Sym.Equals(sym, StringComparison.OrdinalIgnoreCase) && p.Tf == tf && p.Side == side)) return false;
 

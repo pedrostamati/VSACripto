@@ -5,7 +5,7 @@ namespace VsaMonitor;
 public sealed class AppConfig
 {
     [JsonPropertyName("version")]
-    public string Version { get; set; } = "10.1";
+    public string Version { get; set; } = "11.0";
 
     [JsonPropertyName("market")]
     public string Market { get; set; } = "spot";
@@ -174,6 +174,15 @@ public sealed class PaperConfig
 
     [JsonPropertyName("maxBars")]
     public int MaxBars { get; set; } = 24;
+
+    [JsonPropertyName("maxDailyLossPct")]
+    public double MaxDailyLossPct { get; set; } = 3.0;
+
+    [JsonPropertyName("maxWeeklyLossPct")]
+    public double MaxWeeklyLossPct { get; set; } = 7.0;
+
+    [JsonPropertyName("macroGuard")]
+    public bool MacroGuard { get; set; } = false;
 }
 
 public sealed class PriceAlert
