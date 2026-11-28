@@ -1,18 +1,16 @@
-# VSA & Orderflow v11.1 · Institutional Pro Suite
+# VSA & Orderflow v12.0 · Ultimate Guided & Live Suite
 
-Terminal cuantitativa autocontenida (Web, PWA, Android APK y Backend 24/7 en C# .NET 8) integrada con **APIs públicas y gratuitas** (sin API keys).
+Terminal cuantitativa autocontenida (Web, PWA, Android APK y Backend 24/7 en C# .NET 8) pensada para ser clara, explicativa y en tiempo real con APIs públicas gratis.
 
-## Novedades de v11.1
-1. **Radar Institucional Pro (4 vistas con APIs públicas gratis):**
-   - **Macro & Sentimiento:** calendario de eventos de alto impacto (FOMC 2026–2027, CPI y NFP) con bloqueo preventivo opcional (±4h) y *Crypto Fear & Greed Index* (`alternative.me`).
-   - **Multi-Exchange (Spot vs. Perps):** *Coinbase Premium (%)*, *Kraken Spread*, *Funding Bybit* y divergencia de **CVD Spot vs. Futuros (30h)** para distinguir demanda real de rallies frágiles por apalancamiento.
-   - **Opciones Deribit en vivo:** *Put/Call OI Ratio*, *Max Pain* del vencimiento líder, *ATM IV (%)* y *Skew 25D*.
-   - **Mapa de Liquidaciones Estimadas (10x–100x):** imanes superior/inferior y capa opcional **Liquidaciones est.** directo en el gráfico Canvas.
-2. **Footprint Intravela en Vivo (`aggTrade`):** tabla de delta por nivel de precio en tiempo real desde WebSocket de Binance con *Live POC* e *Imbalances ≥ 3:1*.
-3. **Control de Portafolio, Correlación BTC & Kill Switch:** correlación (`ρ`) y beta (`β`) vs. BTC, exposición neta beta-ponderada, riesgo sugerido por *Vol-Targeting* y **Kill Switch diario/semanal** que frena nuevas entradas Paper automáticamente.
-4. **Diario de Ejecución & Orden Binance Lista:** botón para copiar orden *Limit Post-Only + OCO* lista para pegar, más registro y atribución de slippage (bps) y adherencia al plan (Real vs. Sistema).
-5. **Backend C# .NET 8 (`VsaMonitor/` v11.1):** suma Kill Switch diario/semanal, Macro Guard FOMC y *Coinbase Premium* en cada alerta de Telegram.
+## Novedades de v12.0
+1. **Cotización fija siempre visible (`Sticky Quote Bar`):** al bajar en cualquier pestaña, la cotización en vivo, variación 24h, estado de APIs (`APIs X/8`) y el botón **`? Ayuda`** acompañan al menú superior.
+2. **Explicación completa en pantalla de «Ranking Cross-Sectional»:** guía desplegable que detalla RS vs BTC, Funding Carry, Inversa de Volatilidad, Score Z y cómo usar los filtros (con exclusión ampliada de stablecoins como `RLUSD`, `USDE`, `USD1`, `PYUSD`, `BFUSD` y `U`).
+3. **Estrategias y Alarmas mucho mejor explicadas:** tanto la alarma emergente en pantalla como los mensajes de Telegram (web y backend C#) detallan **Qué está pasando**, **Qué significa** y **Qué hacer paso a paso**.
+4. **Glosario e Interfaz Interactiva (`? Ayuda` / Tap-to-Explain):** más de 40 definiciones claras; activando **`? Ayuda`** podés tocar cualquier menú, botón, métrica o palabra para ver al instante qué es, qué hace y cómo usarla, o buscar cualquier término en el glosario.
+5. **Monitor de Carga y Salud de APIs de todos los Exchanges:** controla en vivo Binance Spot, Binance Futuros, WebSocket, Coinbase, Kraken, Bybit, Deribit y Fear & Greed con latencia en `ms`, barra de progreso y acceso en 1 toque desde la barra fija.
+6. **Radar Institucional Pro automático + botón manual:** carga automáticamente al abrir la app, al cambiar de par, al volver a la pestaña y cada 90 segundos, conservando el botón manual **Actualizar Pro**.
+7. **Lectura Rápida en 5 Segundos (`#cQuickRead`):** semáforo ejecutivo al tope del Radar combinando tendencia HTF, flujo Spot/Perps y calendario Macro.
 
-## Despliegue
-- **Servidor web (`fanatics.com.ar/cripto/`):** subí `index.html`, `sw.js`, `manifest.json`, `icon-192.png` e `icon-512.png`.
-- **GitHub (`pedrostamati/VSACripto`):** subí todo el contenido respetando carpetas (`VsaMonitor/` y `.github/workflows/`), sin pisar tu `config.json` si ya tenés alertas guardadas. El APK `v11.1` se compila solo en **Actions**.
+## Despliegue rápido
+- **Servidor web (`fanatics.com.ar/cripto/`):** reemplazá `index.html`, `sw.js` y `manifest.json` (si ya tenés los íconos).
+- **GitHub (`pedrostamati/VSACripto`):** subí los archivos respetando carpetas (`VsaMonitor/` y `.github/workflows/`), sin pisar tu `config.json` si ya tenés alertas guardadas. **Actions** detecta `v12.0` solo y compila tu APK firmado.

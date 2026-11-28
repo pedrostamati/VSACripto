@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>VSA &amp; Orderflow v11.1 · Institutional Pro Suite</title>
-  <meta name="description" content="Terminal cuantitativa VSA &amp; Orderflow v11.1: 70 reglas, Edge Lab OOS con Brier Score, Anticipo calibrado, Ranking Cross-Sectional, Paper Trading y alertas 24/7.">
+  <title>VSA &amp; Orderflow v12.0 · Ultimate Guided &amp; Live Suite</title>
+  <meta name="description" content="Terminal cuantitativa VSA &amp; Orderflow v12.0: 70 reglas, Edge Lab OOS con Brier Score, Anticipo calibrado, Ranking Cross-Sectional, Paper Trading y alertas 24/7.">
   <meta name="theme-color" content="#090d16">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -609,7 +609,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 
 
-/* === v11.1 Unified Alpha Suite additions === */
+/* === v12.0 Unified Alpha Suite additions === */
 .cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
 .cs-kpi{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .cs-kpi .k{font-size:11px;color:var(--tx3);display:block;margin-bottom:2px}
@@ -626,7 +626,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 @media (max-width:640px){.ant-bins{grid-template-columns:repeat(2,1fr)}}
 
 
-/* === v11.1 Institutional Pro Suite === */
+/* === v12.0 Institutional Pro Suite === */
 .sw-liq{background:#f59e0b}
 .pro-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line)}
 .pro-tabs button{background:var(--bg2);color:var(--tx2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer}
@@ -644,6 +644,48 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .j-form input,.j-form select{width:100%;padding:6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--bg2);color:var(--tx1);font-size:12px}
 .macro-banner{padding:8px 12px;border-radius:8px;margin-bottom:8px;font-size:12px;border:1px solid var(--line);background:var(--bg2)}
 .macro-banner.hot{border-color:#f59e0b;background:rgba(245,158,11,.12)}
+
+
+/* === v12.0 Ultimate Guided & Live Suite === */
+.sticky-quote{position:sticky;top:64px;z-index:19;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;background:rgba(11,17,32,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);font-size:12px;font-variant-numeric:tabular-nums}
+.sq-left{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden}
+.sq-sym{font-weight:800;color:var(--tx);white-space:nowrap}
+.sq-mk{font-size:10px;padding:1px 5px;border-radius:4px;background:rgba(56,189,248,.14);color:#38bdf8;font-weight:700}
+.sq-px{font-weight:800;font-size:13.5px;transition:color .2s}
+.sq-chg{font-weight:700;font-size:11.5px}
+.sq-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sq-btn{border:1px solid var(--line2);background:var(--bg2);color:var(--tx);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.sq-btn.help-on{background:#f59e0b;color:#0b1120;border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.28)}
+.api-dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.api-dot.ok{background:#10b981}.api-dot.warn{background:#f59e0b}.api-dot.err{background:#ef4444}
+.api-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:6px;margin-top:8px}
+.api-pill{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:2px}
+.api-pill .ap-top{display:flex;align-items:center;justify-content:space-between;font-weight:700}
+.api-bar-wrap{height:6px;border-radius:999px;background:var(--bg2);overflow:hidden;margin:6px 0 4px}
+.api-bar-fill{height:100%;background:linear-gradient(90deg,#38bdf8,#10b981);transition:width .3s}
+.cs-guide{padding:10px 12px;border-bottom:1px solid var(--line);background:rgba(56,189,248,.05);font-size:12px;line-height:1.45}
+.cs-guide summary{cursor:pointer;font-weight:700;color:#38bdf8}
+.cs-guide ul{margin:6px 0 0 16px;padding:0}.cs-guide li{margin:4px 0}
+.qr-card{padding:10px 12px;border-left:4px solid #38bdf8}
+.qr-card.bull{border-left-color:#10b981}.qr-card.bear{border-left-color:#ef4444}.qr-card.warn{border-left-color:#f59e0b}
+.qr-title{font-size:13px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.qr-text{font-size:12px;color:var(--tx2);line-height:1.45}
+.alarm-guide{margin-top:10px;text-align:left;background:rgba(15,23,42,.72);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.45}
+.alarm-guide div{margin-bottom:6px}.alarm-guide div:last-child{margin-bottom:0}
+.alarm-guide b{color:#38bdf8}
+body.help-mode .tabs button,body.help-mode .card-title,body.help-mode .cs-kpi,body.help-mode .pro-tabs button,body.help-mode .filters button,body.help-mode .vsa-term{outline:1px dashed rgba(245,158,11,.75);outline-offset:2px;cursor:help!important}
+.vsa-term{border-bottom:1px dotted rgba(56,189,248,.75);cursor:help}
+.help-banner{position:sticky;top:102px;z-index:18;background:#f59e0b;color:#0b1120;padding:6px 12px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.help-ov{position:fixed;inset:0;z-index:9998;background:rgba(2,6,23,.72);display:flex;align-items:flex-end;justify-content:center;padding:12px}
+.help-ov[hidden]{display:none!important}
+.help-sheet{width:100%;max-width:560px;max-height:82vh;overflow:auto;background:#0f172a;border:1px solid #334155;border-radius:16px;padding:14px 16px;color:#e2e8f0;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.help-sheet h3{margin:0 0 8px;font-size:16px;color:#38bdf8;display:flex;align-items:center;justify-content:space-between}
+.help-sec{margin:8px 0;font-size:13px;line-height:1.5}
+.help-sec b{color:#f8fafc}
+.help-search{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #334155;background:#090d16;color:#f8fafc;font-size:13px;margin:8px 0}
+.help-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.help-chips button{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:999px;padding:4px 9px;font-size:11.5px;cursor:pointer}
+.help-chips button:hover{border-color:#38bdf8;color:#38bdf8}
 
   </style>
 </head>
@@ -737,6 +779,22 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
     <button type="button" role="tab" data-tab="rules" title="70 reglas y Paper Trading" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"></path><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"></path></svg><span>Paper</span></button>
     <button type="button" role="tab" data-tab="scan" title="Escáner y riesgo" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg><span>Escáner</span></button>
   </nav>
+  <div id="stickyQuote" class="sticky-quote" aria-label="Cotización en vivo fija">
+    <div class="sq-left">
+      <span id="sqSym" class="sq-sym">BTCUSDT</span>
+      <span id="sqMk" class="sq-mk">FUT</span>
+      <span id="sqPx" class="sq-px">—</span>
+      <span id="sqChg" class="sq-chg">—</span>
+    </div>
+    <div class="sq-right">
+      <button type="button" id="sqApiBtn" class="sq-btn" title="Estado de APIs de todos los exchanges"><span id="sqApiDot" class="api-dot warn"></span><span id="sqApiTxt">APIs</span></button>
+      <button type="button" id="sqHelpBtn" class="sq-btn" title="Tocá para activar ayuda interactiva y diccionario">? Ayuda</button>
+    </div>
+  </div>
+  <div id="helpBanner" class="help-banner" hidden>
+    <span>💡 Modo Ayuda activo: tocá cualquier menú, botón, métrica o palabra para ver qué es y cómo se usa.</span>
+    <button type="button" id="helpBannerOff" class="pbtn sm" style="background:#0b1120;color:#fff;border:0">Salir</button>
+  </div>
 
   <main class="stage">
     <!-- 0 · OPORTUNIDADES VALIDADAS (v6) -->
@@ -758,6 +816,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 
     <!-- 1 · RADAR Y EVIDENCIA -->
     <section id="v-radar" class="view on" role="tabpanel">
+      <div class="card" id="cQuickRead"></div>
       <div class="card" id="cAnticipo"></div>
       <div class="card" id="cVerdict"></div>
       <div class="card" id="cMicro"></div>
@@ -934,6 +993,14 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
   </div>
 </div>
 
+<div id="helpOv" class="help-ov" hidden>
+  <div class="help-sheet" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <h3><span id="helpTitle">📘 Glosario y Ayuda Interactiva</span><button type="button" id="helpClose" class="pbtn sm">✕</button></h3>
+    <div id="helpContent"></div>
+    <input id="helpSearch" class="help-search" type="search" placeholder="Buscar cualquier término (ej: CVD, Funding, Bobina, Max Pain, RS vs BTC, Kill Switch…)">
+    <div id="helpChips" class="help-chips"></div>
+  </div>
+</div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div id="cmdk" class="cmdk" hidden>
   <div class="cmdk-back" id="cmdkBack"></div>
@@ -2318,7 +2385,7 @@ function labAdd(P, sym, tf, an, reg, costSide) {
       acc.t.push(c[i + 1].t); acc.R.push(R[i]); acc.ex.push(R[i] - bm); acc.per.push(per); acc.sym.push(symIdx); acc.bars.push(B[i]);
     }
   });
-  // v11.1: Validación causal fuera de muestra (OOS) de Anticipo (horizonte h=6 velas, sin solape)
+  // v12.0: Validación causal fuera de muestra (OOS) de Anticipo (horizonte h=6 velas, sin solape)
   if (!T.ant) T.ant = { n: 0, ySum: 0, brier: 0, edgeN: 0, edgeHit: 0, edgeR: 0, edgeRn: 0, bins: [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]] };
   var antH = 6;
   for (i = Math.max(45, ts.from); i <= Math.min(ts.last, an.n - 1 - antH); i += antH) {
@@ -2789,7 +2856,7 @@ function fetchJson(url, ms) {
   });
 }
 function fetchTimeout(url, ms) {
-  // v11.1: conexión directa a Binance (compatible con fanatics.com.ar/cripto/, PWA y APK Android file://)
+  // v12.0: conexión directa a Binance (compatible con fanatics.com.ar/cripto/, PWA y APK Android file://)
   var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null, timer = null;
   var p = fetch(url, { signal: ctrl ? ctrl.signal : undefined, cache: 'no-store', credentials: 'omit' });
   var t = new Promise(function (_, rej) { timer = setTimeout(function () { if (ctrl) ctrl.abort(); rej(NetError('timeout', 'sin respuesta en ' + Math.round(ms / 1000) + ' s')); }, ms); });
@@ -3266,7 +3333,7 @@ function sendTelegram(text, silent) {
     return fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chat, text: text, disable_web_page_preview: true })
+      body: JSON.stringify({ chat_id: chat, text: (typeof enrichTelegramMessage === 'function' ? enrichTelegramMessage(text) : text), disable_web_page_preview: true })
     }).then(function (r) { return r.json(); }).then(function (j) {
       if (j && j.ok) { if (!silent) toast('Mensaje enviado a Telegram ✓', 3000); return true; }
       if (!silent) toast('Error de Telegram: ' + ((j && j.description) || 'revisá Token y Chat ID'), 4500);
@@ -3403,7 +3470,7 @@ function fireLoudAlarm(opts) {
   ov.className = 'alarm-ov ' + (up ? 'up' : 'dn');
   $('#alarmIco').textContent = up ? '🚨📈' : '🚨📉';
   $('#alarmTitle').textContent = opts.title || '¡ALERTA DE MERCADO!';
-  $('#alarmBody').innerHTML = opts.html || esc(opts.body || '');
+  $('#alarmBody').innerHTML = (opts.html || esc(opts.body || '')) + (typeof buildAlarmExplanationHtml === 'function' ? buildAlarmExplanationHtml(opts) : '');
   ov.hidden = false;
   clearInterval(S.alarm.timer); clearInterval(S.alarm.titleTimer);
   var ring = function () {
@@ -4015,7 +4082,7 @@ function onNewOpp(o) {
 }
 
 // ============================================================================
-// v11.1: Ranking Cross-Sectional (Momentum Relativo vs BTC + Funding Carry + Inv-Vol)
+// v12.0: Ranking Cross-Sectional (Momentum Relativo vs BTC + Funding Carry + Inv-Vol)
 // ============================================================================
 function fetchJson(url, ms) {
   var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
@@ -4047,7 +4114,7 @@ function computeCrossSectionalRows(tickers, fundingMap) {
   if (!isFinite(btcChg)) btcChg = 0;
   var pool = tickers.filter(function (t) {
     if (!t || !t.symbol || !/USDT$/.test(t.symbol)) return false;
-    if (/^(USDC|FDUSD|TUSD|USDP|DAI|BUSD|EUR|USTC)USDT$/.test(t.symbol)) return false;
+    if (/^(USDC|FDUSD|TUSD|USDP|DAI|BUSD|EUR|EURC|AEUR|USTC|RLUSD|USDE|USD1|PYUSD|BFUSD|U)USDT$/.test(t.symbol)) return false;
     var qv = parseFloat(t.quoteVolume), lp = parseFloat(t.lastPrice);
     return qv >= 15e6 && lp > 0;
   }).sort(function (a, b) { return parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume); }).slice(0, 60);
@@ -4112,8 +4179,17 @@ function renderCrossSectional() {
   var el = $('#cCross'); if (!el) return;
   var m = S.cross.mode || 'long', rows = S.cross.rows || [];
   var btn = function (k, lbl) { return '<button type="button" data-csm="' + k + '" class="' + (m === k ? 'on' : '') + '">' + lbl + '</button>'; };
+  var csGuide = '<details class="cs-guide"' + (!rows.length ? ' open' : '') + '><summary>📘 ¿Qué es el Ranking Cross-Sectional y cómo leer cada columna? (tocá para abrir/cerrar)</summary>' +
+    '<p style="margin:6px 0">En vez de mirar una moneda aislada, el <b>Ranking Cross-Sectional</b> compara hoy entre sí a las <b>60 criptomonedas más líquidas</b> (sin stablecoins) para detectar hacia dónde está rotando el capital y dónde hay mejor relación riesgo/beneficio:</p>' +
+    '<ul>' +
+    '<li><b>RS vs BTC (Fuerza Relativa contra Bitcoin · peso 50% en Futuros / 70% en Spot):</b> es el rendimiento 24h de la moneda menos el rendimiento 24h de BTC. Si BTC sube +1% y SOL sube +6%, su RS es <b>+5%</b>: el dinero está entrando con más fuerza ahí.</li>' +
+    '<li><b>Funding Carry 8h (peso 30% en Futuros):</b> la tasa que pagan los traders apalancados cada 8 horas. Un <b>funding negativo</b> significa que los cortos le pagan a los largos y suele ser combustible de <i>short squeeze</i> (bueno para Longs). Un funding muy positivo indica exceso de largos (mejor para buscar Shorts o evitar perseguir).</li>' +
+    '<li><b>Volatilidad / Rango 24h (Inversa de Volatilidad · peso 20–30%):</b> premia monedas que se mueven con tendencia limpia y ordenada por encima de monedas serruchadas que barren stops.</li>' +
+    '<li><b>Score Z:</b> puntaje estadístico combinado (en desvíos estándar respecto al promedio del mercado). <b>&gt; +1,0</b> = líder institucional fuerte; <b>&lt; −1,0</b> = debilidad relativa fuerte.</li>' +
+    '</ul>' +
+    '<p style="margin:6px 0 0"><b>Cómo usarlo:</b> en mercado <i>Risk-ON</i> mirá <b>Top Longs</b> o <b>Carry Positivo</b> y tocá <b>Abrir</b> para verificar si el Radar/Edge Lab confirma entrada. En <i>Risk-OFF</i> mirá <b>Top Shorts</b>.</p></details>';
   var head = '<div class="card-head"><div class="card-title">📊 Ranking Cross-Sectional · RS vs BTC + Funding Carry + Volatilidad</div>' +
-    '<div class="row-btns"><button type="button" class="pbtn sm acc" id="csRun"' + (S.cross.busy ? ' disabled' : '') + '>' + (S.cross.busy ? 'Calculando…' : (rows.length ? 'Actualizar ranking' : 'Calcular ranking')) + '</button></div></div>';
+    '<div class="row-btns"><button type="button" class="pbtn sm acc" id="csRun"' + (S.cross.busy ? ' disabled' : '') + '>' + (S.cross.busy ? 'Calculando…' : (rows.length ? 'Actualizar ranking' : 'Calcular ranking')) + '</button></div></div>' + csGuide;
   if (!rows.length) {
     el.innerHTML = head + (S.cross.err ? '<div class="warnbox bad">' + esc(S.cross.err) + '</div>' : '') +
       '<div class="empty">Ranquea los 60 pares USDT más líquidos por <b>Fuerza Relativa vs BTC</b>, <b>Funding Carry</b> (Futuros) y <b>estabilidad de volatilidad</b>. Tocá <b>Calcular ranking</b> para ver los líderes del día.</div>';
@@ -4153,7 +4229,7 @@ function renderCrossSectional() {
 
 
 // ============================================================================
-// v11.1 INSTITUTIONAL PRO SUITE (100% APIs públicas gratis + riesgo portafolio + footprint)
+// v12.0 INSTITUTIONAL PRO SUITE (100% APIs públicas gratis + riesgo portafolio + footprint)
 // ============================================================================
 S.pro = S.pro || {
   tab: 'macro',
@@ -4176,7 +4252,7 @@ S.pro = S.pro || {
   fpLastRender: 0
 };
 
-// Load persisted v11.1 risk guards & execution journal
+// Load persisted v12.0 risk guards & execution journal
 (function initV11Storage() {
   try {
     var rs = JSON.parse(localStorage.getItem('vsa_v11_risk') || 'null');
@@ -4368,19 +4444,31 @@ function refreshMacroPro() {
   var guardTimer = setTimeout(function () {
     if (!doneFlag) { doneFlag = true; S.pro.busy = false; S.pro.err = 'Tiempo de espera agotado en alguna API pública.'; renderMacroPro(); }
   }, 11000);
-  var safeGet = function (u, ms) {
-    try { return fetchJson(u, ms).catch(function () { return null; }); }
-    catch (_) { return Promise.resolve(null); }
+  var safeGet = function (id, u, ms) {
+    var t0 = Date.now();
+    if (typeof setApiHealth === 'function') setApiHealth(id, 'loading', 0, 'Consultando…');
+    try {
+      return fetchJson(u, ms).then(function (data) {
+        if (typeof setApiHealth === 'function') setApiHealth(id, 'ok', Date.now() - t0, 'Operativa');
+        return data;
+      }).catch(function (err) {
+        if (typeof setApiHealth === 'function') setApiHealth(id, 'err', Date.now() - t0, (err && err.message) ? err.message : 'CORS / sin respuesta');
+        return null;
+      });
+    } catch (err) {
+      if (typeof setApiHealth === 'function') setApiHealth(id, 'err', 0, 'Error local');
+      return Promise.resolve(null);
+    }
   };
   Promise.all([
-    safeGet('https://api.alternative.me/fng/?limit=2', 6500),
-    safeGet('https://api.binance.com/api/v3/klines?symbol=' + sym + '&interval=1h&limit=30', 7500),
-    safeGet('https://fapi.binance.com/fapi/v1/klines?symbol=' + sym + '&interval=1h&limit=30', 7500),
-    safeGet('https://api.exchange.coinbase.com/products/' + base + '-USD/ticker', 6500),
-    safeGet('https://api.kraken.com/0/public/Ticker?pair=' + krPair, 6500),
-    safeGet('https://api.bybit.com/v5/market/tickers?category=linear&symbol=' + sym, 6500),
-    safeGet('https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=' + optCur + '&kind=option', 8000),
-    safeGet('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=65', 7500)
+    safeGet('fng', 'https://api.alternative.me/fng/?limit=2', 6500),
+    safeGet('binance_spot', 'https://api.binance.com/api/v3/klines?symbol=' + sym + '&interval=1h&limit=30', 7500),
+    safeGet('binance_fut', 'https://fapi.binance.com/fapi/v1/klines?symbol=' + sym + '&interval=1h&limit=30', 7500),
+    safeGet('coinbase', 'https://api.exchange.coinbase.com/products/' + base + '-USD/ticker', 6500),
+    safeGet('kraken', 'https://api.kraken.com/0/public/Ticker?pair=' + krPair, 6500),
+    safeGet('bybit', 'https://api.bybit.com/v5/market/tickers?category=linear&symbol=' + sym, 6500),
+    safeGet('deribit', 'https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=' + optCur + '&kind=option', 8000),
+    safeGet('binance_btc', 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=65', 7500)
   ]).then(function (r) {
     clearTimeout(guardTimer);
     if (doneFlag) return;
@@ -4432,7 +4520,7 @@ function renderMacroPro() {
   var tBtn = function (k, lbl) { return '<button type="button" data-prot="' + k + '" class="' + (t === k ? 'on' : '') + '">' + lbl + '</button>'; };
   var head = '<div class="card-head"><div class="card-title">🏛️ Radar Institucional Pro · APIs Públicas Gratis</div>' +
     '<div class="row-btns"><button type="button" class="pbtn sm acc" id="proRefresh"' + (S.pro.busy ? ' disabled' : '') + '>' + (S.pro.busy ? 'Cargando…' : (S.pro.at ? 'Actualizar Pro' : 'Cargar datos en vivo')) + '</button></div></div>' +
-    '<div class="pro-tabs">' + tBtn('macro', '📅 Macro & F&G') + tBtn('multi', '🌐 Multi-Exchange') + tBtn('opt', '📊 Opciones Deribit') + tBtn('liq', '🔥 Liquidaciones est.') + '</div>';
+    '<div class="pro-tabs">' + tBtn('macro', '📅 Macro & F&G') + tBtn('multi', '🌐 Multi-Exchange') + tBtn('opt', '📊 Opciones Deribit') + tBtn('liq', '🔥 Liquidaciones est.') + tBtn('apis', '📡 Estado APIs') + '</div>';
 
   var body = '';
   if (t === 'macro') {
@@ -4484,6 +4572,8 @@ function renderMacroPro() {
         '<div class="cs-kpi"><span class="k">OI Total Opciones</span><span class="v">' + fvol(dr.totalOi) + ' ' + esc(dr.cur) + '</span></div>' +
         '</div></div>';
     }
+  } else if (t === 'apis') {
+    body = typeof renderApiHealthBody === 'function' ? renderApiHealthBody() : '<div class="empty">Monitor de APIs iniciando…</div>';
   } else {
     var an = S.an && S.an[S.set.tf];
     var lq = estimateLiquidationClusters(an);
@@ -4765,7 +4855,7 @@ function renderJournal() {
   };
 }
 
-// Exponer utilidades puras v11.1 en VSA para pruebas automatizadas
+// Exponer utilidades puras v12.0 en VSA para pruebas automatizadas
 if (typeof V !== 'undefined') {
   V.getMacroEvents = getMacroEvents;
   V.estimateLiquidationClusters = estimateLiquidationClusters;
@@ -4773,6 +4863,403 @@ if (typeof V !== 'undefined') {
   V.computeMultiExchange = computeMultiExchange;
   V.computeCorrelationBeta = computeCorrelationBeta;
   V.computeJournalAttribution = computeJournalAttribution;
+}
+
+
+// ============================================================================
+// v12.0 ULTIMATE GUIDED & LIVE SUITE
+// (Sticky Quote, API Health Monitor, Auto-Radar Pro, Rich Alarm/Telegram Guides,
+//  5-Second Quick Read, and 55+ Term Interactive Tap-to-Explain Glossary)
+// ============================================================================
+S.apiHealth = S.apiHealth || {
+  binance_spot: { name: 'Binance Spot', st: 'idle', ms: 0, msg: 'Esperando', at: 0 },
+  binance_fut:  { name: 'Binance Futuros', st: 'idle', ms: 0, msg: 'Esperando', at: 0 },
+  binance_ws:   { name: 'Binance WebSocket', st: 'idle', ms: 0, msg: 'Esperando', at: 0 },
+  coinbase:     { name: 'Coinbase Spot', st: 'idle', ms: 0, msg: 'Esperando', at: 0 },
+  kraken:       { name: 'Kraken Spot', st: 'idle', ms: 0, msg: 'Esperando', at: 0 },
+  bybit:        { name: 'Bybit Futuros', st: 'idle', ms: 0, msg: 'Esperando', at: 0 },
+  deribit:      { name: 'Deribit Opciones', st: 'idle', ms: 0, msg: 'Esperando', at: 0 },
+  fng:          { name: 'Fear & Greed', st: 'idle', ms: 0, msg: 'Esperando', at: 0 }
+};
+S.helpMode = false;
+
+function setApiHealth(id, st, ms, msg) {
+  if (!S.apiHealth[id]) return;
+  S.apiHealth[id].st = st;
+  S.apiHealth[id].ms = ms || 0;
+  S.apiHealth[id].msg = msg || '';
+  S.apiHealth[id].at = Date.now();
+  updateApiHealthBadge();
+  if (S.pro && S.pro.tab === 'apis') renderMacroPro();
+}
+
+function getApiHealthSummary() {
+  var keys = Object.keys(S.apiHealth), ok = 0, loading = 0, err = 0;
+  keys.forEach(function (k) {
+    var s = S.apiHealth[k].st;
+    if (s === 'ok') ok++; else if (s === 'loading') loading++; else if (s === 'err') err++;
+  });
+  return { total: keys.length, ok: ok, loading: loading, err: err, pct: Math.round((ok / keys.length) * 100) };
+}
+
+function updateApiHealthBadge() {
+  var dot = $('#sqApiDot'), txt = $('#sqApiTxt');
+  if (!dot || !txt) return;
+  var sum = getApiHealthSummary();
+  if (sum.loading > 0) { dot.className = 'api-dot warn'; txt.textContent = 'APIs ' + sum.ok + '/' + sum.total + '…'; }
+  else if (sum.ok >= sum.total - 1) { dot.className = 'api-dot ok'; txt.textContent = 'APIs ' + sum.ok + '/' + sum.total; }
+  else if (sum.ok > 0) { dot.className = 'api-dot warn'; txt.textContent = 'APIs ' + sum.ok + '/' + sum.total; }
+  else { dot.className = 'api-dot err'; txt.textContent = 'APIs 0/' + sum.total; }
+}
+
+function renderApiHealthBody() {
+  var sum = getApiHealthSummary();
+  var keys = Object.keys(S.apiHealth);
+  return '<div class="pro-body">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">' +
+    '<span><b>Conexión con Exchanges y Fuentes Públicas:</b> ' + sum.ok + ' de ' + sum.total + ' activas (' + sum.pct + ' %)</span>' +
+    '<span class="card-sub">' + (sum.loading ? 'Consultando…' : (S.pro.at ? 'act. ' + esc(ago(Date.now() - S.pro.at)) : 'sin consulta aún')) + '</span></div>' +
+    '<div class="api-bar-wrap"><div class="api-bar-fill" style="width:' + sum.pct + '%"></div></div>' +
+    '<div class="api-grid">' + keys.map(function (k) {
+      var a = S.apiHealth[k];
+      var cls = a.st === 'ok' ? 'ok' : a.st === 'loading' ? 'warn' : a.st === 'err' ? 'err' : 'warn';
+      var lbl = a.st === 'ok' ? ('OK · ' + (a.ms ? a.ms + ' ms' : 'en vivo')) : a.st === 'loading' ? 'Cargando…' : a.st === 'err' ? 'Error / CORS' : 'Pendiente';
+      return '<div class="api-pill"><div class="ap-top"><span>' + esc(a.name) + '</span><span class="api-dot ' + cls + '"></span></div>' +
+        '<span class="card-sub">' + esc(lbl) + (a.msg && a.st === 'err' ? ' (' + esc(a.msg.slice(0, 26)) + ')' : '') + '</span></div>';
+    }).join('') + '</div></div>';
+}
+
+// --- STICKY QUOTE BAR (Cotización siempre visible al bajar) ---
+function syncStickyOffset() {
+  var nav = document.querySelector('.tabs'), sq = $('#stickyQuote'), hb = $('#helpBanner');
+  if (!nav || !sq) return;
+  var h = nav.offsetHeight || 64;
+  sq.style.top = h + 'px';
+  if (hb) hb.style.top = (h + (sq.offsetHeight || 36)) + 'px';
+}
+
+function updateStickyQuote(livePx, liveChg) {
+  var symEl = $('#sqSym'), mkEl = $('#sqMk'), pxEl = $('#sqPx'), chgEl = $('#sqChg');
+  if (!symEl || !pxEl) return;
+  var sym = S.sym || S.set.sym || 'BTCUSDT';
+  var px = isNum(livePx) ? livePx : (S.ticker && isNum(S.ticker.last) ? S.ticker.last : (S.an && S.an[S.set.tf] && S.an[S.set.tf].c.length ? S.an[S.set.tf].c[S.an[S.set.tf].c.length - 1].c : NaN));
+  var chg = isNum(liveChg) ? liveChg : (S.ticker && isNum(S.ticker.chg) ? S.ticker.chg : NaN);
+  symEl.textContent = sym.replace(/USDT$/, '') + '/USDT';
+  if (mkEl) mkEl.textContent = mk() === 'futures' ? 'FUT' : 'SPOT';
+  if (isNum(px)) {
+    var prev = parseFloat(pxEl.dataset.px || '0');
+    pxEl.textContent = fpx(px);
+    pxEl.dataset.px = String(px);
+    if (prev > 0 && px !== prev) {
+      pxEl.style.color = px > prev ? '#10b981' : '#ef4444';
+      clearTimeout(pxEl._t);
+      pxEl._t = setTimeout(function () { pxEl.style.color = ''; }, 450);
+    }
+  }
+  if (chgEl) {
+    if (isNum(chg)) {
+      chgEl.textContent = fsig(chg * 100, 2) + '%';
+      chgEl.className = 'sq-chg ' + (chg >= 0 ? 'c-bull' : 'c-bear');
+    } else chgEl.textContent = '—';
+  }
+  updateApiHealthBadge();
+  syncStickyOffset();
+}
+
+// --- CARGA AUTOMÁTICA DE RADAR INSTITUCIONAL PRO (conservando botón manual) ---
+var _autoProTimer = null, _autoProLastSym = '';
+function scheduleAutoMacroPro(sym) {
+  clearTimeout(_autoProTimer);
+  _autoProTimer = setTimeout(function () {
+    if (!S.pro.busy && (sym !== _autoProLastSym || Date.now() - (S.pro.at || 0) > 60000)) {
+      _autoProLastSym = sym;
+      refreshMacroPro();
+    }
+  }, 850);
+}
+if (typeof setInterval === 'function') {
+  setInterval(function () {
+    if (typeof document !== 'undefined' && document.hidden) return;
+    if (!S.pro.busy && S.set && S.set.sym) refreshMacroPro();
+  }, 90000);
+}
+if (typeof document !== 'undefined' && document.addEventListener) {
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) {
+      if (typeof openLive === 'function') try { openLive(); } catch (_) {}
+      if (!S.pro.busy && Date.now() - (S.pro.at || 0) > 30000) refreshMacroPro();
+    }
+  });
+}
+
+// --- LECTURA RÁPIDA EN 5 SEGUNDOS (#cQuickRead) ---
+function renderQuickRead() {
+  var el = $('#cQuickRead'); if (!el) return;
+  var tf = S.set.tf || '1h', an = S.an && S.an[tf];
+  var mx = S.pro && S.pro.multi;
+  var mac = getMacroEvents(Date.now());
+  var score = 0, reasons = [];
+  if (an && an.c && an.c.length && an.feats && an.feats[an.n - 1]) {
+    var f = an.feats[an.n - 1];
+    if (isNum(f.e21) && isNum(f.e50)) {
+      if (f.c > f.e21 && f.e21 > f.e50) { score += 1; reasons.push('Estructura alcista sobre EMA 21/50'); }
+      else if (f.c < f.e21 && f.e21 < f.e50) { score -= 1; reasons.push('Estructura bajista bajo EMA 21/50'); }
+      else reasons.push('Estructura lateral/en transición');
+    }
+    if (isNum(f.shareZ)) {
+      if (f.shareZ > 0.7) { score += 1; reasons.push('flujo comprador activo'); }
+      else if (f.shareZ < -0.7) { score -= 1; reasons.push('presión vendedora activa'); }
+    }
+  }
+  if (mx && mx.diag) {
+    if (mx.cls === 'bull') { score += 1; reasons.push(mx.diag.toLowerCase()); }
+    else if (mx.cls === 'bear') { score -= 1; reasons.push(mx.diag.toLowerCase()); }
+    else if (mx.cls === 'warn') reasons.push('ojo: ' + mx.diag.toLowerCase());
+  }
+  if (mac.inWindow) reasons.push('⚠️ ventana macro ' + mac.active[0].kind + ' activa');
+  var verdict = mac.inWindow ? 'ESPERAR · Evento Macro en curso'
+    : score >= 2 ? 'CONTEXTO FAVORABLE PARA LONGS'
+    : score <= -2 ? 'CONTEXTO FAVORABLE PARA SHORTS / DEFENSA'
+    : 'MERCADO MIXTO · Esperar confirmación de vela';
+  var cls = mac.inWindow ? 'warn' : score >= 2 ? 'bull' : score <= -2 ? 'bear' : '';
+  el.innerHTML = '<div class="qr-card ' + cls + '"><div class="qr-title"><span>⚡ Lectura Rápida (5 seg) · ' + esc(S.set.sym || '') + ' ' + esc(tf.toUpperCase()) + '</span><span class="chip ' + (cls || 'mut') + '">' + esc(verdict) + '</span></div>' +
+    '<div class="qr-text">' + (reasons.length ? esc(reasons.join(' · ')) + '.' : 'Cargando contexto técnico y multi-exchange…') + ' <span class="vsa-term" data-help="lectura rápida">¿Cómo leer esto?</span></div></div>';
+}
+
+// --- EXPLICACIONES DETALLADAS DE ESTRATEGIAS Y ALARMAS (Modal + Telegram) ---
+function explainSignalContext(titleOrText) {
+  var s = String(titleOrText || '').toLowerCase();
+  if (s.indexOf('bobina') >= 0 || s.indexOf('nr7') >= 0 || s.indexOf('compresi') >= 0) {
+    return {
+      que: 'El rango de precios y el volumen se achicaron fuerte (compresión de volatilidad). El mercado está acumulando energía como un resorte.',
+      sig: 'Suele anticipar una explosión direccional fuerte en las próximas 3 a 12 velas. Por sí sola avisa que viene movimiento, no da entrada hasta que rompa.',
+      hacer: '1) Esperá el cierre de la vela que rompa la compresión con volumen (RVOL > 1,25). 2) Verificá hacia qué lado apunta el sesgo y el flujo CVD. 3) Recién ahí usá Entrada, SL y Objetivo del Plan.'
+    };
+  }
+  if (s.indexOf('short squeeze') >= 0 || s.indexOf('barrida de cortos') >= 0) {
+    return {
+      que: 'Los vendedores en corto (shorts) quedaron atrapados y están siendo forzados a recomprar a mercado para cerrar pérdidas.',
+      sig: 'Genera velas alcistas violentas porque las compras forzadas alimentan más suba.',
+      hacer: '1) No shortees contra un squeeze activo. 2) Si buscás Long, entrá solo si no se alejó más de 0,5 ATR del punto de ruptura y colocá SL bajo el mínimo de la vela de disparo.'
+    };
+  }
+  if (s.indexOf('long squeeze') >= 0 || s.indexOf('short selling') >= 0 || s.indexOf('cascada') >= 0) {
+    return {
+      que: 'Hay presión vendedora institucional agresiva o liquidación en cadena de largos apalancados.',
+      sig: 'Suele acelerar caídas rápidas hasta barrer la liquidez inferior.',
+      hacer: '1) Evitá comprar caídas sin confirmación de absorción. 2) En Futuros, validá tendencia bajista HTF y respetá el SL técnico sobre el máximo previo.'
+    };
+  }
+  if (s.indexOf('spring') >= 0 || s.indexOf('absorci') >= 0) {
+    return {
+      que: 'El precio perforó un soporte para barrer stops, pero compradores pasivos absorbieron toda la venta y devolvieron el precio arriba.',
+      sig: 'Trampa bajista clásica de Wyckoff: suele marcar pisos locales con excelente relación riesgo/beneficio.',
+      hacer: '1) Confirmá que la vela cierre por encima del soporte recuperado. 2) SL justo debajo de la mecha del Spring; activá Breakeven al alcanzar 1R.'
+    };
+  }
+  if (s.indexOf('upthrust') >= 0 || s.indexOf('distribuci') >= 0 || s.indexOf('rechazo') >= 0) {
+    return {
+      que: 'El precio rompió un techo con entusiasmo pero encontró oferta fuerte y cerró nuevamente por debajo.',
+      sig: 'Trampa alcista (falsa ruptura): suele anticipar giro bajista o toma de ganancias.',
+      hacer: '1) Protegé longs abiertos subiendo stop. 2) Si operás Short en Futuros, confirmá cierre bajista (CLV < 0) y colocá SL arriba de la mecha.'
+    };
+  }
+  if (s.indexOf('divergencia') >= 0 || s.indexOf('cvd') >= 0) {
+    return {
+      que: 'El precio avanzó en una dirección, pero el volumen agresivo a mercado (CVD) no acompañó y apunta al lado contrario.',
+      sig: 'Alerta temprana de agotamiento: falta combustible real detrás del movimiento actual.',
+      hacer: '1) Tomalo como aviso previo, no entrada ciega. 2) Esperá una vela de cierre que confirme el giro antes de ejecutar.'
+    };
+  }
+  if (s.indexOf('donchian') >= 0 || s.indexOf('ruptura') >= 0 || s.indexOf('breakout') >= 0) {
+    return {
+      que: 'El precio rompió un máximo o mínimo de 20 velas acompañado de volumen y flujo real.',
+      sig: 'Señal tendencial diseñada para capturar expansiones largas (colas gordas).',
+      hacer: '1) Operá a favor de la tendencia HTF. 2) Usá Breakeven 1R + Trailing Stop ATR para dejar correr la tendencia sin devolver ganancias.'
+    };
+  }
+  return {
+    que: 'Se activó una condición cuantitativa relevante en el precio, flujo de órdenes o regla validada.',
+    sig: 'Marca un punto de atención donde la probabilidad histórica o la liquidez se inclinan hacia un lado.',
+    hacer: '1) Tocá "Abrir par en Radar" para ver el Plan completo (Entrada, SL, 1R/BE y Objetivo). 2) Confirmá que no haya evento Macro activo y respetá el tamaño de posición.'
+  };
+}
+
+function buildAlarmExplanationHtml(opts) {
+  var ex = explainSignalContext((opts.title || '') + ' ' + (opts.body || '') + ' ' + (opts.html || ''));
+  return '<div class="alarm-guide">' +
+    '<div><b>🔎 Qué está pasando:</b> ' + esc(ex.que) + '</div>' +
+    '<div><b>📊 Qué significa:</b> ' + esc(ex.sig) + '</div>' +
+    '<div><b>🎯 Qué hacer paso a paso:</b> ' + esc(ex.hacer) + '</div></div>';
+}
+
+function enrichTelegramMessage(text) {
+  if (!text || text.indexOf('📘 Qué significa:') >= 0) return text;
+  var ex = explainSignalContext(text);
+  return text + '\n\n📘 Qué significa: ' + ex.sig + '\n🎯 Cómo actuar: ' + ex.hacer;
+}
+
+// --- GLOSARIO INTERACTIVO GLOBAL (55+ TÉRMINOS, MENÚS Y ESTRATEGIAS) ---
+var VSA_GLOSSARY = {
+  'edge': { t: 'Menú Edge (Oportunidades)', q: 'Centro de ventaja estadística de la app.', h: 'Reúne el Laboratorio de Ventaja (pruebas fuera de muestra), las señales validadas activas y el Ranking Cross-Sectional.', u: 'Usalo para descubrir qué monedas y reglas realmente ganan plata después de comisiones.' },
+  'radar': { t: 'Menú Radar', q: 'Tu tablero principal de decisión para la moneda elegida.', h: 'Combina Lectura Rápida, Anticipo probabilístico, Veredicto VSA, Microestructura, Radar Institucional Pro (Macro/Multi-Exchange/Deribit/Liquidaciones) y Plan de Trade.', u: 'Revisalo siempre antes de abrir una operación para confirmar que precio, flujo y contexto coinciden.' },
+  'gráfico': { t: 'Menú Gráfico', q: 'Gráfico interactivo de velas, perfil de volumen, CVD y Footprint en vivo.', h: 'Muestra EMA 9/21/50/200, VWAP, POC/VAH/VAL, cono de pronóstico, niveles del Plan sin superposiciones, bandas de liquidación estimadas y el Footprint intravela por nivel de precio.', u: 'Prendé o apagá capas arriba del gráfico para ver zonas exactas de soporte, resistencia y liquidez.' },
+  'paper': { t: 'Menú Paper (y 70 Reglas)', q: 'Simulador realista de operaciones + Control de Portafolio + Diario Real + Catálogo de 70 reglas.', h: 'Permite probar estrategias con capital ficticio (con comisiones, Breakeven 1R, Trailing ATR y Kill Switch), auditar tu correlación con BTC y registrar tus trades reales.', u: 'Probá siempre cualquier regla nueva en Paper antes de arriesgar dinero real.' },
+  'escáner': { t: 'Menú Escáner y Alertas', q: 'Buscador masivo de oportunidades y configurador de alarmas sonoras y Telegram 24/7.', h: 'Escanea tus favoritas o el Top 25 líquido buscando señales activas, y administra alertas de precio, sirena y sincronización con GitHub.', u: 'Configurá acá tu Bot de Telegram y tus alertas clave para no tener que mirar la pantalla todo el día.' },
+  'lectura rápida': { t: 'Lectura Rápida (5 seg)', q: 'Semáforo ejecutivo al tope del Radar.', h: 'Resume automáticamente tendencia (EMA 21/50), flujo agresivo (ShareZ), divergencia Spot vs Perps y eventos Macro en un único veredicto.', u: 'Si dice "Mercado mixto" o "Evento Macro", evitá forzar operaciones.' },
+  'ranking cross-sectional': { t: 'Ranking Cross-Sectional', q: 'Comparador relativo de las 60 criptos más líquidas del día.', h: 'Combina Fuerza Relativa vs BTC (50–70%), Funding Carry (30% en Futuros) e Inversa de Volatilidad (20–30%) en un único Score Z.', u: 'Elegí líderes de Top Longs en mercados alcistas (Risk-ON) o rezagadas de Top Shorts en mercados bajistas (Risk-OFF).' },
+  'rs vs btc': { t: 'RS vs BTC (Fuerza Relativa)', q: 'Rendimiento de una moneda comparado directamente contra Bitcoin.', h: 'Se calcula como (% cambio 24h de la moneda) − (% cambio 24h de BTC). Positivo = le gana a BTC; negativo = rinde menos que BTC.', u: 'Las monedas con RS positivo suelen liderar los rallies y aguantar mejor las correcciones.' },
+  'funding': { t: 'Funding Rate / Funding Carry', q: 'Tasa periódica (cada 8 h) que se pagan entre sí largos y cortos en Futuros Perpetuos.', h: 'Funding positivo: los largos le pagan a los cortos (mucho apalancamiento alcista). Funding negativo: los cortos le pagan a los largos (exceso de bajistas).', u: 'Funding muy negativo con precio aguantando es combustible de Short Squeeze.' },
+  'score z': { t: 'Score Z (Puntaje Z)', q: 'Medida estadística de cuántos desvíos estándar se aleja un valor del promedio.', h: 'Z = 0 es el promedio del mercado. Z > +1,5 es muy alto; Z < −1,5 es muy bajo.', u: 'Sirve para comparar activos distintos en una misma escala objetiva.' },
+  'risk-on': { t: 'Risk-ON / Risk-OFF', q: 'Termómetro de amplitud global del mercado cripto.', h: 'Risk-ON: ≥ 62% de los pares líquidos suben hoy. Risk-OFF: ≤ 38% suben. Neutral: entre 38% y 62%.', u: 'En Risk-ON priorizá compras; en Risk-OFF defendé capital o buscá shorts.' },
+  'vsa': { t: 'VSA (Volume Spread Analysis)', q: 'Metodología que analiza la relación entre el tamaño de la vela, su cierre y el volumen.', h: 'Detecta cuándo el volumen grande empuja el precio (continuación) o cuándo choca contra órdenes pasivas sin avanzar (absorción / giro).', u: 'Es la base de las reglas V01–V70 para distinguir movimientos reales de trampas.' },
+  'cvd': { t: 'CVD (Cumulative Volume Delta)', q: 'Suma acumulada de compras agresivas a mercado menos ventas agresivas.', h: 'Sube cuando entran compras a mercado (taker buy); baja cuando dominan las ventas a mercado (taker sell).', u: 'Si el precio hace nuevo máximo pero el CVD no sube, hay divergencia bajista (agotamiento).' },
+  'rvol': { t: 'RVOL (Volumen Relativo)', q: 'Compara el volumen de la vela actual contra su promedio de las últimas 20 velas.', h: 'RVOL 1,0x = volumen normal. RVOL > 1,5x = volumen alto (interés institucional). RVOL < 0,7x = volumen seco.', u: 'Las rupturas confiables suelen tener RVOL > 1,35x; las consolidaciones sanas tienen RVOL bajo.' },
+  'clv': { t: 'CLV (Close Location Value)', q: 'Indica en qué parte de la vela cerró el precio (de −1 a +1).', h: '+1 = cerró en el máximo exacto de la vela; 0 = en la mitad; −1 = en el mínimo exacto.', u: 'Un cierre fuerte alcista tiene CLV > +0,35; un rechazo bajista fuerte tiene CLV < −0,35.' },
+  'poc': { t: 'POC / VAH / VAL (Perfil de Volumen)', q: 'Niveles donde se concentró la mayor negociación de volumen por precio.', h: 'POC = precio con más volumen operado (imán). VAH = techo del 70% del volumen (Área de Valor). VAL = piso del Área de Valor.', u: 'El precio suele rebotar en VAH/VAL y volver al POC en mercados laterales; aceptar fuera de VAH/VAL dispara tendencias.' },
+  'vwap': { t: 'VWAP (±1σ / ±2σ)', q: 'Precio promedio ponderado por volumen de la sesión/semana.', h: 'Es la referencia que usan algoritmos institucionales para medir si compraron barato (bajo VWAP) o caro (sobre VWAP). Las bandas ±1σ/±2σ miden desvíos extremos.', u: 'En tendencia alcista, retrocesos al VWAP suelen dar soporte; toques en ±2σ con rechazo dan reversiones.' },
+  'atr': { t: 'ATR (Average True Range)', q: 'Mide la volatilidad promedio de cada vela en unidades de precio.', h: 'Sirve para adaptar Stop Loss, Objetivos y Trailing Stop a cuánto se mueve realmente cada moneda.', u: 'Un SL de 1,5 ATR evita que el ruido normal te saque antes de tiempo.' },
+  'hurst': { t: 'Exponente de Hurst', q: 'Mide si la serie de precios tiende a seguir tendencias o a rebotar en rangos.', h: 'H > 0,55 indica persistencia (tendencia). H ≈ 0,50 es caminata aleatoria. H < 0,45 indica reversión a la media (rango).', u: 'Con H > 0,55 favorecé rupturas (Donchian/NR7); con H < 0,48 favorecé reversiones en VWAP/VAH/VAL.' },
+  'obi': { t: 'OBI (Order Book Imbalance)', q: 'Desequilibrio entre órdenes límite de compra (Bid) y venta (Ask) en el Top 20 del libro.', h: 'Valores positivos altos (> +35%) muestran muros de compra cerca del precio; negativos altos muestran muros de venta.', u: 'Útil para timing muy corto (1–3 velas), recordando que las paredes pueden cancelarse.' },
+  'bobina': { t: 'Bobina / Compresión (NR7)', q: 'Contracción fuerte de rango y volumen que acumula energía antes de una expansión.', h: 'Detecta cuando el ATR baja frente a su media o cuando una vela tiene el rango más chico de las últimas 7 (NR7).', u: 'Es una alerta de preparación: esperá la vela de ruptura con volumen para entrar.' },
+  'spring': { t: 'Spring (Barrida de Soporte)', q: 'Falsa ruptura bajista que barre stops debajo de un soporte y recupera rápido.', h: 'Patrón clásico de acumulación Wyckoff: manos fuertes absorben las ventas forzadas.', u: 'Confirma al cierre por encima del soporte recuperado; SL bajo la mecha.' },
+  'upthrust': { t: 'Upthrust (Barrida de Techo)', q: 'Falsa ruptura alcista sobre una resistencia que fracasa y cierra abajo.', h: 'Patrón de distribución Wyckoff: atrapa compradores tardíos antes de caer.', u: 'Señal de alerta para proteger compras o buscar shorts si el flujo acompaña.' },
+  'short squeeze': { t: 'Short Squeeze', q: 'Suba violenta provocada por vendedores en corto forzados a recomprar para cubrir pérdidas.', h: 'Ocurre cuando hay mucho interés abierto + funding negativo y el precio rompe techos con compras agresivas.', u: 'No operar en contra; aprovechar solo si estás cerca del disparo y con SL claro.' },
+  'long squeeze': { t: 'Long Squeeze', q: 'Caída brusca causada por liquidaciones en cascada de compradores apalancados.', h: 'Se dispara cuando el funding está muy alto y el precio pierde un soporte clave.', u: 'Evitar atrapar cuchillos cayendo; esperar absorción confirmada.' },
+  'anticipo': { t: 'Anticipo (Pronóstico Calibrado)', q: 'Modelo causal que estima la probabilidad de suba P(↑) y un cono de precios para 1 a 24 velas.', h: 'Combina tendencia (filtro de Kalman), flujo agresivo, libro, HTF, imanes de valor, funding y compresión, calibrado sin mirar el futuro.', u: 'Revisá su Brier Skill Score (BSS) en el Laboratorio de Ventaja para saber si aporta ventaja real.' },
+  'brier': { t: 'Brier Score y BSS (Skill Score)', q: 'Métrica matemática que mide qué tan precisas son las probabilidades del Anticipo fuera de muestra.', h: 'Brier Score va de 0 (perfecto) a 0,25 (tirar moneda). BSS > 0% significa que el modelo le gana a la tasa base del mercado; BSS ≤ 0% significa sin ventaja probabilística.', u: 'Te protege de confiar ciegamente en pronósticos que no superen el azar.' },
+  'oos': { t: 'Validación OOS (Fuera de Muestra) y BH', q: 'Prueba honesta de estrategias sobre el 30% más reciente de los datos, nunca usado para elegir reglas.', h: 'Aplica corrección Benjamini-Hochberg (BH) para evitar que una regla parezca buena por pura suerte al probar 70 reglas juntas.', u: 'Solo las reglas "Validadas" pasaron entrenamiento + BH + prueba fuera de muestra con costos reales.' },
+  'coinbase premium': { t: 'Coinbase Premium', q: 'Diferencia porcentual entre el precio Spot en Coinbase (USD) y Binance (USDT).', h: 'Positivo = fuerte demanda institucional/EE.UU. en Spot. Negativo = presión vendedora desde EE.UU.', u: 'Las subas más sanas combinan CVD Spot positivo + Coinbase Premium ≥ 0.' },
+  'basis': { t: 'Basis (Perp vs Spot)', q: 'Diferencia porcentual entre el precio del Futuro Perpetuo y el precio Spot.', h: 'Basis alto positivo indica euforia apalancada; basis negativo indica miedo o cobertura bajista.', u: 'Si el precio sube solo por Perps con Spot cayendo, el movimiento suele ser frágil.' },
+  'deribit': { t: 'Opciones Deribit (PCR, Max Pain, IV, Skew)', q: 'Indicadores del mayor mercado mundial de opciones cripto (API pública gratis).', h: 'PCR = Put/Call OI Ratio; Max Pain = precio donde vencen sin valor la mayor cantidad de opciones; ATM IV = volatilidad esperada; Skew 25D = prima extra que paga el mercado por protegerse de caídas.', u: 'Un Skew muy positivo muestra miedo/cobertura bajista; Max Pain suele actuar como imán cerca del vencimiento.' },
+  'liquidaciones': { t: 'Mapa de Liquidaciones Estimadas', q: 'Niveles teóricos donde se liquidan posiciones apalancadas 10x, 25x, 50x y 100x.', h: 'Calculados desde máximos y mínimos recientes (swings) con margen de mantenimiento de 0,5%.', u: 'El precio suele sentirse atraído hacia estos clusters para barrer liquidez antes de girar o acelerar.' },
+  'footprint': { t: 'Footprint Intravela en Vivo', q: 'Radiografía del volumen comprador y vendedor en cada nivel exacto de precio en tiempo real.', h: 'Agrupa los trades en vivo (aggTrade) por escalón de precio, marca el POC vivo y resalta Imbalances ≥ 3:1.', u: 'Te muestra en vivo en qué precio exacto están absorbiendo o agrediendo las manos grandes.' },
+  'kill switch': { t: 'Kill Switch Diario / Semanal', q: 'Freno de emergencia automático para proteger tu capital.', h: 'Si las pérdidas cerradas en 24h o 7 días superan el % configurado (ej. −3% diario / −7% semanal), bloquea nuevas entradas Paper automáticamente.', u: 'Evita días de furia o rachas malas en mercados difíciles.' },
+  'correlación': { t: 'Correlación y Beta vs BTC', q: 'Mide cuánto se mueve una moneda pegada a Bitcoin y con qué intensidad.', h: 'Correlación cerca de 1,0 = se mueven juntas. Beta 1,5x = si BTC cae 2%, esta moneda suele caer ~3%.', u: 'Controlá la Exposición Beta-BTC total para no estar sobre-apalancado sin darte cuenta.' },
+  'vol-targeting': { t: 'Vol-Targeting', q: 'Ajuste automático del riesgo por operación según la volatilidad real de la moneda.', h: 'Si una moneda es muy volátil, reduce el % de riesgo sugerido; si es más tranquila, lo mantiene cerca de tu base.', u: 'Mantiene parejo el impacto en dólares entre operar BTC y operar una altcoin explosiva.' },
+  'breakeven': { t: 'Breakeven 1R + Trailing Stop ATR', q: 'Gestión dinámica de salida una vez abierta la operación.', h: 'Al avanzar +1R a favor, el Stop Loss sube automáticamente a tu precio de entrada (riesgo cero). El Trailing ATR va persiguiendo el máximo a X×ATR para asegurar ganancias.', u: 'Reduce pérdidas evitables y permite capturar tendencias largas.' },
+  'post-only': { t: 'Orden Limit Post-Only + OCO', q: 'Forma profesional de ejecutar en Binance pagando menos comisión.', h: 'Post-Only garantiza comisión Maker (más barata). OCO coloca Stop Loss y Take Profit vinculados: si se ejecuta uno, cancela el otro.', u: 'Usá el botón "Copiar Orden Binance" del Diario para cargar los niveles exactos sin errores.' },
+  'macro': { t: 'Calendario Macro (FOMC / CPI / NFP)', q: 'Fechas de anuncios económicos de EE.UU. que mueven todo el mercado cripto en segundos.', h: 'FOMC = tasas de la Reserva Federal; CPI = inflación; NFP = empleo. La app avisa 4 horas antes y puede bloquear entradas Paper automáticamente.', u: 'Activá el bloqueo preventivo para no quedar atrapado en latigazos binarios.' },
+  'apis': { t: 'Monitor de Estado de APIs', q: 'Panel de salud en tiempo real de los 8 flujos públicos que alimentan la app.', h: 'Muestra si Binance Spot, Binance Futuros, WebSocket, Coinbase, Kraken, Bybit, Deribit y Fear & Greed están respondiendo y su latencia en milisegundos.', u: 'Tocá la píldora "APIs" de la barra fija en cualquier momento para ver si algún exchange está lento o con CORS.' }
+};
+
+function findGlossaryMatch(rawText) {
+  var s = String(rawText || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  var keys = Object.keys(VSA_GLOSSARY);
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i], kn = k.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (s.indexOf(kn) >= 0) return VSA_GLOSSARY[k];
+  }
+  if (s.indexOf('max pain') >= 0 || s.indexOf('skew') >= 0 || s.indexOf('put') >= 0 || s.indexOf('opciones') >= 0) return VSA_GLOSSARY['deribit'];
+  if (s.indexOf('beta') >= 0 || s.indexOf('portafolio') >= 0) return VSA_GLOSSARY['correlación'];
+  if (s.indexOf('imbalance') >= 0 || s.indexOf('aggtrade') >= 0) return VSA_GLOSSARY['footprint'];
+  if (s.indexOf('carry') >= 0) return VSA_GLOSSARY['funding'];
+  if (s.indexOf('diario') >= 0 || s.indexOf('slippage') >= 0 || s.indexOf('oco') >= 0) return VSA_GLOSSARY['post-only'];
+  if (s.indexOf('fomc') >= 0 || s.indexOf('cpi') >= 0 || s.indexOf('nfp') >= 0 || s.indexOf('fear') >= 0) return VSA_GLOSSARY['macro'];
+  if (s.indexOf('trail') >= 0 || s.indexOf('1r') >= 0) return VSA_GLOSSARY['breakeven'];
+  if (s.indexOf('vah') >= 0 || s.indexOf('val') >= 0) return VSA_GLOSSARY['poc'];
+  if (s.indexOf('laboratorio') >= 0 || s.indexOf('validad') >= 0 || s.indexOf('bh') >= 0) return VSA_GLOSSARY['oos'];
+  if (s.indexOf('bss') >= 0) return VSA_GLOSSARY['brier'];
+  if (s.indexOf('nr7') >= 0 || s.indexOf('compres') >= 0) return VSA_GLOSSARY['bobina'];
+  if (s.indexOf('multi-exchange') >= 0 || s.indexOf('kraken') >= 0 || s.indexOf('bybit') >= 0) return VSA_GLOSSARY['coinbase premium'];
+  return null;
+}
+
+function openHelpModal(item, queryStr) {
+  var ov = $('#helpOv'), titleEl = $('#helpTitle'), bodyEl = $('#helpContent'), searchEl = $('#helpSearch'), chipsEl = $('#helpChips');
+  if (!ov || !bodyEl) return;
+  if (item) {
+    titleEl.textContent = '📘 ' + item.t;
+    bodyEl.innerHTML = '<div class="help-sec"><b>¿Qué es?</b> ' + esc(item.q) + '</div>' +
+      '<div class="help-sec"><b>¿Qué hace / cómo se calcula?</b> ' + esc(item.h) + '</div>' +
+      '<div class="help-sec"><b>¿Cómo usarlo para operar?</b> ' + esc(item.u) + '</div>';
+  } else {
+    titleEl.textContent = '📘 Glosario y Ayuda Interactiva';
+    bodyEl.innerHTML = '<div class="help-sec">Tocá cualquier término de abajo o escribí en el buscador. También podés activar <b>? Ayuda</b> en la barra superior y tocar cualquier menú, métrica o tarjeta de la app.</div>';
+  }
+  function drawChips(q) {
+    var qn = String(q || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var keys = Object.keys(VSA_GLOSSARY).filter(function (k) {
+      if (!qn) return true;
+      var it = VSA_GLOSSARY[k];
+      var hay = (k + ' ' + it.t + ' ' + it.q).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return hay.indexOf(qn) >= 0;
+    });
+    chipsEl.innerHTML = keys.map(function (k) {
+      return '<button type="button" data-gk="' + esc(k) + '">' + esc(VSA_GLOSSARY[k].t) + '</button>';
+    }).join('') || '<span class="card-sub">Sin coincidencias para "' + esc(q) + '".</span>';
+    chipsEl.querySelectorAll('[data-gk]').forEach(function (b) {
+      b.onclick = function () { openHelpModal(VSA_GLOSSARY[b.dataset.gk]); };
+    });
+  }
+  if (searchEl) {
+    searchEl.value = queryStr || '';
+    searchEl.oninput = function () { drawChips(searchEl.value); };
+  }
+  drawChips(queryStr || '');
+  ov.hidden = false;
+}
+
+function setHelpMode(on) {
+  S.helpMode = !!on;
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.classList.toggle('help-mode', S.helpMode);
+  }
+  var btn = $('#sqHelpBtn'), ban = $('#helpBanner');
+  if (btn) btn.classList.toggle('help-on', S.helpMode);
+  if (ban) ban.hidden = !S.helpMode;
+  syncStickyOffset();
+}
+
+// Wire up Sticky Quote buttons, Help Mode global interceptor, and Modal close
+(function wireV12Ui() {
+  if (typeof document === 'undefined') return;
+  var apiBtn = $('#sqApiBtn'), helpBtn = $('#sqHelpBtn'), helpOff = $('#helpBannerOff'), helpClose = $('#helpClose'), helpOv = $('#helpOv');
+  if (apiBtn) apiBtn.onclick = function () {
+    if (typeof showTab === 'function') showTab('radar');
+    S.pro.tab = 'apis';
+    renderMacroPro();
+    var c = $('#cMacroPro'); if (c && c.scrollIntoView) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  if (helpBtn) helpBtn.onclick = function () {
+    if (S.helpMode) { setHelpMode(false); openHelpModal(null); }
+    else setHelpMode(true);
+  };
+  if (helpOff) helpOff.onclick = function () { setHelpMode(false); };
+  if (helpClose) helpClose.onclick = function () { if (helpOv) helpOv.hidden = true; };
+  if (helpOv) helpOv.onclick = function (e) { if (e.target === helpOv) helpOv.hidden = true; };
+
+  // Global click handler: direct tap on .vsa-term OR tap on anything when Help Mode is active
+  document.addEventListener('click', function (e) {
+    var t = e.target; if (!t) return;
+    var termEl = t.closest ? t.closest('[data-help]') : null;
+    if (termEl) {
+      e.preventDefault(); e.stopPropagation();
+      var item = findGlossaryMatch(termEl.getAttribute('data-help') || termEl.textContent);
+      openHelpModal(item, item ? '' : termEl.textContent);
+      return;
+    }
+    if (!S.helpMode) return;
+    if (t.closest && (t.closest('#helpOv') || t.closest('#helpBanner') || t.closest('#sqHelpBtn'))) return;
+    e.preventDefault(); e.stopPropagation();
+    var target = t.closest ? (t.closest('button, .card-title, .cs-kpi, th, label, .chip, summary') || t) : t;
+    var txt = (target.getAttribute && (target.getAttribute('title') || target.getAttribute('aria-label'))) || target.textContent || '';
+    var match = findGlossaryMatch(txt);
+    openHelpModal(match, match ? '' : txt.trim().slice(0, 30));
+  }, true);
+
+  if (typeof window !== 'undefined' && window.addEventListener) {
+    window.addEventListener('resize', syncStickyOffset);
+    setTimeout(function () { syncStickyOffset(); updateStickyQuote(); }, 400);
+  }
+})();
+
+// Expose v12.0 pure helpers on VSA for automated testing
+if (typeof V !== 'undefined') {
+  V.explainSignalContext = explainSignalContext;
+  V.findGlossaryMatch = findGlossaryMatch;
+  V.VSA_GLOSSARY = VSA_GLOSSARY;
+  V.getApiHealthSummary = getApiHealthSummary;
 }
 
 function renderOppsTab() { renderOpps(); renderCrossSectional(); renderLab(); }
@@ -4951,6 +5438,7 @@ function loadAll() {
     if (g !== S.gen || !rs) return null;
     S.sym = rs.sym;
     loadTicker(g); loadMicro(g);
+    if (typeof scheduleAutoMacroPro === 'function') scheduleAutoMacroPro(rs.sym);
     return D.pool(orderTfs(), 3, function (tf) { return loadTf(tf, g); });
   }).then(function () {
     if (g !== S.gen) return;
@@ -5640,7 +6128,7 @@ function renderAnticipo() {
     '<div><div class="fc-h">Imanes más cercanos</div><div class="fc-h2">Arriba</div>' + magRows(upM, 'Sin imán cercano arriba.') + '<div class="fc-h2">Abajo</div>' + magRows(dnM, 'Sin imán cercano abajo.') + '</div></div>' +
     '<div class="note">El porcentaje ya pasó por la historia de este par: si un 60 % solo acertaba el 52 %, ahora dice 52 %. El centro del cono sigue siendo un sesgo chico (Kalman + flujo + régimen) y la banda es la volatilidad EWMA (λ 0,94), no un rango prometido. Techo práctico: cerca del 70 % cuando todo coincide. En el gráfico, capa «Pronóstico», con el precio al borde derecho. La alarma de montaje (bobina, spring, upthrust) se prende en Alertas y no reemplaza a una regla con respaldo.</div>';
 }
-function renderRadar() { renderAnticipo(); renderVerdict(); renderMicro(); if (typeof renderMacroPro === 'function') renderMacroPro(); renderForming(); renderPlan(); renderMtf(); }
+function renderRadar() { if (typeof renderQuickRead === 'function') renderQuickRead(); renderAnticipo(); renderVerdict(); renderMicro(); if (typeof renderMacroPro === 'function') renderMacroPro(); renderForming(); renderPlan(); renderMtf(); if (typeof updateStickyQuote === 'function') updateStickyQuote(); }
 function renderVerdict() {
   var el = $('#cVerdict'), vd = currentVerdict();
   var haveAn = V.TF.filter(function (t) { return S.an[t.id]; }).length, readyEv = V.TF.filter(function (t) { return S.an[t.id] && S.ev[t.id]; }).length;
@@ -6077,7 +6565,7 @@ function drawChart() {
       });
     }
   }
-  // v11.1 Anti-collision right-edge pill stack (evita solapamientos entre Plan, Perfil y P50)
+  // v12.0 Anti-collision right-edge pill stack (evita solapamientos entre Plan, Perfil y P50)
   if (window._vsaChartTags && window._vsaChartTags.length) {
     var tags = window._vsaChartTags.slice().sort(function (a, b) { return a.y - b.y; });
     var minGap = 15, topLim = yP0 + 9, botLim = yP0 + hP - 9;
@@ -7328,7 +7816,7 @@ function openLive() {
   var sock;
   try { sock = new WebSocket(liveUrl(streams.join('/'))); } catch (e) { wsNext = Date.now() + 4000; return; }
   wsSock = sock;
-  sock.onopen = function () { if (wsSock === sock) setLive(true); };
+  sock.onopen = function () { if (wsSock === sock) { setLive(true); if (typeof setApiHealth === 'function') setApiHealth('binance_ws', 'ok', 0, 'Conectado en vivo'); } };
   sock.onmessage = function (ev) {
     if (wsSock !== sock) return;
     var msg; try { msg = JSON.parse(ev.data); } catch (e) { return; }
@@ -7338,7 +7826,7 @@ function openLive() {
   };
   sock.onclose = function () {
     if (wsSock !== sock) return;
-    wsSock = null; setLive(false); wsNext = Date.now() + 2500;
+    wsSock = null; setLive(false); if (typeof setApiHealth === 'function') setApiHealth('binance_ws', 'err', 0, 'Reconectando…'); wsNext = Date.now() + 2500;
   };
   sock.onerror = function () { try { sock.close(); } catch (e) {} };
 }
@@ -7359,7 +7847,7 @@ function applyMini(d) {
   if (sym !== (S.sym || S.set.sym) || S.demo) return;
   var prev = S.ticker && S.ticker.last;
   S.ticker = S.ticker || {};
-  S.ticker.last = last; S.ticker.hi = +d.h; S.ticker.lo = +d.l; if (+d.q) S.ticker.qv = +d.q; if (isNum(chg)) S.ticker.chg = chg;
+  S.ticker.last = last; S.ticker.hi = +d.h; S.ticker.lo = +d.l; if (typeof updateStickyQuote === 'function') updateStickyQuote(last, chg); if (+d.q) S.ticker.qv = +d.q; if (isNum(chg)) S.ticker.chg = chg;
   var el = $('#tPx');
   if (el) {
     el.textContent = fpx(last);
@@ -7530,7 +8018,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 
-// v11.1 PWA Service Worker (solo HTTPS, nunca en file:// ni sandbox)
+// v12.0 PWA Service Worker (solo HTTPS, nunca en file:// ni sandbox)
 try {
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     navigator.serviceWorker.register('./sw.js').catch(function () {});
