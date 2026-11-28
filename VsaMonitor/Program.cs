@@ -53,7 +53,7 @@ public static class Program
             Cash = cfg.PaperTrading.InitialCapital
         });
 
-        Console.WriteLine($"[VSA & Orderflow v11.1 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts}");
+        Console.WriteLine($"[VSA & Orderflow v12.0 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts}");
 
         if (testNotify)
         {
@@ -102,7 +102,7 @@ public static class Program
 
         SaveJson(statePath, state);
         SaveJson(paperPath, paper);
-        Console.WriteLine($"[VSA & Orderflow v11.1 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
+        Console.WriteLine($"[VSA & Orderflow v12.0 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
         return 0;
     }
 
@@ -395,7 +395,7 @@ public static class Program
             {
                 if (!pos.Sym.Equals(sym, StringComparison.OrdinalIgnoreCase)) continue;
                 pos.LastPrice = px;
-                // v11.1: Gestión dinámica Breakeven 1R + Trailing Stop ATR (solo ajusta a favor, nunca afloja)
+                // v12.0: Gestión dinámica Breakeven 1R + Trailing Stop ATR (solo ajusta a favor, nunca afloja)
                 if (pos.PeakPrice <= 0) pos.PeakPrice = pos.Entry;
                 if (pos.Side > 0 && px > pos.PeakPrice) pos.PeakPrice = px;
                 else if (pos.Side < 0 && px < pos.PeakPrice) pos.PeakPrice = px;
@@ -559,9 +559,9 @@ public static class Program
                         $"Regla: {hit.Code} {hit.Name}\n" +
                         $"Régimen HTF ({htf.ToUpperInvariant()}): {hit.HtfRegime.Label} ({hit.HtfRegime.SpreadPct * 100:+0.00;-0.00}%) · Hurst: {(double.IsFinite(hit.Hurst) ? hit.Hurst.ToString("0.00", CultureInfo.InvariantCulture) : "—")}\n" +
                         $"{evLine}\n" +
-                        $"Ref: {QuantEngine.FormatPrice(px)} · SL: {QuantEngine.FormatPrice(sl)} · Obj {rrMult:0.0}R: {QuantEngine.FormatPrice(tp)}{microLine}{cbLine}{obLine}{paperNote}";
+                        $"Ref: {QuantEngine.FormatPrice(px)} · SL: {QuantEngine.FormatPrice(sl)} · Obj {rrMult:0.0}R: {QuantEngine.FormatPrice(tp)}{microLine}{cbLine}{obLine}{paperNote}{BuildPlainStrategyGuidance(hit.Code, hit.Name, hit.Bias, isCand)}";
 
-                    Console.WriteLine($"[SEÑAL CONFIRMADA v11.1] {sym} {tf} {hit.Code}");
+                    Console.WriteLine($"[SEÑAL CONFIRMADA v12.0] {sym} {tf} {hit.Code}");
                     await SendTelegramAsync(tgToken, tgChat, msg);
                 }
                 catch (Exception ex)
@@ -572,6 +572,26 @@ public static class Program
         }
     }
 
+
+
+    private static string BuildPlainStrategyGuidance(string code, string name, int bias, bool isCand)
+    {
+        string dir = bias > 0 ? "alcista (compra/long)" : "bajista (venta/short)";
+        string detail = code switch
+        {
+            "V57" or "V58" => "Trampa bajista / Short Squeeze: cortos atrapados recomprando a mercado.",
+            "V59" or "V60" => "Presión vendedora fuerte / Long Squeeze: cascada de largos atrapados.",
+            "V65" or "V66" => "Ruptura de canal Donchian 20v con volumen y flujo real (estrategia tendencial).",
+            "V67" or "V68" => "Extremo estadístico Z-Score con rechazo (reversión a la media).",
+            "V69" or "V70" => "Expansión direccional tras compresión NR7 (liberación de energía).",
+            "V61" or "V62" => "Absorción/distribución pasiva: volumen agresivo frenado por órdenes límite.",
+            _ => $"Señal cuantitativa {dir} respaldada por volumen y flujo de órdenes ({name})."
+        };
+        string action = isCand
+            ? "Modo CANDIDATA: registrada solo en Paper Trading para validación hacia adelante."
+            : "Paso a paso: revisá que no haya evento macro activo, respetá el SL técnico y dejá actuar Breakeven 1R + Trailing ATR.";
+        return $"\n📘 Qué significa: {detail}\n🎯 Cómo actuar: {action}";
+    }
 
     private static readonly DateTimeOffset[] FomcDatesUtc =
     {
@@ -610,7 +630,7 @@ public static class Program
         try
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.exchange.coinbase.com/products/{baseAsset}-USD/ticker");
-            req.Headers.UserAgent.ParseAdd("VsaOrderflow/11.1");
+            req.Headers.UserAgent.ParseAdd("VsaOrderflow/12.0");
             using var resp = await Http.SendAsync(req, ct);
             if (!resp.IsSuccessStatusCode) return null;
             using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync(ct));
