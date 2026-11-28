@@ -53,7 +53,7 @@ public static class Program
             Cash = cfg.PaperTrading.InitialCapital
         });
 
-        Console.WriteLine($"[VSA & Orderflow v12.0 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts}");
+        Console.WriteLine($"[VSA & Orderflow v12.3 .NET] Mercado={cfg.Market.ToUpperInvariant()} | Pares={cfg.Symbols.Count} | Favoritas={cfg.Favorites.Count} | TFs={string.Join(",", cfg.Timeframes)} | FiltroHTF={cfg.HardRegimeFilter} | DepthWS={cfg.OrderBookAlerts}");
 
         if (testNotify)
         {
@@ -102,7 +102,7 @@ public static class Program
 
         SaveJson(statePath, state);
         SaveJson(paperPath, paper);
-        Console.WriteLine($"[VSA & Orderflow v12.0 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
+        Console.WriteLine($"[VSA & Orderflow v12.3 .NET] Finalizado. {BuildPaperAuditSummary(paper)}");
         return 0;
     }
 
@@ -395,7 +395,7 @@ public static class Program
             {
                 if (!pos.Sym.Equals(sym, StringComparison.OrdinalIgnoreCase)) continue;
                 pos.LastPrice = px;
-                // v12.0: Gestión dinámica Breakeven 1R + Trailing Stop ATR (solo ajusta a favor, nunca afloja)
+                // v12.3: Gestión dinámica Breakeven 1R + Trailing Stop ATR (solo ajusta a favor, nunca afloja)
                 if (pos.PeakPrice <= 0) pos.PeakPrice = pos.Entry;
                 if (pos.Side > 0 && px > pos.PeakPrice) pos.PeakPrice = px;
                 else if (pos.Side < 0 && px < pos.PeakPrice) pos.PeakPrice = px;
@@ -561,7 +561,7 @@ public static class Program
                         $"{evLine}\n" +
                         $"Ref: {QuantEngine.FormatPrice(px)} · SL: {QuantEngine.FormatPrice(sl)} · Obj {rrMult:0.0}R: {QuantEngine.FormatPrice(tp)}{microLine}{cbLine}{obLine}{paperNote}{BuildPlainStrategyGuidance(hit.Code, hit.Name, hit.Bias, isCand)}";
 
-                    Console.WriteLine($"[SEÑAL CONFIRMADA v12.0] {sym} {tf} {hit.Code}");
+                    Console.WriteLine($"[SEÑAL CONFIRMADA v12.3] {sym} {tf} {hit.Code}");
                     await SendTelegramAsync(tgToken, tgChat, msg);
                 }
                 catch (Exception ex)
@@ -630,7 +630,7 @@ public static class Program
         try
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.exchange.coinbase.com/products/{baseAsset}-USD/ticker");
-            req.Headers.UserAgent.ParseAdd("VsaOrderflow/12.0");
+            req.Headers.UserAgent.ParseAdd("VsaOrderflow/12.3");
             using var resp = await Http.SendAsync(req, ct);
             if (!resp.IsSuccessStatusCode) return null;
             using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync(ct));
