@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vsa-orderflow-v12-0';
+const CACHE_NAME = 'vsa-orderflow-v12-3';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>VSA &amp; Orderflow v12.0 · Ultimate Guided &amp; Live Suite</title>
-  <meta name="description" content="Terminal cuantitativa VSA &amp; Orderflow v12.0: 70 reglas, Edge Lab OOS con Brier Score, Anticipo calibrado, Ranking Cross-Sectional, Paper Trading y alertas 24/7.">
+  <title>VSA &amp; Orderflow v12.3 · Ultimate Guided &amp; Live Suite</title>
+  <meta name="description" content="Terminal cuantitativa VSA &amp; Orderflow v12.3: 70 reglas, Edge Lab OOS con Brier Score, Anticipo calibrado, Ranking Cross-Sectional, Paper Trading y alertas 24/7.">
   <meta name="theme-color" content="#090d16">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -609,7 +609,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 
 
-/* === v12.0 Unified Alpha Suite additions === */
+/* === v12.3 Unified Alpha Suite additions === */
 .cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
 .cs-kpi{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 .cs-kpi .k{font-size:11px;color:var(--tx3);display:block;margin-bottom:2px}
@@ -626,7 +626,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 @media (max-width:640px){.ant-bins{grid-template-columns:repeat(2,1fr)}}
 
 
-/* === v12.0 Institutional Pro Suite === */
+/* === v12.3 Institutional Pro Suite === */
 .sw-liq{background:#f59e0b}
 .pro-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line)}
 .pro-tabs button{background:var(--bg2);color:var(--tx2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer}
@@ -646,7 +646,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .macro-banner.hot{border-color:#f59e0b;background:rgba(245,158,11,.12)}
 
 
-/* === v12.0 Ultimate Guided & Live Suite === */
+/* === v12.3 Ultimate Guided & Live Suite === */
 .sticky-quote{position:sticky;top:64px;z-index:19;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;background:rgba(11,17,32,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);font-size:12px;font-variant-numeric:tabular-nums}
 .sq-left{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden}
 .sq-sym{font-weight:800;color:var(--tx);white-space:nowrap}
@@ -686,6 +686,97 @@ body.help-mode .tabs button,body.help-mode .card-title,body.help-mode .cs-kpi,bo
 .help-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .help-chips button{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:999px;padding:4px 9px;font-size:11.5px;cursor:pointer}
 .help-chips button:hover{border-color:#38bdf8;color:#38bdf8}
+
+
+/* === v12.3 Polish: Light Theme Contrast, Sticky No-Clip, Card Collapse, Sheet Scroll === */
+.sticky-quote{background:var(--card);color:var(--tx);padding:5px 8px;gap:5px}
+.sq-left{display:flex;align-items:center;gap:5px;flex:1 1 auto;min-width:0;overflow:visible;white-space:nowrap}
+.sq-px{font-size:12.5px;white-space:nowrap}
+.sq-chg{font-size:11.5px;white-space:nowrap;flex-shrink:0}
+.sq-right{gap:4px}
+.sq-btn{padding:3px 7px;font-size:11px;min-height:26px}
+@media (max-width:420px){
+  .sticky-quote{flex-wrap:wrap;row-gap:4px}
+  .sq-sym{font-size:12px}
+  .sq-px{font-size:12px}
+  .sq-chg{font-size:11px}
+  .cs-tbl th,.cs-tbl td{padding:6px 5px;font-size:11.5px}
+}
+/* Settings Sheet scroll fix on Android WebView / Chrome */
+.sheet{overscroll-behavior:contain;touch-action:none}
+.sheet-card{display:flex!important;flex-direction:column!important;overflow:hidden!important;max-height:86dvh!important}
+.sheet-head{flex:0 0 auto}
+.sheet-body{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-y:contain!important;touch-action:pan-y!important}
+
+/* Universal Card Minimize / Maximize */
+.vsa-col-btn{background:var(--bg2);color:var(--tx2);border:1px solid var(--line2);border-radius:6px;min-width:24px;height:24px;padding:0 6px;font-size:13px;font-weight:800;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.vsa-col-btn:hover{border-color:var(--acc,#38bdf8);color:var(--tx)}
+.card.is-collapsed > :not(.card-head):not(.qr-card){display:none!important}
+.card.is-collapsed .card-head{border-bottom:0!important}
+.card.is-collapsed .qr-text{display:none!important}
+
+/* Full Light Theme ([data-theme="light"]) high-contrast fixes */
+[data-theme="light"] .sticky-quote{background:rgba(255,255,255,.97);color:#0f172a;border-bottom-color:#cbd5e1}
+[data-theme="light"] .sq-sym,[data-theme="light"] .sq-px{color:#0f172a}
+[data-theme="light"] .sq-mk{background:#e0f2fe;color:#0369a1}
+[data-theme="light"] .sq-btn{background:#f1f5f9;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .sq-btn.help-on{background:#f59e0b;color:#0f172a;border-color:#d97706}
+[data-theme="light"] .ant-oos,[data-theme="light"] .j-form{background:#f8fafc;color:#0f172a}
+[data-theme="light"] .j-form input,[data-theme="light"] .j-form select,[data-theme="light"] .ks-row input[type="number"]{background:#ffffff;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .cs-guide{background:#f0f9ff;color:#0f172a;border-bottom-color:#bae6fd}
+[data-theme="light"] .cs-guide summary{color:#0369a1}
+[data-theme="light"] .cs-kpi,[data-theme="light"] .ant-bin,[data-theme="light"] .api-pill,[data-theme="light"] .macro-banner{background:#f8fafc;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .cs-kpi .k,[data-theme="light"] .card-sub,[data-theme="light"] .qr-text{color:#475569}
+[data-theme="light"] .cs-kpi .v,[data-theme="light"] .cs-tbl td,[data-theme="light"] .cs-tbl th,[data-theme="light"] .fp-tbl td,[data-theme="light"] .fp-tbl th{color:#0f172a}
+[data-theme="light"] .pro-tabs button{background:#f1f5f9;color:#334155;border-color:#cbd5e1}
+[data-theme="light"] .pro-tabs button.on{background:#e0f2fe;color:#0369a1;border-color:#0284c7}
+[data-theme="light"] .help-sheet{background:#ffffff;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .help-sheet h3{color:#0369a1}
+[data-theme="light"] .help-sec b{color:#0f172a}
+[data-theme="light"] .help-search{background:#f8fafc;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .help-chips button{background:#f1f5f9;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .alarm-guide{background:rgba(255,255,255,.94);color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .alarm-guide b{color:#0369a1}
+[data-theme="light"] .vsa-term{border-bottom-color:#0284c7;color:#0369a1}
+[data-theme="light"] .vsa-col-btn{background:#f1f5f9;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .c-bull{color:#047857!important}
+[data-theme="light"] .c-bear{color:#b91c1c!important}
+[data-theme="light"] .c-warn{color:#b45309!important}
+
+
+/* === v12.3 Custom Card Drag & Drop Reordering + Bullish Ignition Detector === */
+.sq-btn.reorder-on{background:#38bdf8;color:#0b1120;border-color:#38bdf8;box-shadow:0 0 0 2px rgba(56,189,248,.3)}
+.reorder-banner{position:sticky;top:102px;z-index:18;background:#0284c7;color:#fff;padding:6px 12px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.vsa-drag-ctrls{display:none;align-items:center;gap:4px;margin-right:4px}
+body.reorder-mode .vsa-drag-ctrls{display:inline-flex}
+body.reorder-mode .view .card{outline:1.5px dashed rgba(56,189,248,.65);outline-offset:2px;transition:transform .15s,opacity .15s}
+body.reorder-mode .view .card.dragging{opacity:.45;transform:scale(.985)}
+body.reorder-mode .view .card.drag-over{outline:2px solid #10b981;background:rgba(16,185,129,.06)}
+.vsa-drag-h{cursor:grab;padding:2px 6px;border-radius:6px;background:rgba(56,189,248,.16);color:#38bdf8;font-weight:800;font-size:13px;user-select:none;touch-action:none}
+.vsa-mv-btn{background:var(--bg2);color:var(--tx);border:1px solid var(--line2);border-radius:6px;min-width:24px;height:24px;padding:0 5px;font-size:12px;font-weight:800;cursor:pointer}
+.ig-wrap{padding:10px 12px}
+.ig-bar{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;margin:6px 0 8px;border:1px solid var(--line)}
+.ig-fill{height:100%;transition:width .3s}
+.ig-pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px;margin-top:6px}
+.ig-pil{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:11.5px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.ig-pil.on{border-color:#10b981;background:rgba(16,185,129,.09)}
+[data-theme="light"] .ig-pil{background:#f8fafc;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .ig-pil.on{background:#ecfdf5;border-color:#10b981}
+[data-theme="light"] .vsa-mv-btn{background:#f1f5f9;color:#0f172a;border-color:#cbd5e1}
+
+
+/* === v12.3 Persistent Alarm Log === */
+.sq-btn.has-log{border-color:#f59e0b;color:#f59e0b}
+.alog-item{border-top:1px solid var(--line);padding:10px 12px;font-size:12px;line-height:1.45}
+.alog-item.pinned{background:rgba(245,158,11,.07);border-left:3px solid #f59e0b}
+.alog-item.unread{border-left:3px solid #38bdf8}
+.alog-head{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.alog-title{font-weight:800;font-size:13px}
+.alog-guide{margin-top:6px;padding:8px 10px;border-radius:8px;background:var(--bg2);border:1px solid var(--line)}
+.alog-guide div{margin-bottom:4px}.alog-guide div:last-child{margin-bottom:0}
+.alog-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+[data-theme="light"] .alog-guide{background:#f8fafc;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .alog-item.pinned{background:#fffbeb}
 
   </style>
 </head>
@@ -787,9 +878,17 @@ body.help-mode .tabs button,body.help-mode .card-title,body.help-mode .cs-kpi,bo
       <span id="sqChg" class="sq-chg">—</span>
     </div>
     <div class="sq-right">
+      <button type="button" id="sqLogBtn" class="sq-btn" title="Ver historial de alarmas registradas" aria-label="Historial de alarmas">🔔<span id="sqLogCnt">0</span></button>
+      <button type="button" id="sqReorderBtn" class="sq-btn" title="Mover y arrastrar fichas donde quieras" aria-label="Ordenar fichas">⇅</button>
+      <button type="button" id="sqMinAll" class="sq-btn" title="Minimizar todas las tarjetas" aria-label="Minimizar todo">⊟</button>
+      <button type="button" id="sqMaxAll" class="sq-btn" title="Maximizar todas las tarjetas" aria-label="Maximizar todo">⊞</button>
       <button type="button" id="sqApiBtn" class="sq-btn" title="Estado de APIs de todos los exchanges"><span id="sqApiDot" class="api-dot warn"></span><span id="sqApiTxt">APIs</span></button>
-      <button type="button" id="sqHelpBtn" class="sq-btn" title="Tocá para activar ayuda interactiva y diccionario">? Ayuda</button>
+      <button type="button" id="sqHelpBtn" class="sq-btn" title="Tocá para activar ayuda interactiva y diccionario">?</button>
     </div>
+  </div>
+  <div id="reorderBanner" class="reorder-banner" hidden>
+    <span>⇅ Modo Ordenar activo: arrastrá con ⋮⋮ o usá ↑ ↓ en cada ficha. Se guarda solo.</span>
+    <div class="row-btns"><button type="button" id="reorderReset" class="pbtn sm" style="background:rgba(11,17,32,.2);color:#fff;border:1px solid rgba(255,255,255,.35)">↺ Reset</button><button type="button" id="reorderDone" class="pbtn sm" style="background:#0b1120;color:#fff;border:0">Listo</button></div>
   </div>
   <div id="helpBanner" class="help-banner" hidden>
     <span>💡 Modo Ayuda activo: tocá cualquier menú, botón, métrica o palabra para ver qué es y cómo se usa.</span>
@@ -817,6 +916,7 @@ body.help-mode .tabs button,body.help-mode .card-title,body.help-mode .cs-kpi,bo
     <!-- 1 · RADAR Y EVIDENCIA -->
     <section id="v-radar" class="view on" role="tabpanel">
       <div class="card" id="cQuickRead"></div>
+      <div class="card" id="cIgnition"></div>
       <div class="card" id="cAnticipo"></div>
       <div class="card" id="cVerdict"></div>
       <div class="card" id="cMicro"></div>
@@ -912,6 +1012,7 @@ body.help-mode .tabs button,body.help-mode .card-title,body.help-mode .cs-kpi,bo
 
     <!-- 4 · ESCÁNER Y RIESGO -->
     <section id="v-scan" class="view" role="tabpanel">
+      <div class="card" id="cAlarmLog"></div>
       <div class="card" id="cAlerts"></div>
       <div class="card">
         <div class="card-head">
@@ -976,7 +1077,7 @@ body.help-mode .tabs button,body.help-mode .card-title,body.help-mode .cs-kpi,bo
 <div id="sheet" class="sheet" hidden>
   <div class="sheet-bg" data-close="1"></div>
   <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-    <div class="sheet-head"><b id="sheetTitle">Ajustes</b><button type="button" class="ibtn" data-close="1" aria-label="Cerrar">✕</button></div>
+    <div class="sheet-head"><b id="sheetTitle">Ajustes</b><div class="row-btns"><button id="sheetTop" type="button" class="pbtn sm" title="Volver arriba en Ajustes">↑ Subir</button><button type="button" class="ibtn" data-close="1" aria-label="Cerrar">✕</button></div></div>
     <div class="sheet-body" id="sheetBody"></div>
   </div>
 </div>
@@ -2385,7 +2486,7 @@ function labAdd(P, sym, tf, an, reg, costSide) {
       acc.t.push(c[i + 1].t); acc.R.push(R[i]); acc.ex.push(R[i] - bm); acc.per.push(per); acc.sym.push(symIdx); acc.bars.push(B[i]);
     }
   });
-  // v12.0: Validación causal fuera de muestra (OOS) de Anticipo (horizonte h=6 velas, sin solape)
+  // v12.3: Validación causal fuera de muestra (OOS) de Anticipo (horizonte h=6 velas, sin solape)
   if (!T.ant) T.ant = { n: 0, ySum: 0, brier: 0, edgeN: 0, edgeHit: 0, edgeR: 0, edgeRn: 0, bins: [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]] };
   var antH = 6;
   for (i = Math.max(45, ts.from); i <= Math.min(ts.last, an.n - 1 - antH); i += antH) {
@@ -2856,7 +2957,7 @@ function fetchJson(url, ms) {
   });
 }
 function fetchTimeout(url, ms) {
-  // v12.0: conexión directa a Binance (compatible con fanatics.com.ar/cripto/, PWA y APK Android file://)
+  // v12.3: conexión directa a Binance (compatible con fanatics.com.ar/cripto/, PWA y APK Android file://)
   var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null, timer = null;
   var p = fetch(url, { signal: ctrl ? ctrl.signal : undefined, cache: 'no-store', credentials: 'omit' });
   var t = new Promise(function (_, rej) { timer = setTimeout(function () { if (ctrl) ctrl.abort(); rej(NetError('timeout', 'sin respuesta en ' + Math.round(ms / 1000) + ' s')); }, ms); });
@@ -3151,7 +3252,7 @@ var SYM_NAMES = {}; SYMBOLS.forEach(function (x) { SYM_NAMES[x[0]] = x[1]; });
 var SCAN_TF_MAP = { all4: ['15m', '1h', '4h', '1d'], intra: ['15m', '1h'], swing: ['1h', '4h'], macro: ['4h', '1d'], all3: ['15m', '1h', '4h'] };
 var DEF = {
   v: 6.0, market: 'spot', hardRegime: true, regimeHtf: 'auto', strictLateral: false, sym: 'BTCUSDT', tf: '1h', thr: 'esc', rvol: 'seas', hist: 3000, h: 0, // h=0 -> Auto multi-horizonte
-  feeSpot: 0.10, feeFut: 0.04, slip: 0.02, Kfine: 4000, fontScale: 1.15, refresh: 15, sound: true, sigAlert: 'BOTH', sigAlertOn: true, setupAlertOn: true, tgOn: false, tgToken: '', tgChat: '', ghOn: false, ghRepo: '', ghToken: '', ghBranch: 'main', theme: 'dark',
+  feeSpot: 0.10, feeFut: 0.04, slip: 0.02, Kfine: 4000, fontScale: 1.0, refresh: 15, sound: true, sigAlert: 'BOTH', sigAlertOn: true, setupAlertOn: true, tgOn: false, tgToken: '', tgChat: '', ghOn: false, ghRepo: '', ghToken: '', ghBranch: 'main', theme: 'dark',
   slAtr: 1.3, rr: 2, maxBars: 12, be1r: true, trailAtr: 0,
   scanList: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'ADAUSDT', 'DOGEUSDT', 'AVAXUSDT', 'LINKUSDT', 'SUIUSDT', 'NEARUSDT', 'ARBUSDT', 'DOTUSDT', 'INJUSDT', 'TONUSDT', 'OPUSDT'],
   scanTf: 'all4', scanFilter: 'ALL',
@@ -3171,7 +3272,7 @@ function validate(o) {
   if ([0, 1, 3, 6, 12, 24].indexOf(+o.h) < 0) o.h = 0; o.h = +o.h;
   o.feeSpot = clampNum(o.feeSpot, 0, 1, 0.10); o.feeFut = clampNum(o.feeFut, 0, 1, 0.04); o.slip = clampNum(o.slip, 0, 1, 0.02);
   if ([1000, 2000, 4000].indexOf(+o.Kfine) < 0) o.Kfine = 4000; o.Kfine = +o.Kfine;
-  o.fontScale = Math.round(clampNum(o.fontScale, 0.85, 1.50, 1.15) * 20) / 20;
+  o.fontScale = Math.round(clampNum(o.fontScale, 0.85, 1.50, 1.0) * 20) / 20;
   if ([0, 15, 30, 60].indexOf(+o.refresh) < 0) o.refresh = 15; o.refresh = +o.refresh;
   o.slAtr = clampNum(o.slAtr, 0.3, 5, 1.3); o.rr = clampNum(o.rr, 0.5, 6, 2); o.maxBars = Math.round(clampNum(o.maxBars, 2, 100, 12));
   o.be1r = o.be1r !== false; o.trailAtr = clampNum(o.trailAtr, 0, 5, 0);
@@ -3267,7 +3368,7 @@ function applyTheme() {
   document.documentElement.setAttribute('data-theme', t);
 }
 function applyFont() {
-  var fs = clampNum(S.set.fontScale, 0.85, 1.50, 1.15);
+  var fs = clampNum(S.set.fontScale, 0.85, 1.50, 1.0);
   document.documentElement.style.setProperty('--fs', String(fs));
 }
 function stepFont(delta) {
@@ -3471,6 +3572,7 @@ function fireLoudAlarm(opts) {
   $('#alarmIco').textContent = up ? '🚨📈' : '🚨📉';
   $('#alarmTitle').textContent = opts.title || '¡ALERTA DE MERCADO!';
   $('#alarmBody').innerHTML = (opts.html || esc(opts.body || '')) + (typeof buildAlarmExplanationHtml === 'function' ? buildAlarmExplanationHtml(opts) : '');
+  if (typeof recordAlarmLog === 'function') recordAlarmLog(opts);
   ov.hidden = false;
   clearInterval(S.alarm.timer); clearInterval(S.alarm.titleTimer);
   var ring = function () {
@@ -4082,7 +4184,7 @@ function onNewOpp(o) {
 }
 
 // ============================================================================
-// v12.0: Ranking Cross-Sectional (Momentum Relativo vs BTC + Funding Carry + Inv-Vol)
+// v12.3: Ranking Cross-Sectional (Momentum Relativo vs BTC + Funding Carry + Inv-Vol)
 // ============================================================================
 function fetchJson(url, ms) {
   var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
@@ -4215,7 +4317,7 @@ function renderCrossSectional() {
           '<td class="r">' + fnum(r.rangePct, 1) + ' %</td>' +
           '<td class="r"><b class="' + (sc > 0.5 ? 'c-bull' : sc < -0.5 ? 'c-bear' : '') + '">' + fsig(sc, 2) + '</b></td>' +
           '<td class="r"><button type="button" class="pbtn sm" data-csopen="' + esc(r.sym) + '">Abrir</button></td></tr>';
-      }).join('') + '</tbody></table></div>';
+      }).join('') + '</tbody></table></div></div>';
   }
   var runBtn = $('#csRun');
   if (runBtn) runBtn.onclick = runCrossSectional;
@@ -4229,7 +4331,7 @@ function renderCrossSectional() {
 
 
 // ============================================================================
-// v12.0 INSTITUTIONAL PRO SUITE (100% APIs públicas gratis + riesgo portafolio + footprint)
+// v12.3 INSTITUTIONAL PRO SUITE (100% APIs públicas gratis + riesgo portafolio + footprint)
 // ============================================================================
 S.pro = S.pro || {
   tab: 'macro',
@@ -4252,7 +4354,7 @@ S.pro = S.pro || {
   fpLastRender: 0
 };
 
-// Load persisted v12.0 risk guards & execution journal
+// Load persisted v12.3 risk guards & execution journal
 (function initV11Storage() {
   try {
     var rs = JSON.parse(localStorage.getItem('vsa_v11_risk') || 'null');
@@ -4535,7 +4637,7 @@ function renderMacroPro() {
       '<div class="cs-kpi"><span class="k">Crypto Fear &amp; Greed</span><span class="v" style="font-size:13px">' + fgChip + '</span></div>' +
       '<div class="cs-kpi"><span class="k">Próximo evento alto impacto</span><span class="v" style="font-size:13px">' + (m.upcoming[0] ? esc(m.upcoming[0].kind) + ' · ' + Math.max(0, Math.round((m.upcoming[0].t - Date.now()) / 3600e3)) + ' h' : '—') + '</span></div>' +
       '</div>' +
-      '<table class="cs-tbl"><thead><tr><th>Evento</th><th>Tipo</th><th class="r">Fecha UTC</th><th class="r">Faltan</th></tr></thead><tbody>' +
+      '<div class="lab-scroll"><table class="cs-tbl"><thead><tr><th>Evento</th><th>Tipo</th><th class="r">Fecha UTC</th><th class="r">Faltan</th></tr></thead><tbody>' +
       m.upcoming.map(function (ev) {
         var hrs = Math.round((ev.t - Date.now()) / 3600e3);
         var dStr = new Date(ev.t).toISOString().slice(0, 16).replace('T', ' ');
@@ -4585,10 +4687,10 @@ function renderMacroPro() {
         '<div class="cs-grid" style="padding:0;border:0;margin-bottom:8px">' +
         '<div class="cs-kpi"><span class="k">Imán Short-Liq (arriba)</span><span class="v c-warn">' + (lq.nearestShort ? fpx(lq.nearestShort.px) + ' (+' + fnum(lq.nearestShort.distPct, 2) + '% · ' + lq.nearestShort.lev + 'x)' : '—') + '</span></div>' +
         '<div class="cs-kpi"><span class="k">Imán Long-Liq (abajo)</span><span class="v" style="color:#a855f7">' + (lq.nearestLong ? fpx(lq.nearestLong.px) + ' (' + fnum(lq.nearestLong.distPct, 2) + '% · ' + lq.nearestLong.lev + 'x)' : '—') + '</span></div>' +
-        '</div><table class="cs-tbl"><thead><tr><th>Lado</th><th>Apalancamiento</th><th class="r">Precio est.</th><th class="r">Distancia</th></tr></thead><tbody>' +
+        '</div><div class="lab-scroll"><table class="cs-tbl"><thead><tr><th>Lado</th><th>Apal.</th><th class="r">Precio est.</th><th class="r">Dist.</th></tr></thead><tbody>' +
         lq.clusters.map(function (c) {
-          return '<tr><td><span class="chip ' + (c.side === 'short' ? 'warn' : 'acc') + '">' + (c.side === 'short' ? 'Cortos (arriba)' : 'Largos (abajo)') + '</span></td><td>' + c.lev + 'x</td><td class="r"><b>' + fpx(c.px) + '</b></td><td class="r">' + fsig(c.distPct, 2) + ' %</td></tr>';
-        }).join('') + '</tbody></table></div>';
+          return '<tr><td><span class="chip ' + (c.side === 'short' ? 'warn' : 'acc') + '">' + (c.side === 'short' ? 'Cortos ↑' : 'Largos ↓') + '</span></td><td>' + c.lev + 'x</td><td class="r"><b>' + fpx(c.px) + '</b></td><td class="r">' + fsig(c.distPct, 2) + '%</td></tr>';
+        }).join('') + '</tbody></table></div></div>';
     }
   }
   el.innerHTML = head + body;
@@ -4855,7 +4957,7 @@ function renderJournal() {
   };
 }
 
-// Exponer utilidades puras v12.0 en VSA para pruebas automatizadas
+// Exponer utilidades puras v12.3 en VSA para pruebas automatizadas
 if (typeof V !== 'undefined') {
   V.getMacroEvents = getMacroEvents;
   V.estimateLiquidationClusters = estimateLiquidationClusters;
@@ -4867,7 +4969,7 @@ if (typeof V !== 'undefined') {
 
 
 // ============================================================================
-// v12.0 ULTIMATE GUIDED & LIVE SUITE
+// v12.3 ULTIMATE GUIDED & LIVE SUITE
 // (Sticky Quote, API Health Monitor, Auto-Radar Pro, Rich Alarm/Telegram Guides,
 //  5-Second Quick Read, and 55+ Term Interactive Tap-to-Explain Glossary)
 // ============================================================================
@@ -4944,7 +5046,7 @@ function updateStickyQuote(livePx, liveChg) {
   var sym = S.sym || S.set.sym || 'BTCUSDT';
   var px = isNum(livePx) ? livePx : (S.ticker && isNum(S.ticker.last) ? S.ticker.last : (S.an && S.an[S.set.tf] && S.an[S.set.tf].c.length ? S.an[S.set.tf].c[S.an[S.set.tf].c.length - 1].c : NaN));
   var chg = isNum(liveChg) ? liveChg : (S.ticker && isNum(S.ticker.chg) ? S.ticker.chg : NaN);
-  symEl.textContent = sym.replace(/USDT$/, '') + '/USDT';
+  symEl.textContent = (typeof window !== 'undefined' && window.innerWidth < 430) ? sym.replace(/USDT$/, '') : (sym.replace(/USDT$/, '') + '/USDT');
   if (mkEl) mkEl.textContent = mk() === 'futures' ? 'FUT' : 'SPOT';
   if (isNum(px)) {
     var prev = parseFloat(pxEl.dataset.px || '0');
@@ -5254,12 +5356,573 @@ function setHelpMode(on) {
   }
 })();
 
-// Expose v12.0 pure helpers on VSA for automated testing
+// Expose v12.3 pure helpers on VSA for automated testing
 if (typeof V !== 'undefined') {
   V.explainSignalContext = explainSignalContext;
   V.findGlossaryMatch = findGlossaryMatch;
   V.VSA_GLOSSARY = VSA_GLOSSARY;
   V.getApiHealthSummary = getApiHealthSummary;
+}
+
+
+// ============================================================================
+// v12.3 POLISH: EXPANDED GLOSSARY (65+ TERMS) + PERSISTENT CARD MINIMIZE/MAXIMIZE
+// ============================================================================
+(function expandV121Glossary() {
+  if (typeof VSA_GLOSSARY === 'undefined') return;
+  var extra = {
+    'imb compra': { t: 'IMB COMPRA (Imbalance Comprador ≥ 3:1)', q: 'Desequilibrio agresivo de compras en un nivel exacto de precio dentro del Footprint.', h: 'Aparece cuando el volumen de compras a mercado (Ask) en ese nivel es al menos 3 veces mayor que las ventas a mercado (Bid).', u: 'Indica urgencia compradora institucional en ese precio; varios IMB COMPRA apilados suelen actuar como soporte inmediato.' },
+    'imb venta': { t: 'IMB VENTA (Imbalance Vendedor ≥ 3:1)', q: 'Desequilibrio agresivo de ventas en un nivel exacto de precio dentro del Footprint.', h: 'Aparece cuando el volumen de ventas a mercado (Bid) en ese nivel es al menos 3 veces mayor que las compras a mercado (Ask).', u: 'Muestra presión vendedora fuerte; varios IMB VENTA apilados suelen funcionar como resistencia o aceleración bajista.' },
+    'poc vivo': { t: 'POC VIVO (Point of Control Intravela)', q: 'El nivel de precio exacto donde más volumen se operó en la sesión actual del Footprint.', h: 'Se actualiza tick a tick con cada trade recibido por WebSocket (aggTrade) y resalta la fila de mayor volumen total.', u: 'Si el precio queda por encima del POC vivo, ganan los compradores; si queda por debajo, dominan los vendedores.' },
+    'cinta de agresores': { t: 'Cinta de Agresores (Time & Sales)', q: 'Lista en vivo de las últimas operaciones ejecutadas a mercado en Binance.', h: 'Muestra si el agresor fue COMPRA (pagó el Ask) o VENTA (golpeó el Bid), el precio exacto y el volumen.', u: 'Una ráfaga continua de compras grandes del mismo lado confirma interés real en rupturas.' },
+    'bid': { t: 'Bid / Ask (Ventas y Compras Agresivas)', q: 'Los dos lados del libro de órdenes en tiempo real.', h: 'Bid = órdenes límite esperando comprar (cuando alguien vende a mercado golpea el Bid). Ask = órdenes límite esperando vender (cuando alguien compra a mercado levanta el Ask).', u: 'En el Footprint, más volumen en Ask que en Bid genera Delta positivo.' },
+    'delta': { t: 'Delta (Δ Volumen Neto)', q: 'Diferencia entre compras agresivas a mercado menos ventas agresivas a mercado.', h: 'Delta = Volumen Taker Buy − Volumen Taker Sell. Positivo (+) = agresión compradora; negativo (−) = agresión vendedora.', u: 'Buscá que el Delta acompañe la dirección del precio; si divergen, hay absorción.' },
+    'mmr': { t: 'MMR (Maintenance Margin Rate)', q: 'Tasa mínima de margen de mantenimiento que exige el exchange antes de liquidar una posición apalancada.', h: 'En el mapa de liquidaciones se usa 0,5% estándar para estimar a qué precio exacto se liquidan posiciones 10x, 25x, 50x y 100x.', u: 'Explica por qué un long 50x se liquida alrededor de −1,5% y no exactamente en −2,0%.' },
+    'open interest': { t: 'Open Interest (OI · Interés Abierto)', q: 'Total de contratos de Futuros abiertos (no cerrados) en el mercado.', h: 'Sube cuando entra apalancamiento nuevo; baja cuando se cierran o liquidan posiciones.', u: 'Precio subiendo + OI subiendo = tendencia con combustible; precio subiendo + OI bajando = cierre de cortos (short covering).' },
+    'long/short': { t: 'Long / Short Ratio (L/S)', q: 'Proporción entre cuentas/posiciones compradas (Long) y vendidas (Short) en Futuros.', h: 'L/S > 1,45 muestra exceso de optimismo minorista; L/S < 0,90 muestra exceso de pesimismo.', u: 'Funciona como indicador contrarian: cuando casi todos están del mismo lado, aumenta el riesgo de barrida en contra.' },
+    'ema': { t: 'EMA 9 / 21 / 50 / 200 (Medias Móviles)', q: 'Promedios exponenciales del precio que dan más peso a las velas recientes.', h: 'EMA 9/21 miden impulso corto; EMA 50/200 definen el régimen tendencial de fondo.', u: 'Cuando EMA 9 > 21 > 50 > 200 la tendencia alcista está alineada; operar a favor de la EMA 50/200 filtra señales falsas.' },
+    'rsi': { t: 'RSI Adaptativo', q: 'Índice de Fuerza Relativa (0 a 100) con umbrales dinámicos según la volatilidad.', h: 'En vez de usar siempre 30/70 fijos, ajusta sus bandas de sobreventa/sobrecompra según la compresión del ATR.', u: 'Ayuda a detectar extremos reales sin dar señales prematuras en tendencias fuertes.' },
+    'obv': { t: 'OBV (On-Balance Volume)', q: 'Indicador acumulado que suma el volumen de velas alcistas y resta el de velas bajistas.', h: 'Mide si el volumen acompaña el movimiento del precio en las últimas 10 velas.', u: 'Divergencias entre OBV y precio refuerzan las señales de agotamiento del CVD.' },
+    'stop loss': { t: 'SL / TP / 1R (Plan de Trade)', q: 'Niveles numéricos exactos de salida antes de abrir una operación.', h: 'SL (Stop Loss) = pérdida máxima (1R). 1R/BE = punto donde ganaste lo mismo que arriesgaste y subís el stop a entrada. TP (Objetivo) = ganancia buscada (ej. 2R).', u: 'Nunca abras una operación sin definir primero tu SL y tamaño de posición.' },
+    'expectativa': { t: 'Expectativa (E) y Cota −1σ (LB)', q: 'Ganancia promedio esperada por cada operación medida en unidades de riesgo (R).', h: 'E = +0,25R significa que en promedio ganás 0,25 veces tu riesgo por trade después de comisiones. LB es la estimación conservadora restando 1 error estándar.', u: 'Priorizá reglas con E > 0 y LB positivo fuera de muestra.' },
+    'profit factor': { t: 'Profit Factor (PF)', q: 'Relación entre ganancias brutas totales y pérdidas brutas totales.', h: 'PF = Ganancias / Pérdidas. PF > 1,0 gana plata; PF > 1,5 es sólido; PF < 1,0 pierde plata.', u: 'Combinalo siempre con la cantidad de operaciones (n) para evitar espejismos con pocos trades.' },
+    'drawdown': { t: 'Drawdown (Máxima Caída)', q: 'Mayor retroceso porcentual desde un pico de capital hasta un piso posterior.', h: 'Mide el peor dolor real que tuvo que soportar una estrategia en el historial o en Monte Carlo.', u: 'Usalo junto al Kill Switch para asegurarte de que tu cuenta sobreviva cualquier racha mala.' },
+    'monte carlo': { t: 'Simulación Monte Carlo', q: 'Prueba de estrés que reordena miles de veces tus operaciones al azar.', h: 'Calcula cuál sería tu peor drawdown probable (percentil 95%) y riesgo de ruina si las pérdidas llegan todas juntas.', u: 'Te muestra si tu % de riesgo por operación es seguro o demasiado agresivo.' },
+    'walk-forward': { t: 'Walk-Forward (Validación Rodante)', q: 'Backtest que entrena en el pasado y prueba únicamente en tramos futuros sucesivos.', h: 'Divide el historial en bloques (55→70%, 70→85%, 85→100%) re-entrenando sin mirar adelante.', u: 'Es la prueba más exigente para saber si una estrategia sobrevive cambios de mercado.' },
+    'htf': { t: 'HTF (Temporalidad Superior)', q: 'Marco temporal mayor usado como brújula de tendencia (ej. 4H si operás 1H, o 1D si operás 4H).', h: 'Evalúa EMA 50 vs EMA 200 en la temporalidad superior para activar el Filtro Duro de Régimen.', u: 'Evita comprar en medio de una caída mayor o shortear en plena tendencia alcista.' },
+    'donchian': { t: 'Ruptura Donchian (20 velas · V65/V66)', q: 'Estrategia clásica de seguimiento de tendencia al romper el máximo o mínimo de las últimas 20 velas.', h: 'En tu app exige además RVOL > 1,35, cierre fuerte (CLV) y flujo comprador/vendedor real.', u: 'Ideal en 4H y 1D junto con Breakeven 1R + Trailing Stop ATR.' },
+    'z-score': { t: 'Capitulación / Euforia Z-Score (V67/V68)', q: 'Detecta retornos estadísticamente extremos (más de 2,4 desvíos estándar) con mecha de rechazo.', h: 'Mide cuánto se alejó el retorno actual respecto a las últimas 50 velas.', u: 'Captura rebotes por sobrerreacción violenta cuando aparece absorción con volumen.' },
+    'vela en formación': { t: 'Vela en Formación', q: 'La vela actual que todavía no cerró y sigue moviéndose en vivo.', h: 'Muestra el tiempo restante para el cierre y la presión intravela.', u: 'Recordá que las reglas cuantitativas validadas se confirman únicamente al CIERRE de la vela.' },
+    'spot': { t: 'Spot vs. Futuros', q: 'Dos mercados distintos en Binance con reglas y costos diferentes.', h: 'Spot: comprás la moneda real sin apalancamiento (solo Longs, comisión ~0,1%). Futuros: contratos perpetuos con apalancamiento, Longs y Shorts, comisión más baja y Funding cada 8h.', u: 'Cambiá arriba entre Spot y Futuros según cómo operes realmente.' },
+    'apalancamiento': { t: 'Apalancamiento (10x / 25x / 50x / 100x)', q: 'Multiplicador de exposición en Futuros respecto a tu margen.', h: 'A mayor apalancamiento, más cerca queda tu precio de liquidación forzada (ej. 50x ≈ 1,5–2%).', u: 'Controlá siempre el riesgo real por Stop Loss (1% del capital), no por el multiplicador.' },
+    'minimizar': { t: 'Minimizar / Maximizar Tarjetas (⊟ / ⊞)', q: 'Control de espacio en pantalla guardado automáticamente en tu dispositivo.', h: 'Cada tarjeta tiene su botón − / + arriba a la derecha; los botones ⊟ y ⊞ en la barra fija minimizan o maximizan todas juntas.', u: 'Dejá abiertas solo las tarjetas que usás a diario: cuando vuelvas a abrir la app va a recordar exactamente cómo las dejaste.' }
+  };
+  Object.keys(extra).forEach(function (k) { VSA_GLOSSARY[k] = extra[k]; });
+})();
+
+// Enhance findGlossaryMatch to catch IMB, POC VIVO, Cinta, Bid/Ask, etc.
+var _origFindGlossary = findGlossaryMatch;
+findGlossaryMatch = function (rawText) {
+  var s = String(rawText || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (s.indexOf('imb compra') >= 0) return VSA_GLOSSARY['imb compra'];
+  if (s.indexOf('imb venta') >= 0) return VSA_GLOSSARY['imb venta'];
+  if (s.indexOf('imb') >= 0) return VSA_GLOSSARY['imb compra'];
+  if (s.indexOf('poc vivo') >= 0) return VSA_GLOSSARY['poc vivo'];
+  if (s.indexOf('cinta') >= 0 || s.indexOf('agresor') >= 0) return VSA_GLOSSARY['cinta de agresores'];
+  if (s.indexOf('bid') >= 0 || s.indexOf('ask') >= 0) return VSA_GLOSSARY['bid'];
+  if (s.indexOf('delta') >= 0 || s.indexOf('δ') >= 0 || s.indexOf('Δ') >= 0) return VSA_GLOSSARY['delta'];
+  if (s.indexOf('mmr') >= 0) return VSA_GLOSSARY['mmr'];
+  if (s.indexOf('open interest') >= 0 || s.indexOf(' oi') >= 0) return VSA_GLOSSARY['open interest'];
+  if (s.indexOf('l/s') >= 0 || s.indexOf('long/short') >= 0) return VSA_GLOSSARY['long/short'];
+  if (s.indexOf('ema') >= 0) return VSA_GLOSSARY['ema'];
+  if (s.indexOf('rsi') >= 0) return VSA_GLOSSARY['rsi'];
+  if (s.indexOf('obv') >= 0) return VSA_GLOSSARY['obv'];
+  if (s.indexOf('stop') >= 0 || s.indexOf('objetivo') >= 0 || s.indexOf('plan') >= 0) return VSA_GLOSSARY['stop loss'];
+  if (s.indexOf('expectativa') >= 0 || s.indexOf('cota') >= 0) return VSA_GLOSSARY['expectativa'];
+  if (s.indexOf('profit factor') >= 0) return VSA_GLOSSARY['profit factor'];
+  if (s.indexOf('drawdown') >= 0) return VSA_GLOSSARY['drawdown'];
+  if (s.indexOf('monte carlo') >= 0) return VSA_GLOSSARY['monte carlo'];
+  if (s.indexOf('walk') >= 0) return VSA_GLOSSARY['walk-forward'];
+  if (s.indexOf('htf') >= 0 || s.indexOf('regimen') >= 0) return VSA_GLOSSARY['htf'];
+  if (s.indexOf('donchian') >= 0) return VSA_GLOSSARY['donchian'];
+  if (s.indexOf('z-score') >= 0 || s.indexOf('capitulac') >= 0) return VSA_GLOSSARY['z-score'];
+  if (s.indexOf('vela en form') >= 0) return VSA_GLOSSARY['vela en formación'];
+  if (s.indexOf('spot') >= 0 || s.indexOf('futuro') >= 0) return VSA_GLOSSARY['spot'];
+  if (s.indexOf('apalanc') >= 0 || s.indexOf('apal.') >= 0 || s.indexOf('100x') >= 0 || s.indexOf('50x') >= 0) return VSA_GLOSSARY['apalancamiento'];
+  if (s.indexOf('minimiz') >= 0 || s.indexOf('maximiz') >= 0) return VSA_GLOSSARY['minimizar'];
+  return _origFindGlossary(rawText);
+};
+if (typeof V !== 'undefined') V.findGlossaryMatch = findGlossaryMatch;
+
+// --- UNIVERSAL PERSISTENT CARD COLLAPSE / EXPAND MANAGER ---
+var VSA_COL_KEY = 'vsa_v12_collapsed';
+S.collapsed = {};
+try {
+  var _sc = JSON.parse(localStorage.getItem(VSA_COL_KEY) || '{}');
+  if (_sc && typeof _sc === 'object') S.collapsed = _sc;
+} catch (_) { S.collapsed = {}; }
+
+function saveCollapsedState() {
+  try { localStorage.setItem(VSA_COL_KEY, JSON.stringify(S.collapsed)); } catch (_) {}
+}
+
+function getCardKey(card, idx) {
+  if (card.id) return 'id:' + card.id;
+  var hd = card.querySelector ? (card.querySelector('.card-title') || card.querySelector('.qr-title') || card.querySelector('summary')) : null;
+  var txt = hd ? String(hd.textContent || '').trim().slice(0, 32) : ('card_' + idx);
+  return 't:' + txt.toLowerCase().replace(/\s+/g, '_');
+}
+
+function decorateCollapsibleCards() {
+  if (typeof document === 'undefined' || !document.querySelectorAll) return;
+  var cards = document.querySelectorAll('.view .card');
+  cards.forEach(function (card, idx) {
+    if (card.tagName === 'DETAILS') return;
+    var key = getCardKey(card, idx);
+    card.dataset.colKey = key;
+    var isCol = !!S.collapsed[key];
+    card.classList.toggle('is-collapsed', isCol);
+    var head = card.querySelector('.card-head') || card.querySelector('.qr-title');
+    if (!head) return;
+    var btn = head.querySelector('.vsa-col-btn');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'vsa-col-btn';
+      btn.setAttribute('aria-label', 'Minimizar o maximizar tarjeta');
+      btn.onclick = function (e) {
+        e.stopPropagation();
+        var cur = !!S.collapsed[key];
+        S.collapsed[key] = !cur;
+        saveCollapsedState();
+        card.classList.toggle('is-collapsed', !cur);
+        btn.textContent = !cur ? '+' : '−';
+        btn.title = !cur ? 'Maximizar' : 'Minimizar';
+      };
+      var rbtns = head.querySelector('.row-btns');
+      if (rbtns) rbtns.appendChild(btn);
+      else head.appendChild(btn);
+    }
+    btn.textContent = isCol ? '+' : '−';
+    btn.title = isCol ? 'Maximizar' : 'Minimizar';
+  });
+}
+
+function setAllCardsCollapsed(collapsed) {
+  if (typeof document === 'undefined' || !document.querySelectorAll) return;
+  document.querySelectorAll('.view .card').forEach(function (card, idx) {
+    if (card.tagName === 'DETAILS') {
+      card.open = !collapsed;
+      return;
+    }
+    var key = card.dataset.colKey || getCardKey(card, idx);
+    S.collapsed[key] = !!collapsed;
+  });
+  saveCollapsedState();
+  decorateCollapsibleCards();
+  if (typeof toast === 'function') toast(collapsed ? 'Todas las tarjetas minimizadas' : 'Todas las tarjetas maximizadas', 1600);
+}
+
+(function wireV121Controls() {
+  if (typeof document === 'undefined') return;
+  var bMin = $('#sqMinAll'), bMax = $('#sqMaxAll'), bTop = $('#sheetTop');
+  if (bMin) bMin.onclick = function () { setAllCardsCollapsed(true); };
+  if (bMax) bMax.onclick = function () { setAllCardsCollapsed(false); };
+  if (bTop) bTop.onclick = function () {
+    var sb = $('#sheetBody');
+    if (sb && sb.scrollTo) sb.scrollTo({ top: 0, behavior: 'smooth' });
+    else if (sb) sb.scrollTop = 0;
+  };
+  // Automatically re-decorate cards whenever dynamic renderers update innerHTML
+  if (typeof MutationObserver !== 'undefined') {
+    var moTimer = null;
+    var mo = new MutationObserver(function () {
+      clearTimeout(moTimer);
+      moTimer = setTimeout(decorateCollapsibleCards, 60);
+    });
+    var viewsRoot = document.querySelector('.app') || document.body;
+    if (viewsRoot) mo.observe(viewsRoot, { childList: true, subtree: true });
+  }
+  setTimeout(decorateCollapsibleCards, 250);
+})();
+
+if (typeof V !== 'undefined') {
+  V.setAllCardsCollapsed = setAllCardsCollapsed;
+  V.decorateCollapsibleCards = decorateCollapsibleCards;
+}
+
+
+// ============================================================================
+// v12.3: DETECTOR AUTOMÁTICO DE IGNICIÓN ALCISTA + ARRASTRE/ORDEN DE FICHAS
+// ============================================================================
+var VSA_ORDER_KEY = 'vsa_v12_card_order';
+var VSA_IG_KEY = 'vsa_v12_ig_alert';
+S.reorderMode = false;
+S.cardOrder = {};
+S.igAlertOn = true;
+S.igLastAlertKey = '';
+try {
+  var _ord = JSON.parse(localStorage.getItem(VSA_ORDER_KEY) || '{}');
+  if (_ord && typeof _ord === 'object') S.cardOrder = _ord;
+  var _iga = localStorage.getItem(VSA_IG_KEY);
+  if (_iga !== null) S.igAlertOn = _iga === '1';
+} catch (_) {}
+
+function saveCardOrder() {
+  try { localStorage.setItem(VSA_ORDER_KEY, JSON.stringify(S.cardOrder)); } catch (_) {}
+}
+
+// --- 1. DETECTOR DE CONFLUENCIA ALCISTA INMINENTE (6 PILARES INDEPENDIENTES) ---
+function computeBullishIgnition(an, mx, mac, ticker, micro) {
+  var pillars = [
+    { id: 'trend', name: 'Tendencia EMA 21/50', ok: false, pts: 18, detail: 'sin datos' },
+    { id: 'flow',  name: 'Flujo Comprador (CVD/RVOL)', ok: false, pts: 20, detail: 'sin datos' },
+    { id: 'coil',  name: 'Compresión / Energía (NR7)', ok: false, pts: 15, detail: 'normal' },
+    { id: 'spot',  name: 'Demanda Spot Real', ok: false, pts: 18, detail: 'pendiente' },
+    { id: 'fuel',  name: 'Combustible (RS/Funding)', ok: false, pts: 15, detail: 'neutral' },
+    { id: 'macro', name: 'Ventana Macro Limpia', ok: true, pts: 14, detail: 'sin evento ±4h' }
+  ];
+  if (an && an.c && an.c.length && an.feats && an.feats[an.n - 1]) {
+    var f = an.feats[an.n - 1];
+    if (isNum(f.e21) && isNum(f.e50) && f.c > f.e21 && f.e21 >= f.e50 * 0.998) {
+      pillars[0].ok = true; pillars[0].detail = 'Cierre sobre EMA21/50';
+    } else if (isNum(f.e21)) {
+      pillars[0].detail = f.c >= f.e21 ? 'recuperando EMA21' : 'bajo EMA21';
+    }
+    var flowOk = (isNum(f.shareZ) && f.shareZ > 0.8 && isNum(f.clv) && f.clv > 0.15) || (isNum(f.rvol) && f.rvol > 1.3 && isNum(f.share) && f.share > 0.54);
+    pillars[1].ok = !!flowOk;
+    pillars[1].detail = isNum(f.shareZ) ? ('ShareZ ' + fsig(f.shareZ, 1) + ' · RVOL ' + fx(f.rvol || 1)) : 'neutro';
+    var coilOk = !!f.nr7Prev || (isNum(f.volComp) && f.volComp < 0.92);
+    pillars[2].ok = coilOk;
+    pillars[2].detail = f.nr7Prev ? 'NR7 activa ✓' : (isNum(f.volComp) ? ('ATR ' + Math.round(f.volComp * 100) + '%') : 'normal');
+  }
+  if (mx && isNum(mx.spotCvd)) {
+    var spotOk = mx.spotCvd > 1.5 && (!isNum(mx.cbPremPct) || mx.cbPremPct >= -0.04);
+    pillars[3].ok = spotOk;
+    pillars[3].detail = 'Spot ' + fsig(mx.spotCvd, 1) + '%' + (isNum(mx.cbPremPct) ? ' · CB ' + fsig(mx.cbPremPct, 2) + '%' : '');
+  }
+  var fr = micro && isNum(micro.funding) ? micro.funding : NaN;
+  var chg = ticker && isNum(ticker.chg) ? ticker.chg : NaN;
+  if ((isNum(fr) && fr <= -0.00005) || (isNum(chg) && chg > 0.015)) {
+    pillars[4].ok = true;
+    pillars[4].detail = isNum(fr) && fr <= -0.00005 ? 'Funding negativo (squeeze)' : ('Impulso 24h ' + fsig(chg * 100, 1) + '%');
+  }
+  if (mac && mac.inWindow) {
+    pillars[5].ok = false;
+    pillars[5].detail = '⚠️ ' + mac.active[0].kind + ' activo';
+  }
+  var score = 0, count = 0;
+  pillars.forEach(function (p) { if (p.ok) { score += p.pts; count++; } });
+  var status = score >= 75 ? 'IGNICIÓN ALCISTA (CONFLUENCIA ALTA)'
+    : score >= 52 ? 'VIGILAR · Casi lista para ruptura'
+    : 'NO COMPRAR TODAVÍA · Baja confluencia';
+  var cls = score >= 75 ? 'bull' : score >= 52 ? 'warn' : 'mut';
+  return { score: score, count: count, total: pillars.length, status: status, cls: cls, pillars: pillars };
+}
+
+function renderIgnition() {
+  var el = $('#cIgnition'); if (!el) return;
+  var tf = S.set.tf || '1h', an = S.an && S.an[tf];
+  var mac = typeof getMacroEvents === 'function' ? getMacroEvents(Date.now()) : { inWindow: false, active: [] };
+  var ig = computeBullishIgnition(an, S.pro && S.pro.multi, mac, S.ticker, S.micro);
+  var fillCol = ig.score >= 75 ? '#10b981' : ig.score >= 52 ? '#f59e0b' : '#64748b';
+  el.innerHTML = '<div class="card-head"><div class="card-title">🚀 Detector de Ignición Alcista (6 Pilares)</div>' +
+    '<div class="row-btns"><span class="chip ' + ig.cls + '">' + ig.score + '/100 · ' + ig.count + '/6</span></div></div>' +
+    '<div class="ig-wrap">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px"><b>' + esc(ig.status) + '</b>' +
+    '<label style="font-size:11.5px;cursor:pointer"><input type="checkbox" id="igAlertChk"' + (S.igAlertOn ? ' checked' : '') + ' style="width:auto;min-height:0;vertical-align:middle"> Alertar automático ≥ 75/100</label></div>' +
+    '<div class="ig-bar"><div class="ig-fill" style="width:' + ig.score + '%;background:' + fillCol + '"></div></div>' +
+    '<div class="ig-pillars">' + ig.pillars.map(function (p) {
+      return '<div class="ig-pil' + (p.ok ? ' on' : '') + '"><div><b>' + (p.ok ? '✅ ' : '⚪ ') + esc(p.name) + '</b><div class="card-sub">' + esc(p.detail) + '</div></div></div>';
+    }).join('') + '</div></div>';
+  var chk = $('#igAlertChk');
+  if (chk) chk.onchange = function () {
+    S.igAlertOn = !!chk.checked;
+    try { localStorage.setItem(VSA_IG_KEY, S.igAlertOn ? '1' : '0'); } catch (_) {}
+  };
+  // Disparar alarma automática + Telegram si alcanza confluencia fuerte (>=75) una vez por vela cerrada
+  if (S.igAlertOn && ig.score >= 75 && an && an.c && an.c.length && !S.demo) {
+    var kKey = (S.sym || S.set.sym) + '|' + tf + '|' + an.c[an.c.length - 1].t;
+    if (S.igLastAlertKey !== kKey) {
+      S.igLastAlertKey = kKey;
+      var msg = '🚀 IGNICIÓN ALCISTA (' + ig.score + '/100 · ' + ig.count + '/6 pilares) · ' + (S.sym || S.set.sym) + ' ' + tf.toUpperCase() + '\nPilares activos: ' +
+        ig.pillars.filter(function (p) { return p.ok; }).map(function (p) { return p.name; }).join(', ');
+      if (typeof fireLoudAlarm === 'function') fireLoudAlarm({ up: true, sym: S.sym || S.set.sym, tf: tf, title: '🚀 IGNICIÓN ALCISTA · ' + ig.score + '/100', body: msg });
+      if (S.set && S.set.tgOn && typeof sendTelegram === 'function') sendTelegram(msg, true);
+    }
+  }
+}
+
+// --- 2. REORDENAMIENTO DE FICHAS (DRAG & DROP + FLECHAS ↑ ↓ PERSISTENTE POR PESTAÑA) ---
+function applySavedCardOrderForView(view) {
+  if (!view || !view.id) return;
+  var saved = S.cardOrder[view.id];
+  if (!Array.isArray(saved) || !saved.length) return;
+  var cards = Array.prototype.slice.call(view.children).filter(function (el) { return el.classList && el.classList.contains('card'); });
+  var map = {};
+  cards.forEach(function (c, i) { map[getCardKey(c, i)] = c; });
+  saved.forEach(function (k) { if (map[k]) view.appendChild(map[k]); });
+}
+
+function persistViewOrder(view) {
+  if (!view || !view.id) return;
+  var cards = Array.prototype.slice.call(view.children).filter(function (el) { return el.classList && el.classList.contains('card'); });
+  S.cardOrder[view.id] = cards.map(function (c, i) { return c.dataset.colKey || getCardKey(c, i); });
+  saveCardOrder();
+}
+
+function moveCardInView(card, dir) {
+  var view = card.parentNode; if (!view) return;
+  var cards = Array.prototype.slice.call(view.children).filter(function (el) { return el.classList && el.classList.contains('card'); });
+  var idx = cards.indexOf(card);
+  if (idx < 0) return;
+  var target = idx + dir;
+  if (target < 0 || target >= cards.length) return;
+  if (dir < 0) view.insertBefore(card, cards[target]);
+  else view.insertBefore(cards[target], card);
+  persistViewOrder(view);
+}
+
+var _dragCard = null;
+function decorateDraggableCards() {
+  if (typeof document === 'undefined' || !document.querySelectorAll) return;
+  document.querySelectorAll('.view').forEach(function (view) {
+    if (!view.dataset.orderApplied) {
+      view.dataset.orderApplied = '1';
+      applySavedCardOrderForView(view);
+    }
+    var cards = Array.prototype.slice.call(view.children).filter(function (el) { return el.classList && el.classList.contains('card'); });
+    cards.forEach(function (card, idx) {
+      var key = card.dataset.colKey || getCardKey(card, idx);
+      card.dataset.colKey = key;
+      card.draggable = !!S.reorderMode;
+      if (!card.dataset.dndWired) {
+        card.dataset.dndWired = '1';
+        card.addEventListener('dragstart', function (e) {
+          if (!S.reorderMode) { e.preventDefault(); return; }
+          _dragCard = card; card.classList.add('dragging');
+          try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', key); } catch (_) {}
+        });
+        card.addEventListener('dragend', function () {
+          card.classList.remove('dragging'); _dragCard = null;
+          document.querySelectorAll('.card.drag-over').forEach(function (x) { x.classList.remove('drag-over'); });
+        });
+        card.addEventListener('dragover', function (e) {
+          if (!S.reorderMode || !_dragCard || _dragCard === card || _dragCard.parentNode !== card.parentNode) return;
+          e.preventDefault(); card.classList.add('drag-over');
+        });
+        card.addEventListener('dragleave', function () { card.classList.remove('drag-over'); });
+        card.addEventListener('drop', function (e) {
+          if (!S.reorderMode || !_dragCard || _dragCard === card || _dragCard.parentNode !== card.parentNode) return;
+          e.preventDefault(); card.classList.remove('drag-over');
+          var v = card.parentNode;
+          var kids = Array.prototype.slice.call(v.children);
+          if (kids.indexOf(_dragCard) < kids.indexOf(card)) v.insertBefore(_dragCard, card.nextSibling);
+          else v.insertBefore(_dragCard, card);
+          persistViewOrder(v);
+        });
+      }
+      var head = card.querySelector('.card-head') || card.querySelector('.qr-title') || card.querySelector('summary');
+      if (!head || head.querySelector('.vsa-drag-ctrls')) return;
+      var ctrls = document.createElement('span');
+      ctrls.className = 'vsa-drag-ctrls';
+      ctrls.innerHTML = '<span class="vsa-drag-h" title="Arrastrar ficha">⋮⋮</span><button type="button" class="vsa-mv-btn" data-mv="-1" title="Subir ficha">↑</button><button type="button" class="vsa-mv-btn" data-mv="1" title="Bajar ficha">↓</button>';
+      ctrls.querySelector('[data-mv="-1"]').onclick = function (e) { e.preventDefault(); e.stopPropagation(); moveCardInView(card, -1); };
+      ctrls.querySelector('[data-mv="1"]').onclick = function (e) { e.preventDefault(); e.stopPropagation(); moveCardInView(card, 1); };
+      head.insertBefore(ctrls, head.firstChild);
+    });
+  });
+}
+
+function setReorderMode(on) {
+  S.reorderMode = !!on;
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.classList.toggle('reorder-mode', S.reorderMode);
+  }
+  var btn = $('#sqReorderBtn'), ban = $('#reorderBanner');
+  if (btn) btn.classList.toggle('reorder-on', S.reorderMode);
+  if (ban) ban.hidden = !S.reorderMode;
+  decorateDraggableCards();
+  if (typeof syncStickyOffset === 'function') syncStickyOffset();
+}
+
+// Add 2 new glossary terms (total 67)
+if (typeof VSA_GLOSSARY !== 'undefined') {
+  VSA_GLOSSARY['ignición alcista'] = {
+    t: 'Detector de Ignición Alcista (6 Pilares)',
+    q: 'Semáforo de confluencia (0 a 100) que evalúa 6 factores independientes al mismo tiempo.',
+    h: 'Combina Tendencia EMA 21/50, Flujo Comprador (CVD/RVOL), Compresión/NR7, Demanda Spot Real (Coinbase + Spot CVD), Combustible (RS vs BTC / Funding) y Ventana Macro limpia.',
+    u: 'Cuando alcanza ≥ 75/100 puede disparar alarma automática y Telegram. Nunca garantiza el futuro al 100%, pero concentra las entradas donde más probabilidades convergen.'
+  };
+  VSA_GLOSSARY['ordenar fichas'] = {
+    t: 'Ordenar y Arrastrar Fichas (⇅)',
+    q: 'Personalización libre del orden de todas las tarjetas en cada pestaña.',
+    h: 'Tocá ⇅ en la barra fija para activar el modo orden: podés arrastrar con ⋮⋮ o subir/bajar con ↑ ↓ cada tarjeta y el orden queda guardado automáticamente en tu dispositivo.',
+    u: 'Poné arriba de todo las tarjetas que más mirás para ver tu tablero ideal apenas abrís la app.'
+  };
+}
+
+// Wire buttons & extend decorateCollapsibleCards to also ensure drag handles exist
+var _origDecorateCol = decorateCollapsibleCards;
+decorateCollapsibleCards = function () { _origDecorateCol(); decorateDraggableCards(); };
+
+(function wireV122() {
+  if (typeof document === 'undefined') return;
+  var rb = $('#sqReorderBtn'), rd = $('#reorderDone'), rr = $('#reorderReset');
+  if (rb) rb.onclick = function () { setReorderMode(!S.reorderMode); };
+  if (rd) rd.onclick = function () { setReorderMode(false); };
+  if (rr) rr.onclick = function () {
+    S.cardOrder = {}; saveCardOrder();
+    if (typeof toast === 'function') toast('Orden original restablecido. Recargando vista…', 1500);
+    setTimeout(function () { try { location.reload(); } catch (_) {} }, 500);
+  };
+  setTimeout(decorateDraggableCards, 300);
+})();
+
+if (typeof V !== 'undefined') {
+  V.computeBullishIgnition = computeBullishIgnition;
+  V.setReorderMode = setReorderMode;
+}
+
+
+// ============================================================================
+// v12.3: HISTORIAL PERSISTENTE DE ALARMAS CON EXPLICACIONES (EL USUARIO DECIDE)
+// ============================================================================
+var VSA_ALOG_KEY = 'vsa_v12_alarm_log';
+S.alarmLog = [];
+try {
+  var _al = JSON.parse(localStorage.getItem(VSA_ALOG_KEY) || '[]');
+  if (Array.isArray(_al)) S.alarmLog = _al;
+} catch (_) { S.alarmLog = []; }
+
+function saveAlarmLog() {
+  try { localStorage.setItem(VSA_ALOG_KEY, JSON.stringify(S.alarmLog)); } catch (_) {}
+}
+
+function stripTagsPlain(s) {
+  return String(s || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function recordAlarmLog(opts) {
+  if (!opts) return null;
+  var title = String(opts.title || '¡ALERTA DE MERCADO!').trim();
+  var rawDetail = stripTagsPlain(opts.body || opts.html || '');
+  var ex = typeof explainSignalContext === 'function'
+    ? explainSignalContext(title + ' ' + rawDetail)
+    : { que: rawDetail, sig: '', hacer: '' };
+  var entry = {
+    id: Date.now() + '-' + Math.floor(Math.random() * 1e6),
+    at: Date.now(),
+    sym: (opts.sym || S.sym || S.set.sym || '').toUpperCase(),
+    tf: opts.tf || S.set.tf || '1h',
+    up: opts.up !== false,
+    title: title,
+    detail: rawDetail,
+    que: ex.que,
+    sig: ex.sig,
+    hacer: ex.hacer,
+    pinned: false,
+    read: false
+  };
+  S.alarmLog.unshift(entry);
+  saveAlarmLog();
+  updateAlarmLogBadge();
+  renderAlarmLog();
+  return entry;
+}
+
+function deleteAlarmLogItem(id) {
+  S.alarmLog = S.alarmLog.filter(function (x) { return x.id !== id; });
+  saveAlarmLog();
+  updateAlarmLogBadge();
+  renderAlarmLog();
+}
+
+function togglePinAlarmLogItem(id) {
+  for (var i = 0; i < S.alarmLog.length; i++) {
+    if (S.alarmLog[i].id === id) {
+      S.alarmLog[i].pinned = !S.alarmLog[i].pinned;
+      S.alarmLog[i].read = true;
+      break;
+    }
+  }
+  saveAlarmLog();
+  updateAlarmLogBadge();
+  renderAlarmLog();
+}
+
+function markAllAlarmLogRead() {
+  var changed = false;
+  S.alarmLog.forEach(function (x) { if (!x.read) { x.read = true; changed = true; } });
+  if (changed) { saveAlarmLog(); updateAlarmLogBadge(); }
+}
+
+function updateAlarmLogBadge() {
+  var cntEl = $('#sqLogCnt'), btn = $('#sqLogBtn');
+  if (!cntEl || !btn) return;
+  var total = S.alarmLog.length;
+  var unread = S.alarmLog.filter(function (x) { return !x.read; }).length;
+  cntEl.textContent = String(total);
+  btn.classList.toggle('has-log', unread > 0);
+  btn.title = total ? (total + ' alarma(s) guardada(s)' + (unread ? ' · ' + unread + ' nueva(s)' : '')) : 'Historial de alarmas (vacío)';
+}
+
+function renderAlarmLog() {
+  var el = $('#cAlarmLog'); if (!el) return;
+  var list = S.alarmLog.slice().sort(function (a, b) {
+    if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
+    return (b.at || 0) - (a.at || 0);
+  });
+  var head = '<div class="card-head"><div class="card-title">🔔 Historial de Alarmas Registradas (' + list.length + ')</div>' +
+    '<div class="row-btns">' +
+    (list.length ? '<button type="button" class="pbtn sm" id="alogClearUnpinned">Borrar no fijadas</button>' : '') +
+    '</div></div>';
+  if (!list.length) {
+    el.innerHTML = head + '<div class="empty">Todavía no hay alarmas registradas. Cada vez que se dispare una alarma en la web o app, quedará guardada acá con toda su explicación hasta que vos decidas eliminarla.</div>';
+    return;
+  }
+  el.innerHTML = head +
+    '<div class="note" style="border-top:0">Las alarmas se guardan en tu dispositivo y <b>no se borran solas</b>. Usá <b>★ Fijar</b> para dejarlas arriba o <b>🗑 Eliminar</b> cuando ya no las necesites.</div>' +
+    list.map(function (a) {
+      var d = new Date(a.at || Date.now());
+      var ts = d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+      return '<div class="alog-item' + (a.pinned ? ' pinned' : '') + (!a.read ? ' unread' : '') + '">' +
+        '<div class="alog-head"><span class="alog-title">' + (a.up ? '📈 ' : '📉 ') + esc(a.title) + '</span>' +
+        '<div>' + (a.sym ? '<span class="chip ' + (a.up ? 'bull' : 'bear') + '">' + esc(a.sym) + ' · ' + esc(String(a.tf || '').toUpperCase()) + '</span> ' : '') +
+        (a.pinned ? '<span class="chip warn">★ Fijada</span> ' : '') +
+        '<span class="card-sub">' + esc(ts) + '</span></div></div>' +
+        (a.detail ? '<div class="card-sub" style="margin-bottom:4px">' + esc(a.detail) + '</div>' : '') +
+        '<div class="alog-guide">' +
+        '<div><b>🔎 Qué está pasando:</b> ' + esc(a.que || '') + '</div>' +
+        '<div><b>📊 Qué significa:</b> ' + esc(a.sig || '') + '</div>' +
+        '<div><b>🎯 Qué hacer paso a paso:</b> ' + esc(a.hacer || '') + '</div>' +
+        '</div>' +
+        '<div class="alog-actions">' +
+        (a.sym ? '<button type="button" class="pbtn sm acc" data-alog-open="' + esc(a.id) + '">Abrir en Radar</button>' : '') +
+        '<button type="button" class="pbtn sm" data-alog-pin="' + esc(a.id) + '">' + (a.pinned ? '★ Quitar fijación' : '☆ Fijar / Dejar') + '</button>' +
+        '<button type="button" class="pbtn sm" data-alog-del="' + esc(a.id) + '">🗑 Eliminar</button>' +
+        '</div></div>';
+    }).join('');
+
+  var clrBtn = $('#alogClearUnpinned');
+  if (clrBtn) clrBtn.onclick = function () {
+    S.alarmLog = S.alarmLog.filter(function (x) { return !!x.pinned; });
+    saveAlarmLog(); updateAlarmLogBadge(); renderAlarmLog();
+    if (typeof toast === 'function') toast('Se eliminaron las alarmas no fijadas', 1600);
+  };
+  el.querySelectorAll('[data-alog-open]').forEach(function (b) {
+    b.onclick = function () {
+      var item = S.alarmLog.filter(function (x) { return x.id === b.dataset.alogOpen; })[0];
+      if (!item) return;
+      item.read = true; saveAlarmLog(); updateAlarmLogBadge();
+      if (item.sym && typeof pickSymbol === 'function') pickSymbol(item.sym);
+      if (typeof showTab === 'function') showTab('radar');
+    };
+  });
+  el.querySelectorAll('[data-alog-pin]').forEach(function (b) {
+    b.onclick = function () { togglePinAlarmLogItem(b.dataset.alogPin); };
+  });
+  el.querySelectorAll('[data-alog-del]').forEach(function (b) {
+    b.onclick = function () { deleteAlarmLogItem(b.dataset.alogDel); };
+  });
+}
+
+(function wireV123AlarmLog() {
+  if (typeof document === 'undefined') return;
+  var lb = $('#sqLogBtn');
+  if (lb) lb.onclick = function () {
+    markAllAlarmLogRead();
+    if (typeof showTab === 'function') showTab('scan');
+    renderAlarmLog();
+    var c = $('#cAlarmLog'); if (c && c.scrollIntoView) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  setTimeout(function () { updateAlarmLogBadge(); renderAlarmLog(); }, 350);
+})();
+
+if (typeof V !== 'undefined') {
+  V.recordAlarmLog = recordAlarmLog;
+  V.deleteAlarmLogItem = deleteAlarmLogItem;
+  V.togglePinAlarmLogItem = togglePinAlarmLogItem;
 }
 
 function renderOppsTab() { renderOpps(); renderCrossSectional(); renderLab(); }
@@ -6128,7 +6791,7 @@ function renderAnticipo() {
     '<div><div class="fc-h">Imanes más cercanos</div><div class="fc-h2">Arriba</div>' + magRows(upM, 'Sin imán cercano arriba.') + '<div class="fc-h2">Abajo</div>' + magRows(dnM, 'Sin imán cercano abajo.') + '</div></div>' +
     '<div class="note">El porcentaje ya pasó por la historia de este par: si un 60 % solo acertaba el 52 %, ahora dice 52 %. El centro del cono sigue siendo un sesgo chico (Kalman + flujo + régimen) y la banda es la volatilidad EWMA (λ 0,94), no un rango prometido. Techo práctico: cerca del 70 % cuando todo coincide. En el gráfico, capa «Pronóstico», con el precio al borde derecho. La alarma de montaje (bobina, spring, upthrust) se prende en Alertas y no reemplaza a una regla con respaldo.</div>';
 }
-function renderRadar() { if (typeof renderQuickRead === 'function') renderQuickRead(); renderAnticipo(); renderVerdict(); renderMicro(); if (typeof renderMacroPro === 'function') renderMacroPro(); renderForming(); renderPlan(); renderMtf(); if (typeof updateStickyQuote === 'function') updateStickyQuote(); }
+function renderRadar() { if (typeof renderQuickRead === 'function') renderQuickRead(); if (typeof renderIgnition === 'function') renderIgnition(); renderAnticipo(); renderVerdict(); renderMicro(); if (typeof renderMacroPro === 'function') renderMacroPro(); renderForming(); renderPlan(); renderMtf(); if (typeof updateStickyQuote === 'function') updateStickyQuote(); }
 function renderVerdict() {
   var el = $('#cVerdict'), vd = currentVerdict();
   var haveAn = V.TF.filter(function (t) { return S.an[t.id]; }).length, readyEv = V.TF.filter(function (t) { return S.an[t.id] && S.ev[t.id]; }).length;
@@ -6393,7 +7056,7 @@ function drawChart() {
   if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; }
   var ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
   var C = colors(), tf = S.set.tf, an = S.an[tf], st = S.data[tf], lay = S.set.layers;
-  var cFs = Math.round(11 * clampNum(S.set.fontScale, 0.85, 1.5, 1.15));
+  var cFs = Math.round(11 * clampNum(S.set.fontScale, 0.85, 1.5, 1.0));
   ctx.font = cFs + 'px ' + (C.sans || 'sans-serif'); ctx.textBaseline = 'middle';
   if (!an) { ctx.fillStyle = C.tx2; ctx.textAlign = 'center'; ctx.fillText(st && st.loading ? 'Cargando…' : 'Sin datos para graficar', W / 2, H / 2); S.chGeom = null; return; }
   var c = an.c, n = an.n, F = st.forming, total = n + (F ? 1 : 0), ch = S.ch;
@@ -6565,7 +7228,7 @@ function drawChart() {
       });
     }
   }
-  // v12.0 Anti-collision right-edge pill stack (evita solapamientos entre Plan, Perfil y P50)
+  // v12.3 Anti-collision right-edge pill stack (evita solapamientos entre Plan, Perfil y P50)
   if (window._vsaChartTags && window._vsaChartTags.length) {
     var tags = window._vsaChartTags.slice().sort(function (a, b) { return a.y - b.y; });
     var minGap = 15, topLim = yP0 + 9, botLim = yP0 + hP - 9;
@@ -6830,6 +7493,7 @@ function pollOtherAlerts() {
   });
 }
 function renderAlerts() {
+  if (typeof renderAlarmLog === 'function') renderAlarmLog();
   var el = $('#cAlerts'); if (!el) return;
   var cur = S.ticker && !S.demo ? S.ticker.last : NaN;
   var notifPerm = ('Notification' in window) ? Notification.permission : 'unsupported';
@@ -7230,7 +7894,7 @@ function renderSheet() {
     g('Plan, salidas y backtest', 'Parámetros compartidos por el plan operativo, el backtest walk-forward y el Paper Trading. Breakeven en 1R y Trailing Stop ATR protegen ganancias en tendencias.', '<div class="set-in">' + nin('slAtr', 'Stop (ATR)') + nin('rr', 'Objetivo (R)') + nin('maxBars', 'Velas mín. venc.') + '</div><div class="opts" style="margin-top:7px">' + opt('be1r', 'true', '✓ Breakeven en 1R') + opt('be1r', 'false', 'Sin BE 1R') + opt('trailAtr', 0, 'Sin Trailing') + opt('trailAtr', 1.5, 'Trail 1,5 ATR') + opt('trailAtr', 2, 'Trail 2,0 ATR') + '</div>') +
     g('Permutaciones finas (Etapa 2)', 'Resolución exacta de p-valores para candidatas que pasan la etapa 1 (p ≤ 0,08).', '<div class="opts">' + [1000, 2000, 4000].map(function (v) { return opt('Kfine', v, fnum(v, 0)); }).join('') + '</div>') +
     g('Actualización', 'Frecuencia de refresco de la vela en formación y ticker.', '<div class="opts">' + opt('refresh', 15, '15 s') + opt('refresh', 30, '30 s') + opt('refresh', 60, '60 s') + opt('refresh', 0, 'Manual') + '</div>') +
-    g('Tamaño de texto y números', 'Ajustá la escala general de la interfaz para lectura cómoda en celular (' + Math.round(s.fontScale * 100) + ' %). También podés usar A− / A+ arriba.', '<div class="opts"><button type="button" data-fstep="-0.10">A− Reducir</button>' + opt('fontScale', 1, '100 %') + opt('fontScale', 1.15, '115 % (base)') + opt('fontScale', 1.3, '130 %') + '<button type="button" data-fstep="0.10">A+ Agrandar</button></div>') +
+    g('Tamaño de texto y números', 'Ajustá la escala general de la interfaz para lectura cómoda en celular (' + Math.round(s.fontScale * 100) + ' %). También podés usar A− / A+ arriba.', '<div class="opts"><button type="button" data-fstep="-0.10">A− Reducir</button>' + opt('fontScale', 1, '100 % (base)') + opt('fontScale', 1.15, '115 %') + opt('fontScale', 1.3, '130 %') + '<button type="button" data-fstep="0.10">A+ Agrandar</button></div>') +
     g('Tema', '', '<div class="opts">' + opt('theme', 'dark', 'Oscuro') + opt('theme', 'light', 'Claro') + opt('theme', 'auto', 'Automático') + '</div>') +
     g('Demostración con datos inventados', 'Velas sintéticas para inspeccionar visualmente cada regla. Nunca se activa sola.', '<div class="set-in" style="grid-template-columns:1fr auto"><div class="sel-wrap"><select id="demoSel">' + V.SCEN.map(function (x) { return '<option value="' + x.id + '"' + (S.demo && S.demo.code === x.id ? ' selected' : '') + '>' + x.id + ' · ' + esc(x.name) + '</option>'; }).join('') + '</select></div><button type="button" class="pbtn" id="demoGo">Ver</button></div>') +
     g('Respaldo completo (Web ↔ PWA ↔ App Android)', 'Exportá o restaurá en un archivo JSON tus favoritas, alertas, diario, Paper Trading, ajustes y Libro de Ventajas.', '<div class="opts"><button type="button" id="bkExport" class="on">⬇ Exportar Backup JSON</button><button type="button" id="bkImport">⬆ Restaurar Backup</button><input id="bkFile" type="file" accept="application/json,.json" hidden></div>') +
@@ -8018,7 +8682,7 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 })();
 
 
-// v12.0 PWA Service Worker (solo HTTPS, nunca en file:// ni sandbox)
+// v12.3 PWA Service Worker (solo HTTPS, nunca en file:// ni sandbox)
 try {
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     navigator.serviceWorker.register('./sw.js').catch(function () {});

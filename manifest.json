@@ -1,7 +1,7 @@
 {
-  "name": "VSA & Orderflow v12.0 · Institutional Pro Suite",
+  "name": "VSA & Orderflow v12.3 · Institutional Pro Suite",
   "short_name": "VSA Orderflow",
-  "description": "Terminal cuantitativa v12.0: 70 reglas, Edge Lab OOS + Brier Score, Multi-Exchange Spot/Perps, Opciones Deribit, Liquidaciones, Footprint WebSocket y Kill Switch.",
+  "description": "Terminal cuantitativa v12.3: 70 reglas, Edge Lab OOS + Brier Score, Multi-Exchange Spot/Perps, Opciones Deribit, Liquidaciones, Footprint WebSocket y Kill Switch.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#090d16",
